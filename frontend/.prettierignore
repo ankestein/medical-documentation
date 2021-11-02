@@ -1,0 +1,6 @@
+.*
+*.iml
+README.md
+/node_modules
+/build
+package-lock.json
