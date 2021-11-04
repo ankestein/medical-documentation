@@ -10,7 +10,7 @@ export default function App() {
 
 	return (
 		<>
-			<h1>Greetings overview</h1>
+			<h1>New greetings overview</h1>
 			<ul>
 				{greetings.map((greeting) => {
 					return <li key={greeting.id}>{greeting.greetingText}</li>;
