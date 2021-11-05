@@ -23,6 +23,5 @@ public class DoctorDto {
     private String specialty;
     private Address address;
     private List<PhoneNumber> phoneNumbers;
-    private String mobileNumber;
     private String emailAddress;
 }

@@ -1,7 +1,6 @@
 package de.neuefische.backend.service;
 
 import de.neuefische.backend.dto.DoctorDto;
-import de.neuefische.backend.model.Address;
 import de.neuefische.backend.model.Doctor;
 import de.neuefische.backend.repo.DoctorRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
+
 
 @Service
 public class DoctorService {
@@ -26,29 +25,20 @@ public class DoctorService {
     }
 
     public Doctor getDoctorById(String id) {
-        Optional<Doctor> optionalDoctor = doctorRepo.findById(id);
-        if (optionalDoctor.isEmpty()) {
-            throw new NoSuchElementException ("Doctor with id " + id + " not found!");
-        }
-        return optionalDoctor.get();
+        return doctorRepo.findById(id).orElseThrow(
+                () -> new NoSuchElementException("Doctor with id " + id + " not found!")
+        );
     }
 
     public Doctor addDoctor(DoctorDto doctorDto) {
-
-        Doctor doctor = new Doctor();
-        Address address = new Address();
-
-        address.setStreet(doctorDto.getAddress().getStreet());
-        address.setStreetNumber(doctorDto.getAddress().getStreetNumber());
-        address.setPostalCode(doctorDto.getAddress().getPostalCode());
-        address.setCity(doctorDto.getAddress().getCity());
-
-        doctor.setFirstName(doctorDto.getFirstName());
-        doctor.setLastName(doctorDto.getLastName());
-        doctor.setSpecialty(doctorDto.getSpecialty());
-        doctor.setAddress(address);
-        doctor.setPhoneNumbers(doctorDto.getPhoneNumbers());
-        doctor.setEmailAddress(doctorDto.getEmailAddress());
+        Doctor doctor = Doctor.builder()
+                .firstName(doctorDto.getFirstName())
+                .lastName(doctorDto.getLastName())
+                .specialty(doctorDto.getSpecialty())
+                .address(doctorDto.getAddress())
+                .phoneNumbers(doctorDto.getPhoneNumbers())
+                .emailAddress(doctorDto.getEmailAddress())
+                .build();
         return doctorRepo.save(doctor);
 
     }

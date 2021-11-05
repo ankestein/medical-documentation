@@ -19,7 +19,7 @@ class DoctorServiceTest {
     private final DoctorService doctorService = new DoctorService(doctorRepo);
 
     @Test
-    void addDoctor() {
+    void addDoctorTest() {
         // GIVEN
         DoctorDto expectedDoctorDto = DoctorDto.builder()
                 .firstName("Linda")

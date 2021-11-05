@@ -1,5 +1,6 @@
 package de.neuefische.backend.controller;
 
+import de.neuefische.backend.dto.DoctorDto;
 import de.neuefische.backend.model.Address;
 import de.neuefische.backend.model.Doctor;
 import de.neuefische.backend.model.PhoneNumber;
@@ -33,9 +34,32 @@ class DoctorControllerTest {
     }
 
     @Test
-    void addDoctor() {
+    void addDoctorTest() {
         // GIVEN
-        Doctor doctor = Doctor.builder()
+        DoctorDto doctorDto = DoctorDto.builder()
+                .firstName("Linda")
+                .lastName("Holder")
+                .specialty("Dentist")
+                .address(Address.builder()
+                        .city("Bonn")
+                        .build())
+                .phoneNumbers(List.of(
+                        PhoneNumber.builder()
+                                .areaCode("0228")
+                                .numberSuffix("12345")
+                                .phoneType(PhoneType.LAND_LINE)
+                                .build()
+                        ,
+                        PhoneNumber.builder()
+                                .countryCode("+49")
+                                .areaCode("172")
+                                .numberSuffix("33333")
+                                .phoneType(PhoneType.MOBILE)
+                                .build()
+                ))
+                .build();
+
+        Doctor expectedDoctor = Doctor.builder()
                 .firstName("Linda")
                 .lastName("Holder")
                 .specialty("Dentist")
@@ -59,27 +83,21 @@ class DoctorControllerTest {
                 .build();
 
         // WHEN
-        ResponseEntity<Doctor> response = testRestTemplate.postForEntity("/api/doctor", doctor, Doctor.class);
+        ResponseEntity<Doctor> response = testRestTemplate.postForEntity("/api/doctor", doctorDto, Doctor.class);
         Doctor actual = response.getBody();
+        String actualId = actual.getId();
 
         // THEN
+        expectedDoctor.setId(actualId);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(actual);
-        assertNotNull(actual.getId());
-        assertEquals(doctor.getLastName(), actual.getLastName());
-        assertEquals(doctor.getAddress(), actual.getAddress());
-        assertEquals(doctor.getPhoneNumbers(), actual.getPhoneNumbers());
+        assertEquals(expectedDoctor, actual);
 
         // THEN - check via GET if element was actually added
-        String actualId = actual.getId();
         ResponseEntity<Doctor> getResponse = testRestTemplate.getForEntity("/api/doctor/" + actualId, Doctor.class);
         Doctor persistedDoctor = getResponse.getBody();
 
         assertNotNull(persistedDoctor);
-        assertNotNull(actualId, persistedDoctor.getId());
-        assertEquals(doctor.getLastName(), persistedDoctor.getLastName());
-        assertEquals(doctor.getAddress(), persistedDoctor.getAddress());
-        assertEquals(doctor.getPhoneNumbers(), persistedDoctor.getPhoneNumbers());
+        assertEquals(expectedDoctor, persistedDoctor);
 
     }
 
