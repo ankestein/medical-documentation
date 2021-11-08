@@ -65,9 +65,4 @@ class DoctorControllerTest {
         assertEquals(expectedDoctor, persistedDoctor);
 
     }
-
-
-    //TODO
-    // test adding doctor that is already in database (add exception to service? but which fields to compare?)
-
 }

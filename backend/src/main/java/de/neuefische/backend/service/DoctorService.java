@@ -53,27 +53,16 @@ public class DoctorService {
                 doctor.getCity()
         );
 
-
-
-/*
         if (doctorExists) {
             throw new IllegalArgumentException("Doctor " +
                     doctorDto.getFirstName() + " " +
                     doctorDto.getLastName() + ", " +
-                    doctorDto.getCity() + ", " +
                     doctorDto.getSpecialty() + ", " +
-                    " already exists in the database");
+                    doctorDto.getCity() +
+                    ", already exists in the database");
         } else {
             return doctorRepo.save(doctor);
         }
-
- */
-
-
-        /*System.out.println("does doctor exist: " + doctorExists);*/
-        return doctorRepo.save(doctor);
-
     }
-
 
 }
