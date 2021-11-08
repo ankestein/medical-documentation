@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -20,7 +18,12 @@ public class Doctor {
     private String firstName;
     private String lastName;
     private String specialty;
-    private Address address;
-    private List<PhoneNumber> phoneNumbers;
+    private String street;
+    private String streetNumber;
+    private String postalCode;
+    private String city;
+    private String country;
+    private String phoneNumber;
+    private String mobileNumber;
     private String emailAddress;
 }

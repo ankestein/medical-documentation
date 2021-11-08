@@ -31,12 +31,18 @@ public class DoctorService {
     }
 
     public Doctor addDoctor(DoctorDto doctorDto) {
+
         Doctor doctor = Doctor.builder()
                 .firstName(doctorDto.getFirstName())
                 .lastName(doctorDto.getLastName())
                 .specialty(doctorDto.getSpecialty())
-                .address(doctorDto.getAddress())
-                .phoneNumbers(doctorDto.getPhoneNumbers())
+                .street(doctorDto.getStreet())
+                .streetNumber(doctorDto.getStreetNumber())
+                .postalCode(doctorDto.getPostalCode())
+                .city(doctorDto.getCity())
+                .country(doctorDto.getCountry())
+                .phoneNumber(doctorDto.getPhoneNumber())
+                .mobileNumber(doctorDto.getMobileNumber())
                 .emailAddress(doctorDto.getEmailAddress())
                 .build();
         return doctorRepo.save(doctor);

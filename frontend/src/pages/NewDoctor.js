@@ -8,19 +8,13 @@ export default function NewDoctor() {
 		firstName: '',
 		lastName: '',
 		specialty: '',
-		address: {
-			street: '',
-			streetNumber: '',
-			postalCode: '',
-			city: '',
-			country: '',
-		},
-		phoneNumbers: {
-			countryCode: '',
-			areaCode: '',
-			numberSuffix: '',
-			phoneType: '',
-		},
+		street: '',
+		streetNumber: '',
+		postalCode: '',
+		city: '',
+		country: 'Germany',
+		phoneNumber: '',
+		mobileNumber: '',
 		emailAddress: '',
 	};
 
@@ -40,26 +34,112 @@ export default function NewDoctor() {
 	};
 
 	return (
-		<Form onSubmit={handleSubmit}>
-			<TextField
-				variant='standard'
-				value={newDoctor.firstName}
-				placeholder='First name'
-				name='firstName'
-				onChange={handleChange}
-			/>
+		<PageLayout>
+			<Form onSubmit={handleSubmit}>
+				<TextField
+					variant='outlined'
+					value={newDoctor.firstName}
+					placeholder='First name'
+					required={true}
+					name='firstName'
+					onChange={handleChange}
+				/>
 
-			<TextField
-				variant='standard'
-				value={newDoctor.lastName}
-				placeholder='Last name'
-				required={true}
-				name='lastName'
-				onChange={handleChange}
-			/>
+				<TextField
+					variant='outlined'
+					value={newDoctor.lastName}
+					placeholder='Last name'
+					required={true}
+					name='lastName'
+					onChange={handleChange}
+				/>
 
-			<Button type='submit'>Submit</Button>
-		</Form>
+				<TextField
+					variant='outlined'
+					value={newDoctor.specialty}
+					placeholder='Specialty'
+					required={true}
+					name='specialty'
+					onChange={handleChange}
+				/>
+
+				<TextField
+					variant='outlined'
+					value={newDoctor.street}
+					placeholder='Street'
+					required={false}
+					name='street'
+					onChange={handleChange}
+				/>
+
+				<TextField
+					variant='outlined'
+					value={newDoctor.streetNumber}
+					placeholder='Number'
+					required={false}
+					name='streetNumber'
+					onChange={handleChange}
+				/>
+
+				<TextField
+					variant='outlined'
+					value={newDoctor.postalCode}
+					placeholder='Postal code'
+					required={false}
+					name='postalCode'
+					onChange={handleChange}
+				/>
+
+				<TextField
+					variant='outlined'
+					value={newDoctor.city}
+					placeholder='City'
+					required={true}
+					name='city'
+					onChange={handleChange}
+				/>
+
+				<TextField
+					variant='outlined'
+					value={newDoctor.country}
+					placeholder='Country'
+					required={false}
+					name='country'
+					onChange={handleChange}
+				/>
+
+				<TextField
+					variant='outlined'
+					value={newDoctor.phoneNumber}
+					placeholder='Phone'
+					required={false}
+					name='phoneNumber'
+					onChange={handleChange}
+				/>
+
+				<TextField
+					variant='outlined'
+					value={newDoctor.mobileNumber}
+					placeholder='Mobile'
+					required={false}
+					name='mobileNumber'
+					onChange={handleChange}
+				/>
+
+				<TextField
+					variant='outlined'
+					value={newDoctor.emailAddress}
+					placeholder='Email'
+					required={false}
+					name='emailAddress'
+					onChange={handleChange}
+				/>
+
+				<Button variant='contained' type='submit'>
+					Submit
+				</Button>
+			</Form>
+		</PageLayout>
 	);
 }
 
@@ -68,5 +148,9 @@ const Form = styled.form`
 	margin: 40px auto;
 	display: flex;
 	flex-direction: column;
-	gap: 20px;
+	gap: 10px;
+`;
+
+const PageLayout = styled.div`
+	margin-bottom: 60px;
 `;

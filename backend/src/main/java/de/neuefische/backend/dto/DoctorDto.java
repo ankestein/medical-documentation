@@ -1,14 +1,9 @@
 package de.neuefische.backend.dto;
 
-import de.neuefische.backend.model.Address;
-import de.neuefische.backend.model.PhoneNumber;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,12 +11,15 @@ import java.util.List;
 @Builder
 public class DoctorDto {
 
-    @Id
-    private String id;
     private String firstName;
     private String lastName;
     private String specialty;
-    private Address address;
-    private List<PhoneNumber> phoneNumbers;
+    private String street;
+    private String streetNumber;
+    private String postalCode;
+    private String city;
+    private String country;
+    private String phoneNumber;
+    private String mobileNumber;
     private String emailAddress;
 }
