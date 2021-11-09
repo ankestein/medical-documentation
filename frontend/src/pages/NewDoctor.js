@@ -1,8 +1,4 @@
-import {
-	Button,
-	MenuItem,
-	TextField,
-} from '@mui/material';
+import {Button, MenuItem, TextField} from '@mui/material';
 import {useState} from 'react';
 import {submitDoctor} from '../service/DoctorApiService';
 import styled from 'styled-components/macro';
@@ -38,20 +34,21 @@ export default function NewDoctor() {
 	};
 
 	const specialties = [
-		{value: 'Cardiologist'},
-		{value: 'Dentist'},
-		{value: 'Dermatologist'},
-		{value: 'Gastroenterologist'},
-		{value: 'General practitioner'},
-		{value: 'Gynecologist'},
-		{value: 'Oncologist'},
-		{value: 'Ophthalmologist'},
-		{value: 'Orthopedist'},
-		{value: 'Pediatrician'},
-		{value: 'Psychiatrist'},
-		{value: 'Pulmonologist'},
-		{value: 'Radiologist'},
-		{value: 'Urologist'},
+		'Cardiologist',
+		'Dentist',
+		'Dermatologist',
+		'ENT physician',
+		'Gastroenterologist',
+		'General practitioner',
+		'Gynecologist',
+		'Oncologist',
+		'Ophthalmologist',
+		'Orthopedist',
+		'Pediatrician',
+		'Psychiatrist',
+		'Pulmonologist',
+		'Radiologist',
+		'Urologist',
 	];
 
 	return (
@@ -85,7 +82,9 @@ export default function NewDoctor() {
 					onChange={handleChange}
 				>
 					{specialties.map((specialty) => (
-						<MenuItem value={specialty.value}>{specialty.value}</MenuItem>
+						<MenuItem key={specialty} value={specialty}>
+							{specialty}
+						</MenuItem>
 					))}
 				</TextField>
 
