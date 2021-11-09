@@ -1,6 +1,8 @@
 package de.neuefische.backend.service;
 
+import de.neuefische.backend.dto.AppointmentDto;
 import de.neuefische.backend.dto.DoctorDto;
+import de.neuefische.backend.model.Appointment;
 import de.neuefische.backend.model.Doctor;
 import de.neuefische.backend.repo.DoctorRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,37 @@ public class DoctorService {
         } else {
             return doctorRepo.save(doctor);
         }
+    }
+
+
+    public Doctor addAppointment(DoctorDto doctorDto) {
+
+        AppointmentDto appointmentDto = doctorDto.getAppointmentDto();
+        Appointment appointment = utilService.mapAppointmentDtoToAppointment(appointmentDto);
+        Doctor doctor = utilService.mapDoctorDtoToDoctor(doctorDto);
+
+        Boolean appointmentExists = doctorRepo.existsDoctor_Appointment_ByDate(
+                appointment.getDate()
+        );
+
+        if (appointmentExists) {
+            throw new IllegalArgumentException("Appointment with Doctor" + doctorDto.getLastName() + " on " + appointmentDto.getDate() + " already exists in the database");
+        } else {
+            Doctor doctorToUpdate = doctorRepo.findDoctorByFirstNameAndLastNameAndSpecialtyAndCity(
+                    doctor.getFirstName(),
+                    doctor.getLastName(),
+                    doctor.getSpecialty(),
+                    doctor.getCity()
+            );
+
+            if (doctorToUpdate != null) {
+                doctorToUpdate.getAppointments().add(appointment);
+                return doctorRepo.save(doctorToUpdate);
+            } else {
+                return doctorRepo.save(doctor);
+            }
+        }
+
     }
 
 }

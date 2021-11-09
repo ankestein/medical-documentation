@@ -1,7 +1,7 @@
 package de.neuefische.backend.dto;
 
-import de.neuefische.backend.model.Doctor;
 import lombok.*;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,6 +20,7 @@ public class DoctorDto {
     private String phoneNumber;
     private String mobileNumber;
     private String emailAddress;
+    private AppointmentDto appointmentDto;
 
     @Override
     public String toString() {

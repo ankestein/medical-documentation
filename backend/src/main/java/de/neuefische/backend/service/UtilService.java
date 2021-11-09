@@ -27,7 +27,6 @@ public class UtilService {
 
     public Appointment mapAppointmentDtoToAppointment(AppointmentDto appointmentDto) {
         return Appointment.builder()
-                .doctorId(appointmentDto.getDoctorId())
                 .date(appointmentDto.getDate())
                 .reasonForVisit(appointmentDto.getReasonForVisit())
                 .notes(appointmentDto.getNotes())

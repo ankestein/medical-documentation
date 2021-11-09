@@ -15,7 +15,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Appointment {
 
     private String id;
-    private String doctorId;
     private String date;
     private String reasonForVisit;
     private String notes;
