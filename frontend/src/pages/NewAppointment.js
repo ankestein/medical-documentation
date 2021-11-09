@@ -1,17 +1,15 @@
-import {
-	Button,
-	TextField,
-} from '@mui/material';
+import {Button, TextField} from '@mui/material';
 import {useState} from 'react';
 import {submitAppointment} from '../service/AppointmentApiService';
 import styled from 'styled-components/macro';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import {DatePicker, LocalizationProvider} from '@mui/lab';
+import moment from 'moment';
 
 export default function NewAppointment() {
 	const initialAppointment = {
 		doctor: '',
-		date: '',
+		date: null,
 		reasonForVisit: '',
 		notes: '',
 	};
@@ -25,11 +23,16 @@ export default function NewAppointment() {
 		});
 	};
 
+	const handleDateChange = (inputDate) => {
+		const formattedDate = moment(inputDate, 'YYYY-MM-DD').format('LL');
+		setNewAppointment({
+			...newAppointment,
+			date: formattedDate,
+		});
+	};
+
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		if (!newAppointment) {
-			return;
-		}
 		submitAppointment(newAppointment).catch(console.error);
 		setNewAppointment(initialAppointment);
 	};
@@ -46,20 +49,12 @@ export default function NewAppointment() {
 					onChange={handleChange}
 				/>
 
-				<TextField
-					variant='outlined'
-					value={newAppointment.date}
-					placeholder='Date'
-					required={true}
-					name='date'
-					onChange={handleChange}
-				/>
-
 				<LocalizationProvider dateAdapter={AdapterDateFns}>
 					<DatePicker
 						label='Date'
 						value={newAppointment.date}
-						onChange={handleChange}
+						onChange={handleDateChange}
+						name='date'
 						renderInput={(params) => <TextField {...params} />}
 					/>
 				</LocalizationProvider>
@@ -68,8 +63,8 @@ export default function NewAppointment() {
 					variant='outlined'
 					value={newAppointment.reasonForVisit}
 					placeholder='Reason for Visit'
-					required={true}
-					name='reason'
+					required={false}
+					name='reasonForVisit'
 					onChange={handleChange}
 				/>
 
