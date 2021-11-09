@@ -14,10 +14,12 @@ import java.util.NoSuchElementException;
 public class DoctorService {
 
     private final DoctorRepo doctorRepo;
+    private final UtilService utilService;
 
     @Autowired
-    public DoctorService(DoctorRepo doctorRepo) {
+    public DoctorService(DoctorRepo doctorRepo, UtilService utilService) {
         this.doctorRepo = doctorRepo;
+        this.utilService = utilService;
     }
 
     public List<Doctor> getDoctors() {
@@ -32,19 +34,7 @@ public class DoctorService {
 
     public Doctor addDoctor(DoctorDto doctorDto) {
 
-        Doctor doctor = Doctor.builder()
-                .firstName(doctorDto.getFirstName())
-                .lastName(doctorDto.getLastName())
-                .specialty(doctorDto.getSpecialty())
-                .street(doctorDto.getStreet())
-                .streetNumber(doctorDto.getStreetNumber())
-                .postalCode(doctorDto.getPostalCode())
-                .city(doctorDto.getCity())
-                .country(doctorDto.getCountry())
-                .phoneNumber(doctorDto.getPhoneNumber())
-                .mobileNumber(doctorDto.getMobileNumber())
-                .emailAddress(doctorDto.getEmailAddress())
-                .build();
+        Doctor doctor = utilService.mapDoctorDtoToDoctor(doctorDto);
 
         Boolean doctorExists = doctorRepo.existsDoctorByFirstNameAndLastNameAndSpecialtyAndCity(
                 doctor.getFirstName(),
@@ -54,12 +44,7 @@ public class DoctorService {
         );
 
         if (doctorExists) {
-            throw new IllegalArgumentException("Doctor " +
-                    doctorDto.getFirstName() + " " +
-                    doctorDto.getLastName() + ", " +
-                    doctorDto.getSpecialty() + ", " +
-                    doctorDto.getCity() +
-                    ", already exists in the database");
+            throw new IllegalArgumentException(doctorDto + ", already exists in the database");
         } else {
             return doctorRepo.save(doctor);
         }

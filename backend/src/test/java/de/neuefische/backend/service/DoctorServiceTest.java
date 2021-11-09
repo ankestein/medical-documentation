@@ -3,7 +3,6 @@ package de.neuefische.backend.service;
 import de.neuefische.backend.dto.DoctorDto;
 import de.neuefische.backend.model.Doctor;
 import de.neuefische.backend.repo.DoctorRepo;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +13,8 @@ import static org.mockito.Mockito.*;
 class DoctorServiceTest {
 
     private final DoctorRepo doctorRepo = mock(DoctorRepo.class);
-    private final DoctorService doctorService = new DoctorService(doctorRepo);
+    private final UtilService utilService = mock(UtilService.class);
+    private final DoctorService doctorService = new DoctorService(doctorRepo, utilService);
 
     @Test
     @DisplayName("addDoctor should add a new doctor to the database")
@@ -37,6 +37,7 @@ class DoctorServiceTest {
                 .build();
 
         when(doctorRepo.save(expectedDoctor)).thenReturn(expectedDoctor);
+        when(utilService.mapDoctorDtoToDoctor(expectedDoctorDto)).thenReturn(expectedDoctor);
 
         // WHEN
         Doctor actualDoctor = doctorService.addDoctor(expectedDoctorDto);
@@ -65,7 +66,7 @@ class DoctorServiceTest {
                 .city("Bonn")
                 .build();
 
-        when(doctorRepo.save(expectedDoctor)).thenReturn(expectedDoctor);
+        when(utilService.mapDoctorDtoToDoctor(expectedDoctorDto)).thenReturn(expectedDoctor);
         when(doctorRepo.existsDoctorByFirstNameAndLastNameAndSpecialtyAndCity(
                 "Linda", "Holder", "Dentist", "Bonn")
         ).thenReturn(true);
