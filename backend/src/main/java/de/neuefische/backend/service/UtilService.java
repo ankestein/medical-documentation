@@ -1,6 +1,8 @@
 package de.neuefische.backend.service;
 
+import de.neuefische.backend.dto.AppointmentDto;
 import de.neuefische.backend.dto.DoctorDto;
+import de.neuefische.backend.model.Appointment;
 import de.neuefische.backend.model.Doctor;
 import org.springframework.stereotype.Service;
 
@@ -8,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class UtilService {
 
     public Doctor mapDoctorDtoToDoctor(DoctorDto doctorDto) {
-            return Doctor.builder()
+        return Doctor.builder()
                 .firstName(doctorDto.getFirstName())
                 .lastName(doctorDto.getLastName())
                 .specialty(doctorDto.getSpecialty())
@@ -20,6 +22,15 @@ public class UtilService {
                 .phoneNumber(doctorDto.getPhoneNumber())
                 .mobileNumber(doctorDto.getMobileNumber())
                 .emailAddress(doctorDto.getEmailAddress())
+                .build();
+    }
+
+    public Appointment mapAppointmentDtoToAppointment(AppointmentDto appointmentDto) {
+        return Appointment.builder()
+                .doctorId(appointmentDto.getDoctorId())
+                .date(appointmentDto.getDate())
+                .reasonForVisit(appointmentDto.getReasonForVisit())
+                .notes(appointmentDto.getNotes())
                 .build();
     }
 }

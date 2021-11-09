@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,8 +15,8 @@ import java.util.Date;
 public class Appointment {
 
     private String id;
-    private Doctor doctor;
-    private Date date;
+    private String doctorId;
+    private String date;
     private String reasonForVisit;
     private String notes;
 

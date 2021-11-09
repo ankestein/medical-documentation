@@ -11,12 +11,11 @@ public interface AppointmentRepo extends PagingAndSortingRepository<Appointment,
 
     List<Appointment> findAll();
 
-    // TODO compare only doctor.id
-    /*
-    Boolean existsAppointmentByDoctorAndDate(
-            Doctor doctor,
+
+    Boolean existsAppointmentByDoctorIdAndDate(
+            String doctorId,
             String date
     );
-     */
+
 
 }

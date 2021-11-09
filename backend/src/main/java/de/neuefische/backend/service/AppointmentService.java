@@ -14,10 +14,12 @@ import java.util.NoSuchElementException;
 public class AppointmentService {
 
     private final AppointmentRepo appointmentRepo;
+    private final UtilService utilService;
 
     @Autowired
-    public AppointmentService(AppointmentRepo appointmentRepo) {
+    public AppointmentService(AppointmentRepo appointmentRepo, UtilService utilService) {
         this.appointmentRepo = appointmentRepo;
+        this.utilService = utilService;
     }
 
     public List<Appointment> getAppointments() {
@@ -32,14 +34,18 @@ public class AppointmentService {
 
     public Appointment addAppointment(AppointmentDto appointmentDto) {
 
-        Appointment appointment = Appointment.builder()
-                .doctor(appointmentDto.getDoctor())
-                .date(appointmentDto.getDate())
-                .reasonForVisit(appointmentDto.getReasonForVisit())
-                .notes(appointmentDto.getNotes())
-                .build();
+        Appointment appointment = utilService.mapAppointmentDtoToAppointment(appointmentDto);
 
+        Boolean appointmentExists = appointmentRepo.existsAppointmentByDoctorIdAndDate(
+                appointment.getDoctorId(),
+                appointment.getDate()
+        );
+
+        if (appointmentExists) {
+            throw new IllegalArgumentException(appointmentDto + " already exists in the database");
+        } else {
             return appointmentRepo.save(appointment);
+        }
 
     }
 

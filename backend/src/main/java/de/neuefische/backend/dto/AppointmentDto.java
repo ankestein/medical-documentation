@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,9 +13,15 @@ import java.util.Date;
 @Builder
 public class AppointmentDto {
 
-    private Doctor doctor;
-    private Date date;
+    private String doctorId;
+    private String date;
     private String reasonForVisit;
     private String notes;
 
+    @Override
+    public String toString() {
+        return "Appointment with doctor " +
+                this.getDoctorId() + " on " +
+                this.getDate();
+    }
 }
