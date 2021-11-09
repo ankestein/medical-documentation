@@ -1,9 +1,7 @@
 package de.neuefische.backend.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import de.neuefische.backend.model.Doctor;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,4 +20,14 @@ public class DoctorDto {
     private String phoneNumber;
     private String mobileNumber;
     private String emailAddress;
+
+    @Override
+    public String toString() {
+        return "Doctor " +
+                this.getFirstName() + " " +
+                this.getLastName() + ", " +
+                this.getSpecialty() + ", " +
+                this.getCity();
+    }
+
 }

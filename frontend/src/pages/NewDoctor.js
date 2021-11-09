@@ -1,6 +1,6 @@
 import {Button, TextField} from '@mui/material';
 import {useState} from 'react';
-import {submitDoctor} from '../service/doctorApiService';
+import {submitDoctor} from '../service/DoctorApiService';
 import styled from 'styled-components/macro';
 
 export default function NewDoctor() {
@@ -26,7 +26,7 @@ export default function NewDoctor() {
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		if (!newDoctor) {
+		if (!newDoctor.lastName || !newDoctor.specialty || !newDoctor.city) {
 			return;
 		}
 		submitDoctor(newDoctor).catch(console.error);
