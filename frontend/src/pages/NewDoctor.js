@@ -1,4 +1,4 @@
-import {Button, TextField} from '@mui/material';
+import {Button, MenuItem, TextField} from '@mui/material';
 import {useState} from 'react';
 import {submitDoctor} from '../service/DoctorApiService';
 import styled from 'styled-components/macro';
@@ -33,6 +33,24 @@ export default function NewDoctor() {
 		setNewDoctor(initialDoctor);
 	};
 
+	const specialties = [
+		'Cardiologist',
+		'Dentist',
+		'Dermatologist',
+		'ENT physician',
+		'Gastroenterologist',
+		'General practitioner',
+		'Gynecologist',
+		'Oncologist',
+		'Ophthalmologist',
+		'Orthopedist',
+		'Pediatrician',
+		'Psychiatrist',
+		'Pulmonologist',
+		'Radiologist',
+		'Urologist',
+	];
+
 	return (
 		<PageLayout>
 			<Form onSubmit={handleSubmit}>
@@ -55,13 +73,20 @@ export default function NewDoctor() {
 				/>
 
 				<TextField
-					variant='outlined'
+					id='select-specialty'
+					select
 					value={newDoctor.specialty}
-					placeholder='Specialty'
+					label='Specialty'
 					required={true}
 					name='specialty'
 					onChange={handleChange}
-				/>
+				>
+					{specialties.map((specialty) => (
+						<MenuItem key={specialty} value={specialty}>
+							{specialty}
+						</MenuItem>
+					))}
+				</TextField>
 
 				<TextField
 					variant='outlined'
