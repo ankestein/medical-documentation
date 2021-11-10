@@ -1,8 +1,11 @@
 package de.neuefische.backend.controller;
 
+import de.neuefische.backend.dto.AppointmentDto;
 import de.neuefische.backend.dto.DoctorDto;
+import de.neuefische.backend.model.Appointment;
 import de.neuefische.backend.model.Doctor;
 import de.neuefische.backend.repo.DoctorRepo;
+import de.neuefische.backend.service.UtilService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -22,6 +27,9 @@ class DoctorControllerTest {
 
     @Autowired
     private DoctorRepo doctorRepo;
+
+    @Autowired
+    private UtilService utilService;
 
     @BeforeEach
     public void clearDb() {
@@ -39,13 +47,7 @@ class DoctorControllerTest {
                 .phoneNumber("022812345")
                 .build();
 
-        Doctor expectedDoctor = Doctor.builder()
-                .firstName("Linda")
-                .lastName("Holder")
-                .specialty("Dentist")
-                .city("Bonn")
-                .phoneNumber("022812345")
-                .build();
+        Doctor expectedDoctor = utilService.mapDoctorDtoToDoctor(doctorDto);
 
         // WHEN
         ResponseEntity<Doctor> response = testRestTemplate.postForEntity("/api/doctor", doctorDto, Doctor.class);
