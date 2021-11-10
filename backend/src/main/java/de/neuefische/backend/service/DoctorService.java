@@ -8,6 +8,7 @@ import de.neuefische.backend.repo.DoctorRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -17,11 +18,13 @@ public class DoctorService {
 
     private final DoctorRepo doctorRepo;
     private final UtilService utilService;
+    private final IdService idService;
 
     @Autowired
-    public DoctorService(DoctorRepo doctorRepo, UtilService utilService) {
+    public DoctorService(DoctorRepo doctorRepo, UtilService utilService, IdService idService) {
         this.doctorRepo = doctorRepo;
         this.utilService = utilService;
+        this.idService = idService;
     }
 
     public List<Doctor> getDoctors() {
@@ -57,14 +60,16 @@ public class DoctorService {
 
         AppointmentDto appointmentDto = doctorDto.getAppointmentDto();
         Appointment appointment = utilService.mapAppointmentDtoToAppointment(appointmentDto);
+        appointment.setId(idService.generateId());
         Doctor doctor = utilService.mapDoctorDtoToDoctor(doctorDto);
+        doctor.setAppointments(List.of(appointment));
 
-        Boolean appointmentExists = doctorRepo.existsDoctor_Appointment_ByDate(
+       Boolean appointmentExists = doctorRepo.existsDoctor_Appointment_ByDate(
                 appointment.getDate()
         );
 
         if (appointmentExists) {
-            throw new IllegalArgumentException("Appointment with Doctor" + doctorDto.getLastName() + " on " + appointmentDto.getDate() + " already exists in the database");
+            throw new IllegalArgumentException("Appointment with Doctor " + doctorDto.getLastName() + " on " + appointmentDto.getDate() + " already exists in the database");
         } else {
             Doctor doctorToUpdate = doctorRepo.findDoctorByFirstNameAndLastNameAndSpecialtyAndCity(
                     doctor.getFirstName(),
@@ -74,13 +79,14 @@ public class DoctorService {
             );
 
             if (doctorToUpdate != null) {
-                doctorToUpdate.getAppointments().add(appointment);
+                List<Appointment> appointments = new ArrayList<>(doctorToUpdate.getAppointments());
+                appointments.add(appointment);
+                doctorToUpdate.setAppointments(appointments);
                 return doctorRepo.save(doctorToUpdate);
             } else {
                 return doctorRepo.save(doctor);
             }
         }
-
     }
 
 }

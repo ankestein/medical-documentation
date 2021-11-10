@@ -18,7 +18,8 @@ class DoctorServiceTest {
 
     private final DoctorRepo doctorRepo = mock(DoctorRepo.class);
     private final UtilService utilService = mock(UtilService.class);
-    private final DoctorService doctorService = new DoctorService(doctorRepo, utilService);
+    private final IdService idService = mock(IdService.class);
+    private final DoctorService doctorService = new DoctorService(doctorRepo, utilService, idService);
 
     @Test
     @DisplayName("addDoctor should add a new doctor to the database")
@@ -126,7 +127,122 @@ class DoctorServiceTest {
         verify(doctorRepo).save(expectedDoctor);
     }
 
-    //TODO
-    // Check addAppointment if doctor already exists in the database (how to do with mocking?)
-    // Check exception if appointment already exists
+    @Test
+    @DisplayName("Adding an appointment that is already in the database (same date) should throw an IllegalArgumentException")
+    void addExistingAppointmentTest() {
+        // GIVEN
+        DoctorDto expectedDoctorDto = DoctorDto.builder()
+                .firstName("Linda")
+                .lastName("Holder")
+                .specialty("Dentist")
+                .city("Bonn")
+                .appointmentDto(AppointmentDto.builder()
+                        .date("2021-11-08")
+                        .reasonForVisit("checkup")
+                        .build())
+                .build();
+
+        Doctor expectedDoctor = Doctor.builder()
+                .firstName("Linda")
+                .lastName("Holder")
+                .specialty("Dentist")
+                .city("Bonn")
+                .appointments(List.of(
+                        Appointment.builder()
+                                .date("2021-11-08")
+                                .reasonForVisit("checkup")
+                                .build()
+                ))
+                .build();
+
+        when(utilService.mapDoctorDtoToDoctor(expectedDoctorDto)).thenReturn(expectedDoctor);
+        when(utilService.mapAppointmentDtoToAppointment(expectedDoctorDto.getAppointmentDto())).thenReturn(expectedDoctor.getAppointments().get(0));
+        when(doctorRepo.existsDoctor_Appointment_ByDate("2021-11-08")).thenReturn(true);
+
+        // WHEN
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            doctorService.addAppointment(expectedDoctorDto);
+        }, "I expected an IllegalArgumentException");
+
+        // THEN
+        assertEquals("Appointment with Doctor Holder on 2021-11-08 already exists in the database", thrown.getMessage());
+        verify(doctorRepo).existsDoctor_Appointment_ByDate("2021-11-08");
+    }
+
+
+    @Test
+    @DisplayName("Adding an appointment to a doctor that already exists in the database should add the new appointment to the existing list of appointments")
+    void addAppointmentToExistingDoctorTest() {
+        // GIVEN
+        DoctorDto doctorDto = DoctorDto.builder()
+                .firstName("Linda")
+                .lastName("Holder")
+                .specialty("Dentist")
+                .city("Bonn")
+                .appointmentDto(AppointmentDto.builder()
+                        .date("2021-11-08")
+                        .reasonForVisit("checkup")
+                        .build())
+                .build();
+
+        Doctor doctor = Doctor.builder()
+                .firstName("Linda")
+                .lastName("Holder")
+                .specialty("Dentist")
+                .city("Bonn")
+                .appointments(List.of(
+                        Appointment.builder()
+                                .date("2021-11-08")
+                                .reasonForVisit("checkup")
+                                .build()
+                ))
+                .build();
+
+        Doctor doctorInDb = Doctor.builder()
+                .firstName("Linda")
+                .lastName("Holder")
+                .specialty("Dentist")
+                .city("Bonn")
+                .appointments(List.of(
+                        Appointment.builder()
+                                .id("111111")
+                                .date("2020-10-02")
+                                .reasonForVisit("checkup")
+                                .build()
+                ))
+                .build();
+
+        Doctor updatedDoctor = Doctor.builder()
+                .firstName("Linda")
+                .lastName("Holder")
+                .specialty("Dentist")
+                .city("Bonn")
+                .appointments(List.of(
+                        Appointment.builder()
+                                .id("111111")
+                                .date("2020-10-02")
+                                .reasonForVisit("checkup")
+                                .build(),
+                        Appointment.builder()
+                                .id("123456")
+                                .date("2021-11-08")
+                                .reasonForVisit("checkup")
+                                .build()
+                ))
+                .build();
+
+        when(utilService.mapDoctorDtoToDoctor(doctorDto)).thenReturn(doctor);
+        when(utilService.mapAppointmentDtoToAppointment(doctorDto.getAppointmentDto())).thenReturn(doctor.getAppointments().get(0));
+        when(idService.generateId()).thenReturn("123456");
+        when(doctorRepo.findDoctorByFirstNameAndLastNameAndSpecialtyAndCity("Linda", "Holder", "Dentist", "Bonn")).thenReturn(doctorInDb);
+        when(doctorRepo.save(doctorInDb)).thenReturn(updatedDoctor);
+
+        // WHEN
+        Doctor actualDoctor = doctorService.addAppointment(doctorDto);
+
+        // THEN
+        assertEquals(updatedDoctor, actualDoctor);
+        verify(doctorRepo).save(doctorInDb);
+    }
+
 }
