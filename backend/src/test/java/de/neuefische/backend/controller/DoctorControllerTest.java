@@ -67,4 +67,46 @@ class DoctorControllerTest {
         assertEquals(expectedDoctor, persistedDoctor);
 
     }
+
+
+    @Test
+    void addAppointmentTest() {
+        // GIVEN
+        AppointmentDto appointmentDto = (AppointmentDto.builder()
+                .date("2021-11-08")
+                .reasonForVisit("checkup")
+                .build());
+
+        DoctorDto doctorDto = DoctorDto.builder()
+                .firstName("Linda")
+                .lastName("Holder")
+                .specialty("Dentist")
+                .city("Bonn")
+                .appointmentDto(appointmentDto)
+                .build();
+
+        Doctor expectedDoctor = utilService.mapDoctorDtoToDoctor(doctorDto);
+        Appointment appointment = expectedDoctor.getAppointments().get(0);
+
+        // WHEN
+        ResponseEntity<Doctor> response = testRestTemplate.postForEntity("/api/doctor/appointment", doctorDto, Doctor.class);
+        Doctor actual = response.getBody();
+        String actualDoctorId = actual.getId();
+        String actualAppointmentId = actual.getAppointments().get(0).getId();
+
+        // THEN
+        appointment.setId(actualAppointmentId);
+        expectedDoctor.setAppointments(List.of(appointment));
+        expectedDoctor.setId(actualDoctorId);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(expectedDoctor, actual);
+
+        // THEN - check via GET if element was actually added
+        ResponseEntity<Doctor> getResponse = testRestTemplate.getForEntity("/api/doctor/" + actualDoctorId, Doctor.class);
+        Doctor persistedDoctor = getResponse.getBody();
+
+        assertNotNull(persistedDoctor);
+        assertEquals(expectedDoctor, persistedDoctor);
+
+    }
 }

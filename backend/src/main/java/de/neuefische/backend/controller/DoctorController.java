@@ -33,4 +33,12 @@ public class DoctorController {
     public Doctor addDoctor(@RequestBody DoctorDto doctorDto) {
         return doctorService.addDoctor(doctorDto);
     }
+
+    @PostMapping("/appointment")
+    public Doctor addAppointment(@RequestBody DoctorDto doctorDto) {
+        return doctorService.addAppointment(doctorDto);
+    }
+
+
+
 }
