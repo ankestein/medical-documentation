@@ -64,7 +64,7 @@ public class DoctorService {
         Doctor doctor = utilService.mapDoctorDtoToDoctor(doctorDto);
         doctor.setAppointments(List.of(appointment));
 
-       Boolean appointmentExists = doctorRepo.existsDoctor_Appointment_ByDate(
+       Boolean appointmentExists = doctorRepo.existsDoctorByAppointmentsDate(
                 appointment.getDate()
         );
 

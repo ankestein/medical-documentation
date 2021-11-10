@@ -24,7 +24,7 @@ public interface DoctorRepo extends PagingAndSortingRepository<Doctor, String> {
             String specialty,
             String city);
 
-    Boolean existsDoctor_Appointment_ByDate(
+    Boolean existsDoctorByAppointmentsDate(
             String date
     );
 
