@@ -5,6 +5,7 @@ import de.neuefische.backend.dto.DoctorDto;
 import de.neuefische.backend.model.Appointment;
 import de.neuefische.backend.model.Doctor;
 import de.neuefische.backend.repo.DoctorRepo;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -20,6 +21,27 @@ class DoctorServiceTest {
     private final UtilService utilService = mock(UtilService.class);
     private final IdService idService = mock(IdService.class);
     private final DoctorService doctorService = new DoctorService(doctorRepo, utilService, idService);
+
+    @Test
+    void getDoctorsTest() {
+        // GIVEN
+        List<Doctor> expectedDoctors = List.of(Doctor.builder()
+                .firstName("Adam")
+                .lastName("Riese")
+                .specialty("General practitioner")
+                .city("Bonn")
+                .build());
+        when(doctorRepo.findAll()).thenReturn(expectedDoctors);
+
+        // WHEN
+        List<Doctor> actualDoctors = doctorService.getDoctors();
+
+        // THEN
+        assertEquals(expectedDoctors, actualDoctors);
+        verify(doctorRepo).findAll();
+    }
+
+
 
     @Test
     @DisplayName("addDoctor should add a new doctor to the database")
