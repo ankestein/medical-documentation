@@ -34,7 +34,7 @@ public class DoctorController {
         return doctorService.addDoctor(doctorDto);
     }
 
-    @PostMapping("/appointment")
+    @PutMapping("/appointment")
     public Doctor addAppointment(@RequestBody DoctorDto doctorDto) {
         return doctorService.addAppointment(doctorDto);
     }
