@@ -18,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.arrayContainingInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -112,5 +114,35 @@ class DoctorControllerTest {
 
     }
 
+
+    @Test
+    void getDoctorsTest() {
+        // GIVEN
+        Doctor doctor1 = Doctor.builder()
+                .firstName("Linda")
+                .lastName("Holder")
+                .specialty("Dentist")
+                .city("Bonn")
+                .phoneNumber("022812345")
+                .build();
+
+        Doctor doctor2 = Doctor.builder()
+                .firstName("Suse")
+                .lastName("Meier")
+                .specialty("Oculist")
+                .city("Cologne")
+                .build();
+
+        doctorRepo.save(doctor1);
+        doctorRepo.save(doctor2);
+
+        // WHEN
+        ResponseEntity<Doctor[]> response = testRestTemplate.getForEntity("/api/doctor", Doctor[].class);
+
+        // THEN
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertThat(response.getBody(), arrayContainingInAnyOrder(doctor1, doctor2));
+
+    }
 
 }
