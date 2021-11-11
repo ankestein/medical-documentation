@@ -245,4 +245,69 @@ class DoctorServiceTest {
         verify(doctorRepo).save(doctorInDb);
     }
 
+
+
+    @Test
+    @DisplayName("Adding an appointment to a doctor that already exists in the database without any appointments should add the new appointment")
+    void addAppointmentToExistingDoctorWithoutAppointmentsTest() {
+        // GIVEN
+        DoctorDto doctorDto = DoctorDto.builder()
+                .firstName("Linda")
+                .lastName("Holder")
+                .specialty("Dentist")
+                .city("Bonn")
+                .appointmentDto(AppointmentDto.builder()
+                        .date("2021-11-08")
+                        .reasonForVisit("checkup")
+                        .build())
+                .build();
+
+        Doctor doctor = Doctor.builder()
+                .firstName("Linda")
+                .lastName("Holder")
+                .specialty("Dentist")
+                .city("Bonn")
+                .appointments(List.of(
+                        Appointment.builder()
+                                .date("2021-11-08")
+                                .reasonForVisit("checkup")
+                                .build()
+                ))
+                .build();
+
+        Doctor doctorInDb = Doctor.builder()
+                .firstName("Linda")
+                .lastName("Holder")
+                .specialty("Dentist")
+                .city("Bonn")
+                .build();
+
+        Doctor updatedDoctor = Doctor.builder()
+                .firstName("Linda")
+                .lastName("Holder")
+                .specialty("Dentist")
+                .city("Bonn")
+                .appointments(List.of(
+                        Appointment.builder()
+                                .id("123456")
+                                .date("2021-11-08")
+                                .reasonForVisit("checkup")
+                                .build()
+                ))
+                .build();
+
+        when(utilService.mapDoctorDtoToDoctor(doctorDto)).thenReturn(doctor);
+        when(utilService.mapAppointmentDtoToAppointment(doctorDto.getAppointmentDto())).thenReturn(doctor.getAppointments().get(0));
+        when(idService.generateId()).thenReturn("123456");
+        when(doctorRepo.findDoctorByFirstNameAndLastNameAndSpecialtyAndCity("Linda", "Holder", "Dentist", "Bonn")).thenReturn(doctorInDb);
+        when(doctorRepo.save(doctorInDb)).thenReturn(updatedDoctor);
+
+        // WHEN
+        Doctor actualDoctor = doctorService.addAppointment(doctorDto);
+
+        // THEN
+        assertEquals(updatedDoctor, actualDoctor);
+        verify(doctorRepo).save(doctorInDb);
+    }
+
 }
