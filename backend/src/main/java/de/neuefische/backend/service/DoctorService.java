@@ -79,12 +79,14 @@ public class DoctorService {
             );
 
             if (doctorToUpdate != null) {
-                List<Appointment> appointments = new ArrayList<>();
                 if (doctorToUpdate.getAppointments() != null) {
-                    appointments = doctorToUpdate.getAppointments();
+                    List<Appointment> appointments = new ArrayList<>(doctorToUpdate.getAppointments());
+                    appointments.add(appointment);
+                    doctorToUpdate.setAppointments(appointments);
+                } else {
+                    List<Appointment> appointments = new ArrayList<>(List.of(appointment));
+                    doctorToUpdate.setAppointments(appointments);
                 }
-                appointments.add(appointment);
-                doctorToUpdate.setAppointments(appointments);
                 return doctorRepo.save(doctorToUpdate);
             } else {
                 return doctorRepo.save(doctor);

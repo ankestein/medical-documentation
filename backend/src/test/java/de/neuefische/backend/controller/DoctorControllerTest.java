@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -89,7 +91,7 @@ class DoctorControllerTest {
         Appointment appointment = expectedDoctor.getAppointments().get(0);
 
         // WHEN
-        ResponseEntity<Doctor> response = testRestTemplate.postForEntity("/api/doctor/appointment", doctorDto, Doctor.class);
+        ResponseEntity<Doctor> response = testRestTemplate.exchange("/api/doctor/appointment", HttpMethod.PUT, new HttpEntity<>(doctorDto), Doctor.class);
         Doctor actual = response.getBody();
         String actualDoctorId = actual.getId();
         String actualAppointmentId = actual.getAppointments().get(0).getId();
@@ -109,4 +111,6 @@ class DoctorControllerTest {
         assertEquals(expectedDoctor, persistedDoctor);
 
     }
+
+
 }
