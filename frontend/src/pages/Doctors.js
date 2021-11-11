@@ -1,14 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
-import {
-	Fab,
-	Paper,
-	Table,
-	TableBody,
-	TableCell,
-	TableContainer,
-	TableHead,
-	TableRow,
-} from '@mui/material';
+import {Fab} from '@mui/material';
+import {DataGrid} from '@mui/x-data-grid';
 import {Link} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import {getDoctors} from '../service/DoctorApiService';
@@ -29,6 +21,21 @@ export default function Doctors() {
 		right: 16,
 	};
 
+	const columns = [
+		{field: 'col1', headerName: 'Name', width: 150},
+		{field: 'col2', headerName: 'Specialty', width: 150},
+		{field: 'col3', headerName: 'City', width: 150},
+	];
+
+	const rows = doctors.map((doctor) => {
+		return {
+			id: doctor.id,
+			col1: `${doctor.lastName}, ${doctor.firstName}`,
+			col2: doctor.specialty,
+			col3: doctor.city,
+		};
+	});
+
 	return (
 		<PageLayout>
 			<H2>Doctors</H2>
@@ -44,35 +51,9 @@ export default function Doctors() {
 				<AddIcon />
 			</Fab>
 
-			<TableContainer component={Paper}>
-				<Table size='small' aria-label='doctors-table'>
-					<TableHead>
-						<TableRow>
-							<TableCell>Name</TableCell>
-							<TableCell align='left'>Specialty</TableCell>
-							<TableCell align='left'>City</TableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{doctors
-							.sort((first, second) => {
-								return first.lastName > second.lastName ? 1 : -1;
-							})
-							.map((doctor) => (
-								<TableRow
-									key={doctor.id}
-									sx={{'&:last-child td, &:last-child th': {border: 0}}}
-								>
-									<TableCell component='th' scope='row'>
-										{`${doctor.firstName} ${doctor.lastName}`}
-									</TableCell>
-									<TableCell align='left'>{doctor.specialty}</TableCell>
-									<TableCell align='left'>{doctor.city}</TableCell>
-								</TableRow>
-							))}
-					</TableBody>
-				</Table>
-			</TableContainer>
+			<div style={{width: '100%'}}>
+				<DataGrid rows={rows} columns={columns} hideFooterPagination={true} />
+			</div>
 		</PageLayout>
 	);
 }
