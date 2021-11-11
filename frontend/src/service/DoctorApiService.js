@@ -6,7 +6,7 @@ export function submitDoctor(newDoctor) {
 
 export function submitAppointment(newDoctor) {
 	return axios
-		.post('/api/doctor/appointment', newDoctor)
+		.put('/api/doctor/appointment', newDoctor)
 		.then((response) => response.data);
 }
 

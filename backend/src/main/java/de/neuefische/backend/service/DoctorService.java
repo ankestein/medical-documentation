@@ -64,20 +64,24 @@ public class DoctorService {
         Doctor doctor = utilService.mapDoctorDtoToDoctor(doctorDto);
         doctor.setAppointments(List.of(appointment));
 
-        Boolean appointmentExists = doctorRepo.existsDoctorByAppointmentsDate(
+        Doctor doctorToUpdate = doctorRepo.findDoctorByFirstNameAndLastNameAndSpecialtyAndCity(
+                doctor.getFirstName(),
+                doctor.getLastName(),
+                doctor.getSpecialty(),
+                doctor.getCity()
+        );
+        if (doctorToUpdate != null) {
+            doctor.setId(doctorToUpdate.getId());
+        }
+
+        Boolean appointmentExists = doctorRepo.existsDoctorByIdAndAppointmentsDate(
+                doctor.getId(),
                 appointment.getDate()
         );
 
         if (appointmentExists) {
             throw new IllegalArgumentException("Appointment with Doctor " + doctorDto.getLastName() + " on " + appointmentDto.getDate() + " already exists in the database");
         } else {
-            Doctor doctorToUpdate = doctorRepo.findDoctorByFirstNameAndLastNameAndSpecialtyAndCity(
-                    doctor.getFirstName(),
-                    doctor.getLastName(),
-                    doctor.getSpecialty(),
-                    doctor.getCity()
-            );
-
             if (doctorToUpdate != null) {
                 if (doctorToUpdate.getAppointments() != null) {
                     List<Appointment> appointments = new ArrayList<>(doctorToUpdate.getAppointments());

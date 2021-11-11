@@ -26,7 +26,7 @@ export default function NewAppointment() {
 		phoneNumber: '',
 		mobileNumber: '',
 		emailAddress: '',
-		appointments: [initialAppointment],
+		appointmentDto: initialAppointment,
 	};
 
 	const [newAppointment, setNewAppointment] = useState(initialAppointment);
@@ -39,6 +39,10 @@ export default function NewAppointment() {
 			.catch((error) => console.error(error.message));
 	}, []);
 
+	useEffect(() => {
+		setDoctor({...doctor, appointmentDto: newAppointment});
+	}, [newAppointment]);
+
 	const handleChange = (event) => {
 		setNewAppointment({
 			...newAppointment,
@@ -48,30 +52,19 @@ export default function NewAppointment() {
 
 	const handleDateChange = (inputDate) => {
 		const formattedDate = moment(inputDate, 'YYYY-MM-DD').format('LL');
-		setNewAppointment({
-			...newAppointment,
-			date: formattedDate,
-		});
+		setNewAppointment({...newAppointment, date: formattedDate});
 	};
 
 	const handleDoctorChange = (event) => {
-		//console.log(event.target);
-		//console.log(`all doctors: ${JSON.stringify(doctors)}`);
-		let doctorToSet = doctors.find(
+		let doctorToUpdate = doctors.find(
 			(doctor) => doctor.id === event.target.value
 		);
-		//doctorToSet = {...doctorToSet, appointments: []};
-		console.log(`doctorToSet: ${JSON.stringify(doctorToSet)}`);
-		setDoctor(doctorToSet);
-		//setDoctor({...doctorToSet, appointments: []});
+		delete doctorToUpdate.appointments;
+		setDoctor(doctorToUpdate);
 	};
-	console.log(`doctor: ${JSON.stringify(doctor)}`);
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		setDoctor({...doctor, appointments: [newAppointment]});
-		console.log(`doctor to be submitted: ${JSON.stringify(doctor)}`);
-		console.log(`newAppointment: ${JSON.stringify(newAppointment)}`);
 		submitAppointment(doctor).catch(console.error);
 		setNewAppointment(initialAppointment);
 		setDoctor(initialDoctor);

@@ -143,6 +143,7 @@ class DoctorServiceTest {
                 .build();
 
         Doctor expectedDoctor = Doctor.builder()
+                .id("123")
                 .firstName("Linda")
                 .lastName("Holder")
                 .specialty("Dentist")
@@ -157,7 +158,7 @@ class DoctorServiceTest {
 
         when(utilService.mapDoctorDtoToDoctor(expectedDoctorDto)).thenReturn(expectedDoctor);
         when(utilService.mapAppointmentDtoToAppointment(expectedDoctorDto.getAppointmentDto())).thenReturn(expectedDoctor.getAppointments().get(0));
-        when(doctorRepo.existsDoctorByAppointmentsDate("2021-11-08")).thenReturn(true);
+        when(doctorRepo.existsDoctorByIdAndAppointmentsDate("123", "2021-11-08")).thenReturn(true);
 
         // WHEN
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
@@ -166,7 +167,7 @@ class DoctorServiceTest {
 
         // THEN
         assertEquals("Appointment with Doctor Holder on 2021-11-08 already exists in the database", thrown.getMessage());
-        verify(doctorRepo).existsDoctorByAppointmentsDate("2021-11-08");
+        verify(doctorRepo).existsDoctorByIdAndAppointmentsDate("123", "2021-11-08");
     }
 
 
