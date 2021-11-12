@@ -2,6 +2,8 @@ package de.neuefische.backend.service;
 
 import de.neuefische.backend.dto.AppointmentDto;
 import de.neuefische.backend.dto.DoctorDto;
+import de.neuefische.backend.mapper.AppointmentMapper;
+import de.neuefische.backend.mapper.DoctorMapper;
 import de.neuefische.backend.model.Appointment;
 import de.neuefische.backend.model.Doctor;
 import de.neuefische.backend.repo.DoctorRepo;
@@ -17,13 +19,11 @@ import java.util.NoSuchElementException;
 public class DoctorService {
 
     private final DoctorRepo doctorRepo;
-    private final UtilService utilService;
     private final IdService idService;
 
     @Autowired
-    public DoctorService(DoctorRepo doctorRepo, UtilService utilService, IdService idService) {
+    public DoctorService(DoctorRepo doctorRepo, IdService idService) {
         this.doctorRepo = doctorRepo;
-        this.utilService = utilService;
         this.idService = idService;
     }
 
@@ -39,9 +39,9 @@ public class DoctorService {
 
     public Doctor addDoctor(DoctorDto doctorDto) {
 
-        Doctor doctor = utilService.mapDoctorDtoToDoctor(doctorDto);
+        Doctor doctor = DoctorMapper.mapDoctorDtoToDoctor(doctorDto);
 
-        Boolean doctorExists = doctorRepo.existsDoctorByFirstNameAndLastNameAndSpecialtyAndCity(
+        boolean doctorExists = doctorRepo.existsDoctorByFirstNameAndLastNameAndSpecialtyAndCity(
                 doctor.getFirstName(),
                 doctor.getLastName(),
                 doctor.getSpecialty(),
@@ -59,9 +59,9 @@ public class DoctorService {
     public Doctor addAppointment(DoctorDto doctorDto) {
 
         AppointmentDto appointmentDto = doctorDto.getAppointmentDto();
-        Appointment appointment = utilService.mapAppointmentDtoToAppointment(appointmentDto);
+        Appointment appointment = AppointmentMapper.mapAppointmentDtoToAppointment(appointmentDto);
         appointment.setId(idService.generateId());
-        Doctor doctor = utilService.mapDoctorDtoToDoctor(doctorDto);
+        Doctor doctor = DoctorMapper.mapDoctorDtoToDoctor(doctorDto);
         doctor.setAppointments(List.of(appointment));
 
         Doctor doctorToUpdate = doctorRepo.findDoctorByFirstNameAndLastNameAndSpecialtyAndCity(
@@ -74,7 +74,7 @@ public class DoctorService {
             doctor.setId(doctorToUpdate.getId());
         }
 
-        Boolean appointmentExists = doctorRepo.existsDoctorByIdAndAppointmentsDate(
+        boolean appointmentExists = doctorRepo.existsDoctorByIdAndAppointmentsDate(
                 doctor.getId(),
                 appointment.getDate()
         );

@@ -2,10 +2,10 @@ package de.neuefische.backend.controller;
 
 import de.neuefische.backend.dto.AppointmentDto;
 import de.neuefische.backend.dto.DoctorDto;
+import de.neuefische.backend.mapper.DoctorMapper;
 import de.neuefische.backend.model.Appointment;
 import de.neuefische.backend.model.Doctor;
 import de.neuefische.backend.repo.DoctorRepo;
-import de.neuefische.backend.service.UtilService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +30,6 @@ class DoctorControllerTest {
     @Autowired
     private DoctorRepo doctorRepo;
 
-    @Autowired
-    private UtilService utilService;
-
     @BeforeEach
     public void clearDb() {
         doctorRepo.deleteAll();
@@ -49,16 +46,20 @@ class DoctorControllerTest {
                 .phoneNumber("022812345")
                 .build();
 
-        Doctor expectedDoctor = utilService.mapDoctorDtoToDoctor(doctorDto);
+        Doctor expectedDoctor = DoctorMapper.mapDoctorDtoToDoctor(doctorDto);
 
         // WHEN
         ResponseEntity<Doctor> response = testRestTemplate.postForEntity("/api/doctor", doctorDto, Doctor.class);
-        Doctor actual = response.getBody();
-        String actualId = actual.getId();
 
         // THEN
-        expectedDoctor.setId(actualId);
         assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        Doctor actual = response.getBody();
+        assertNotNull(actual);
+        String actualId = actual.getId();
+        assertNotNull(actualId);
+        expectedDoctor.setId(actualId);
+
         assertEquals(expectedDoctor, actual);
 
         // THEN - check via GET if element was actually added
@@ -87,20 +88,24 @@ class DoctorControllerTest {
                 .appointmentDto(appointmentDto)
                 .build();
 
-        Doctor expectedDoctor = utilService.mapDoctorDtoToDoctor(doctorDto);
+        Doctor expectedDoctor = DoctorMapper.mapDoctorDtoToDoctor(doctorDto);
         Appointment appointment = expectedDoctor.getAppointments().get(0);
 
         // WHEN
         ResponseEntity<Doctor> response = testRestTemplate.exchange("/api/doctor/appointment", HttpMethod.PUT, new HttpEntity<>(doctorDto), Doctor.class);
-        Doctor actual = response.getBody();
-        String actualDoctorId = actual.getId();
-        String actualAppointmentId = actual.getAppointments().get(0).getId();
 
         // THEN
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        Doctor actual = response.getBody();
+        assertNotNull(actual);
+        assertNotNull(actual.getId());
+        String actualDoctorId = actual.getId();
+        String actualAppointmentId = actual.getAppointments().get(0).getId();
         appointment.setId(actualAppointmentId);
         expectedDoctor.setAppointments(List.of(appointment));
         expectedDoctor.setId(actualDoctorId);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+
         assertEquals(expectedDoctor, actual);
 
         // THEN - check via GET if element was actually added
