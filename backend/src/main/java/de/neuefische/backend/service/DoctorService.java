@@ -19,12 +19,10 @@ import java.util.NoSuchElementException;
 public class DoctorService {
 
     private final DoctorRepo doctorRepo;
-    private final IdService idService;
 
     @Autowired
-    public DoctorService(DoctorRepo doctorRepo, IdService idService) {
+    public DoctorService(DoctorRepo doctorRepo) {
         this.doctorRepo = doctorRepo;
-        this.idService = idService;
     }
 
     public List<Doctor> getDoctors() {
@@ -60,7 +58,7 @@ public class DoctorService {
 
         AppointmentDto appointmentDto = doctorDto.getAppointmentDto();
         Appointment appointment = AppointmentMapper.mapAppointmentDtoToAppointment(appointmentDto);
-        appointment.setId(idService.generateId());
+        appointment.setId(IdService.generateId());
         Doctor doctor = DoctorMapper.mapDoctorDtoToDoctor(doctorDto);
         doctor.setAppointments(List.of(appointment));
 

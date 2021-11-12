@@ -7,6 +7,7 @@ import de.neuefische.backend.model.Doctor;
 import de.neuefische.backend.repo.DoctorRepo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 
 import java.util.List;
 
@@ -17,8 +18,7 @@ import static org.mockito.Mockito.*;
 class DoctorServiceTest {
 
     private final DoctorRepo doctorRepo = mock(DoctorRepo.class);
-    private final IdService idService = mock(IdService.class);
-    private final DoctorService doctorService = new DoctorService(doctorRepo, idService);
+    private final DoctorService doctorService = new DoctorService(doctorRepo);
 
     @Test
     @DisplayName("addDoctor should add a new doctor to the database")
@@ -81,6 +81,8 @@ class DoctorServiceTest {
     @DisplayName("addAppointment should add a new appointment to the database")
     void addAppointmentTest() {
         // GIVEN
+        MockedStatic<IdService> idService = mockStatic(IdService.class);
+
         DoctorDto expectedDoctorDto = DoctorDto.builder()
                 .firstName("Linda")
                 .lastName("Holder")
@@ -99,20 +101,40 @@ class DoctorServiceTest {
                 .city("Bonn")
                 .appointments(List.of(
                         Appointment.builder()
+                                .id("111111")
                                 .date("2021-11-08")
                                 .reasonForVisit("checkup")
                                 .build()
                 ))
                 .build();
 
+        Doctor doctorInDb = Doctor.builder()
+                .firstName("Linda")
+                .lastName("Holder")
+                .specialty("Dentist")
+                .city("Bonn")
+                .build();
+
+        idService.when(IdService::generateId).thenReturn("111111");
+        when(doctorRepo.existsDoctorByIdAndAppointmentsDate("111111", "2021-11-08")).thenReturn(false);
+        when(doctorRepo.findDoctorByFirstNameAndLastNameAndSpecialtyAndCity(
+                "Linda",
+                "Holder",
+                "Dentist",
+                "Bonn"
+        )).thenReturn(doctorInDb);
         when(doctorRepo.save(expectedDoctor)).thenReturn(expectedDoctor);
+
 
         // WHEN
         Doctor actualDoctor = doctorService.addAppointment(expectedDoctorDto);
 
         // THEN
-        assertEquals(expectedDoctor, actualDoctor);
         verify(doctorRepo).save(expectedDoctor);
+        assertEquals(expectedDoctor, actualDoctor);
+
+        idService.close();
+
     }
 
     @Test
@@ -140,6 +162,7 @@ class DoctorServiceTest {
         // THEN
         assertEquals("Appointment with Doctor Holder on 2021-11-08 already exists in the database", thrown.getMessage());
         verify(doctorRepo).existsDoctorByIdAndAppointmentsDate(null, "2021-11-08");
+
     }
 
 
@@ -147,6 +170,8 @@ class DoctorServiceTest {
     @DisplayName("Adding an appointment to a doctor that already exists in the database should add the new appointment to the existing list of appointments")
     void addAppointmentToExistingDoctorTest() {
         // GIVEN
+        MockedStatic<IdService> idService = mockStatic(IdService.class);
+
         DoctorDto doctorDto = DoctorDto.builder()
                 .firstName("Linda")
                 .lastName("Holder")
@@ -191,7 +216,7 @@ class DoctorServiceTest {
                 ))
                 .build();
 
-        when(idService.generateId()).thenReturn("123456");
+        idService.when(IdService::generateId).thenReturn("123456");
         when(doctorRepo.findDoctorByFirstNameAndLastNameAndSpecialtyAndCity("Linda", "Holder", "Dentist", "Bonn")).thenReturn(doctorInDb);
         when(doctorRepo.save(doctorInDb)).thenReturn(updatedDoctor);
 
@@ -201,8 +226,10 @@ class DoctorServiceTest {
         // THEN
         assertEquals(updatedDoctor, actualDoctor);
         verify(doctorRepo).save(doctorInDb);
-        verify(idService).generateId();
+        idService.verify(IdService::generateId);
         verify(doctorRepo).findDoctorByFirstNameAndLastNameAndSpecialtyAndCity("Linda", "Holder", "Dentist", "Bonn");
+
+        idService.close();
     }
 
 
@@ -211,6 +238,9 @@ class DoctorServiceTest {
     @DisplayName("Adding an appointment to a doctor that already exists in the database without any appointments should add the new appointment")
     void addAppointmentToExistingDoctorWithoutAppointmentsTest() {
         // GIVEN
+        MockedStatic<IdService> idService = mockStatic(IdService.class);
+
+
         DoctorDto doctorDto = DoctorDto.builder()
                 .firstName("Linda")
                 .lastName("Holder")
@@ -243,7 +273,7 @@ class DoctorServiceTest {
                 ))
                 .build();
 
-        when(idService.generateId()).thenReturn("123456");
+        idService.when(IdService::generateId).thenReturn("123456");
         when(doctorRepo.findDoctorByFirstNameAndLastNameAndSpecialtyAndCity("Linda", "Holder", "Dentist", "Bonn")).thenReturn(doctorInDb);
         when(doctorRepo.save(doctorInDb)).thenReturn(updatedDoctor);
 
@@ -253,9 +283,10 @@ class DoctorServiceTest {
         // THEN
         assertEquals(updatedDoctor, actualDoctor);
         verify(doctorRepo).save(doctorInDb);
-        verify(idService).generateId();
+        idService.verify(IdService::generateId);
         verify(doctorRepo).findDoctorByFirstNameAndLastNameAndSpecialtyAndCity("Linda", "Holder", "Dentist", "Bonn");
 
+        idService.close();
     }
 
 }
