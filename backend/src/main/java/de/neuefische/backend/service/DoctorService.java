@@ -81,14 +81,12 @@ public class DoctorService {
             throw new IllegalArgumentException("Appointment with Doctor " + doctorDto.getLastName() + " on " + appointmentDto.getDate() + " already exists in the database");
         } else {
             if (doctorToUpdate != null) {
+                List<Appointment> appointments = new ArrayList<>();
                 if (doctorToUpdate.getAppointments() != null) {
-                    List<Appointment> appointments = new ArrayList<>(doctorToUpdate.getAppointments());
-                    appointments.add(appointment);
-                    doctorToUpdate.setAppointments(appointments);
-                } else {
-                    List<Appointment> appointments = new ArrayList<>(List.of(appointment));
-                    doctorToUpdate.setAppointments(appointments);
+                    appointments.addAll(doctorToUpdate.getAppointments());
                 }
+                appointments.add(appointment);
+                doctorToUpdate.setAppointments(appointments);
                 return doctorRepo.save(doctorToUpdate);
             } else {
                 return doctorRepo.save(doctor);
