@@ -1,7 +1,7 @@
 import {Button, MenuItem, TextField} from '@mui/material';
 import {useEffect, useState} from 'react';
 import styled from 'styled-components/macro';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import DateAdapter from '@mui/lab/AdapterMoment';
 import {DatePicker, LocalizationProvider} from '@mui/lab';
 import moment from 'moment';
 import {getDoctors, submitAppointment} from '../service/DoctorApiService';
@@ -30,17 +30,17 @@ export default function NewAppointment() {
 	};
 
 	const [newAppointment, setNewAppointment] = useState(initialAppointment);
-	const [doctor, setDoctor] = useState(initialDoctor);
-	const [doctors, setDoctors] = useState([]);
+	const [selectedDoctor, setSelectedDoctor] = useState(initialDoctor);
+	const [allDoctors, setAllDoctors] = useState([]);
 
 	useEffect(() => {
 		getDoctors()
-			.then((doctors) => setDoctors(doctors))
+			.then((doctors) => setAllDoctors(doctors))
 			.catch((error) => console.error(error.message));
 	}, []);
 
 	useEffect(() => {
-		setDoctor({...doctor, appointmentDto: newAppointment});
+		setSelectedDoctor({...selectedDoctor, appointmentDto: newAppointment});
 	}, [newAppointment]);
 
 	const handleChange = (event) => {
@@ -56,18 +56,18 @@ export default function NewAppointment() {
 	};
 
 	const handleDoctorChange = (event) => {
-		let doctorToUpdate = doctors.find(
+		let doctorToUpdate = allDoctors.find(
 			(doctor) => doctor.id === event.target.value
 		);
 		delete doctorToUpdate.appointments;
-		setDoctor(doctorToUpdate);
+		setSelectedDoctor(doctorToUpdate);
 	};
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		submitAppointment(doctor).catch(console.error);
+		submitAppointment(selectedDoctor).catch(console.error);
 		setNewAppointment(initialAppointment);
-		setDoctor(initialDoctor);
+		setSelectedDoctor(initialDoctor);
 	};
 
 	return (
@@ -76,13 +76,13 @@ export default function NewAppointment() {
 				<TextField
 					id='select-doctor'
 					select
-					value={doctor.id}
+					value={selectedDoctor.id}
 					label='Doctor'
 					required={true}
 					name='doctorId'
 					onChange={handleDoctorChange}
 				>
-					{doctors
+					{allDoctors
 						.sort((first, second) => {
 							return first.lastName > second.lastName ? 1 : -1;
 						})
@@ -93,7 +93,7 @@ export default function NewAppointment() {
 						))}
 				</TextField>
 
-				<LocalizationProvider dateAdapter={AdapterDateFns}>
+				<LocalizationProvider dateAdapter={DateAdapter}>
 					<DatePicker
 						label='Date'
 						value={newAppointment.date}

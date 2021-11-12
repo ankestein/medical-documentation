@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -102,7 +103,7 @@ class DoctorServiceTest {
                 .appointments(List.of(
                         Appointment.builder()
                                 .id("111111")
-                                .date("2021-11-08")
+                                .date(LocalDate.of(2021,11,8))
                                 .reasonForVisit("checkup")
                                 .build()
                 ))
@@ -116,7 +117,7 @@ class DoctorServiceTest {
                 .build();
 
         idService.when(IdService::generateId).thenReturn("111111");
-        when(doctorRepo.existsDoctorByIdAndAppointmentsDate("111111", "2021-11-08")).thenReturn(false);
+        when(doctorRepo.existsDoctorByIdAndAppointmentsDate("111111", LocalDate.of(2021,11,8))).thenReturn(false);
         when(doctorRepo.findDoctorByFirstNameAndLastNameAndSpecialtyAndCity(
                 "Linda",
                 "Holder",
@@ -152,7 +153,7 @@ class DoctorServiceTest {
                         .build())
                 .build();
 
-        when(doctorRepo.existsDoctorByIdAndAppointmentsDate(null, "2021-11-08")).thenReturn(true);
+        when(doctorRepo.existsDoctorByIdAndAppointmentsDate(null, LocalDate.of(2021,11,8))).thenReturn(true);
 
         // WHEN
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
@@ -161,7 +162,7 @@ class DoctorServiceTest {
 
         // THEN
         assertEquals("Appointment with Doctor Holder on 2021-11-08 already exists in the database", thrown.getMessage());
-        verify(doctorRepo).existsDoctorByIdAndAppointmentsDate(null, "2021-11-08");
+        verify(doctorRepo).existsDoctorByIdAndAppointmentsDate(null, LocalDate.of(2021,11,8));
 
     }
 
@@ -191,7 +192,7 @@ class DoctorServiceTest {
                 .appointments(List.of(
                         Appointment.builder()
                                 .id("111111")
-                                .date("2020-10-02")
+                                .date(LocalDate.of(2020,10,2))
                                 .reasonForVisit("checkup")
                                 .build()
                 ))
@@ -205,12 +206,12 @@ class DoctorServiceTest {
                 .appointments(List.of(
                         Appointment.builder()
                                 .id("111111")
-                                .date("2020-10-02")
+                                .date(LocalDate.of(2020,10,2))
                                 .reasonForVisit("checkup")
                                 .build(),
                         Appointment.builder()
                                 .id("123456")
-                                .date("2021-11-08")
+                                .date(LocalDate.of(2021,11,8))
                                 .reasonForVisit("checkup")
                                 .build()
                 ))
@@ -267,7 +268,7 @@ class DoctorServiceTest {
                 .appointments(List.of(
                         Appointment.builder()
                                 .id("123456")
-                                .date("2021-11-08")
+                                .date(LocalDate.of(2021,11,8))
                                 .reasonForVisit("checkup")
                                 .build()
                 ))
