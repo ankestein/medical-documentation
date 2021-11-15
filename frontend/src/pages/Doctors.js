@@ -2,18 +2,11 @@ import AddIcon from '@mui/icons-material/Add';
 import {Fab} from '@mui/material';
 import {DataGrid} from '@mui/x-data-grid';
 import {Link} from 'react-router-dom';
-import {useEffect, useState} from 'react';
-import {getDoctors} from '../service/DoctorApiService';
 import styled from 'styled-components/macro';
+import useDoctors from '../hooks/useDoctors';
 
 export default function Doctors() {
-	const [doctors, setDoctors] = useState([]);
-
-	useEffect(() => {
-		getDoctors()
-			.then((doctors) => setDoctors(doctors))
-			.catch((error) => console.error(error.message));
-	}, []);
+	const {allDoctors} = useDoctors();
 
 	const fabStyle = {
 		position: 'absolute',
@@ -27,7 +20,7 @@ export default function Doctors() {
 		{field: 'col3', headerName: 'City', width: 150},
 	];
 
-	const rows = doctors.map((doctor) => {
+	const rows = allDoctors.map((doctor) => {
 		return {
 			id: doctor.id,
 			col1: `${doctor.lastName}, ${doctor.firstName}`,
@@ -35,10 +28,11 @@ export default function Doctors() {
 			col3: doctor.city,
 		};
 	});
+	console.log(rows);
 
 	return (
 		<PageLayout>
-			<H2>Doctors</H2>
+			<StyledH1>Doctors</StyledH1>
 
 			<Fab
 				color='primary'
@@ -62,6 +56,6 @@ const PageLayout = styled.div`
 	margin-bottom: 60px;
 `;
 
-const H2 = styled.h2`
+const StyledH1 = styled.h1`
 	margin-left: 12px;
 `;

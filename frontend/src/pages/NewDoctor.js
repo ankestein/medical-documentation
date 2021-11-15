@@ -1,9 +1,13 @@
 import {Button, MenuItem, TextField} from '@mui/material';
 import {useState} from 'react';
-import {submitDoctor} from '../service/DoctorApiService';
+import {getDoctors, submitDoctor} from '../service/DoctorApiService';
 import styled from 'styled-components/macro';
+import {useHistory} from 'react-router-dom';
+import useDoctors from '../hooks/useDoctors';
 
 export default function NewDoctor() {
+	const {setAllDoctors} = useDoctors();
+
 	const initialDoctor = {
 		firstName: '',
 		lastName: '',
@@ -19,6 +23,7 @@ export default function NewDoctor() {
 	};
 
 	const [newDoctor, setNewDoctor] = useState(initialDoctor);
+	const history = useHistory();
 
 	const handleChange = (event) => {
 		setNewDoctor({...newDoctor, [event.target.name]: event.target.value});
@@ -27,10 +32,15 @@ export default function NewDoctor() {
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		if (!newDoctor.lastName || !newDoctor.specialty || !newDoctor.city) {
+			//alert('Please enter last name, specialty and city!');
 			return;
 		}
 		submitDoctor(newDoctor).catch(console.error);
 		setNewDoctor(initialDoctor);
+		getDoctors()
+			.then((doctors) => setAllDoctors(doctors))
+			.catch(console.error)
+			.then(() => history.push('/doctors'));
 	};
 
 	const specialties = [
