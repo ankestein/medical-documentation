@@ -1,14 +1,22 @@
-package de.neuefische.backend.service;
+package de.neuefische.backend.mapper;
 
+import de.neuefische.backend.dto.AppointmentDto;
 import de.neuefische.backend.dto.DoctorDto;
+import de.neuefische.backend.model.Appointment;
 import de.neuefische.backend.model.Doctor;
-import org.springframework.stereotype.Service;
 
-@Service
-public class UtilService {
+import java.util.List;
 
-    public Doctor mapDoctorDtoToDoctor(DoctorDto doctorDto) {
-            return Doctor.builder()
+
+public class DoctorMapper {
+
+    private DoctorMapper() {}
+
+    public static Doctor mapDoctorDtoToDoctor(DoctorDto doctorDto) {
+
+        AppointmentDto appointmentDto = doctorDto.getAppointmentDto();
+
+        Doctor doctor = Doctor.builder()
                 .firstName(doctorDto.getFirstName())
                 .lastName(doctorDto.getLastName())
                 .specialty(doctorDto.getSpecialty())
@@ -21,5 +29,12 @@ public class UtilService {
                 .mobileNumber(doctorDto.getMobileNumber())
                 .emailAddress(doctorDto.getEmailAddress())
                 .build();
+
+        if (appointmentDto != null) {
+            Appointment appointment = AppointmentMapper.mapAppointmentDtoToAppointment(appointmentDto);
+            doctor.setAppointments(List.of(appointment));
+        }
+
+        return doctor;
     }
 }
