@@ -1,5 +1,6 @@
 package de.neuefische.backend.controller;
 
+import de.neuefische.backend.dto.AppointmentDto;
 import de.neuefische.backend.dto.DoctorDto;
 import de.neuefische.backend.model.Doctor;
 import de.neuefische.backend.service.DoctorService;
@@ -34,9 +35,9 @@ public class DoctorController {
         return doctorService.addDoctor(doctorDto);
     }
 
-    @PutMapping("/appointment")
-    public Doctor addAppointment(@RequestBody DoctorDto doctorDto) {
-        return doctorService.addAppointment(doctorDto);
+    @PutMapping("/{id}/appointment")
+    public Doctor addAppointment(@PathVariable String id, @RequestBody AppointmentDto appointmentDto) {
+        return doctorService.addAppointment(appointmentDto, id);
     }
 
 

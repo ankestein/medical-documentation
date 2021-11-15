@@ -1,47 +1,22 @@
 import {Button, MenuItem, TextField} from '@mui/material';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import styled from 'styled-components/macro';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import {DatePicker, LocalizationProvider} from '@mui/lab';
-import moment from 'moment';
-import {getDoctors, submitAppointment} from '../service/DoctorApiService';
+import {submitAppointment} from '../service/DoctorApiService';
+import {useHistory} from 'react-router-dom';
 
-export default function NewAppointment() {
+export default function NewAppointment({allDoctors}) {
 	const initialAppointment = {
 		date: null,
 		reasonForVisit: '',
 		notes: '',
 	};
 
-	const initialDoctor = {
-		id: '',
-		firstName: '',
-		lastName: '',
-		specialty: '',
-		street: '',
-		streetNumber: '',
-		postalCode: '',
-		city: '',
-		country: '',
-		phoneNumber: '',
-		mobileNumber: '',
-		emailAddress: '',
-		appointmentDto: initialAppointment,
-	};
-
 	const [newAppointment, setNewAppointment] = useState(initialAppointment);
-	const [selectedDoctor, setSelectedDoctor] = useState(initialDoctor);
-	const [allDoctors, setAllDoctors] = useState([]);
+	const [selectedDoctorId, setSelectedDoctorId] = useState('');
 
-	useEffect(() => {
-		getDoctors()
-			.then((doctors) => setAllDoctors(doctors))
-			.catch((error) => console.error(error.message));
-	}, []);
-
-	useEffect(() => {
-		setSelectedDoctor({...selectedDoctor, appointmentDto: newAppointment});
-	}, [newAppointment]);
+	const history = useHistory();
 
 	const handleChange = (event) => {
 		setNewAppointment({
@@ -51,23 +26,25 @@ export default function NewAppointment() {
 	};
 
 	const handleDateChange = (inputDate) => {
-		const formattedDate = moment(inputDate, 'YYYY-MM-DD').format('LL');
-		setNewAppointment({...newAppointment, date: formattedDate});
+		//const formattedDate = moment(inputDate, 'YYYY-MM-DD').format('LL');
+		//setNewAppointment({...newAppointment, date: formattedDate});
+		//setNewAppointment({...newAppointment, date: inputDate});
+		//setNewAppointment({...newAppointment, date: inputDate._d.toJSON()});
+		setNewAppointment({...newAppointment, date: inputDate._d.toString()});
+		//console.log(`newAppointment: ${JSON.stringify(newAppointment)}`);
+		//console.log(`date: ${JSON.stringify(formattedDate)}`);
 	};
 
 	const handleDoctorChange = (event) => {
-		let doctorToUpdate = allDoctors.find(
-			(doctor) => doctor.id === event.target.value
-		);
-		delete doctorToUpdate.appointments;
-		setSelectedDoctor(doctorToUpdate);
+		setSelectedDoctorId(event.target.value);
 	};
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		submitAppointment(selectedDoctor).catch(console.error);
+		submitAppointment(newAppointment, selectedDoctorId).catch(console.error);
 		setNewAppointment(initialAppointment);
-		setSelectedDoctor(initialDoctor);
+		setSelectedDoctorId('');
+		history.push('/appointments');
 	};
 
 	return (
@@ -76,7 +53,7 @@ export default function NewAppointment() {
 				<TextField
 					id='select-doctor'
 					select
-					value={selectedDoctor.id}
+					value={selectedDoctorId}
 					label='Doctor'
 					required={true}
 					name='doctorId'
@@ -100,6 +77,7 @@ export default function NewAppointment() {
 						onChange={handleDateChange}
 						name='date'
 						renderInput={(params) => <TextField {...params} />}
+						showTodayButton={true}
 					/>
 				</LocalizationProvider>
 
