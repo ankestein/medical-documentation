@@ -26,13 +26,7 @@ export default function NewAppointment({allDoctors}) {
 	};
 
 	const handleDateChange = (inputDate) => {
-		//const formattedDate = moment(inputDate, 'YYYY-MM-DD').format('LL');
-		//setNewAppointment({...newAppointment, date: formattedDate});
-		//setNewAppointment({...newAppointment, date: inputDate});
-		//setNewAppointment({...newAppointment, date: inputDate._d.toJSON()});
-		setNewAppointment({...newAppointment, date: inputDate._d.toString()});
-		//console.log(`newAppointment: ${JSON.stringify(newAppointment)}`);
-		//console.log(`date: ${JSON.stringify(formattedDate)}`);
+		setNewAppointment({...newAppointment, date: inputDate._d.toJSON()});
 	};
 
 	const handleDoctorChange = (event) => {

@@ -65,26 +65,26 @@ public class DoctorService {
             throw new NoSuchElementException("Could not add appointment - doctor with id " + doctorId + " not found in the database");
         } else {
 
-            boolean appointmentExists = doctorToUpdate
-                    .getAppointments()
-                    .stream()
-                    .anyMatch(
-                            element -> element.getDate().toString().equals(appointmentDto.getDate())
-                    );
+            if (doctorToUpdate.getAppointments() != null) {
+                boolean appointmentExists = doctorToUpdate
+                        .getAppointments()
+                        .stream()
+                        .anyMatch(
+                                element -> element.getDate().equals(appointmentDto.getDate())
+                        );
 
-            if (appointmentExists) {
-                throw new IllegalArgumentException("Appointment with Doctor " + doctorToUpdate.getLastName() + " on " + appointmentDto.getDate() + " already exists in the database");
-            } else {
-
-                    List<Appointment> appointments = new ArrayList<>();
-                    if (doctorToUpdate.getAppointments() != null) {
-                        appointments.addAll(doctorToUpdate.getAppointments());
-                    }
-                    appointments.add(appointment);
-                    doctorToUpdate.setAppointments(appointments);
-                    return doctorRepo.save(doctorToUpdate);
-
+                if (appointmentExists) {
+                    throw new IllegalArgumentException("Appointment with Doctor " + doctorToUpdate.getLastName() + " on " + appointmentDto.getDate() + " already exists in the database");
+                }
             }
+
+            List<Appointment> appointments = new ArrayList<>();
+            if (doctorToUpdate.getAppointments() != null) {
+                appointments.addAll(doctorToUpdate.getAppointments());
+            }
+            appointments.add(appointment);
+            doctorToUpdate.setAppointments(appointments);
+            return doctorRepo.save(doctorToUpdate);
         }
     }
 
