@@ -2,6 +2,7 @@ package de.neuefische.backend.controller;
 
 import de.neuefische.backend.dto.AppointmentDto;
 import de.neuefische.backend.dto.DoctorDto;
+import de.neuefische.backend.mapper.AppointmentMapper;
 import de.neuefische.backend.mapper.DoctorMapper;
 import de.neuefische.backend.model.Appointment;
 import de.neuefische.backend.model.Doctor;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,6 +36,7 @@ class DoctorControllerTest {
     public void clearDb() {
         doctorRepo.deleteAll();
     }
+
 
     @Test
     void addDoctorTest() {
@@ -75,35 +78,49 @@ class DoctorControllerTest {
     @Test
     void addAppointmentTest() {
         // GIVEN
-        AppointmentDto appointmentDto = (AppointmentDto.builder()
-                .date("2021-11-08")
+        AppointmentDto appointmentDto = AppointmentDto.builder()
+                .date(LocalDate.of(2021, 11, 8))
                 .reasonForVisit("checkup")
-                .build());
+                .build();
+
+        AppointmentDto oldAppointmentDto = AppointmentDto.builder()
+                .date(LocalDate.of(2020, 10, 5))
+                .reasonForVisit("checkup")
+                .build();
 
         DoctorDto doctorDto = DoctorDto.builder()
                 .firstName("Linda")
                 .lastName("Holder")
                 .specialty("Dentist")
                 .city("Bonn")
-                .appointmentDto(appointmentDto)
+                .appointmentDto(oldAppointmentDto)
                 .build();
 
         Doctor expectedDoctor = DoctorMapper.mapDoctorDtoToDoctor(doctorDto);
-        Appointment appointment = expectedDoctor.getAppointments().get(0);
+        Appointment appointment = AppointmentMapper.mapAppointmentDtoToAppointment(appointmentDto);
+        Appointment oldAppointment = AppointmentMapper.mapAppointmentDtoToAppointment(oldAppointmentDto);
+
+        ResponseEntity<Doctor> postResponse = testRestTemplate.postForEntity("/api/doctor", doctorDto, Doctor.class);
+        assertNotNull(postResponse.getBody());
+        assertNotNull(postResponse.getBody().getId());
+        String doctorId = postResponse.getBody().getId();
 
         // WHEN
-        ResponseEntity<Doctor> response = testRestTemplate.exchange("/api/doctor/appointment", HttpMethod.PUT, new HttpEntity<>(doctorDto), Doctor.class);
+        ResponseEntity<Doctor> response = testRestTemplate.exchange("/api/doctor/" + doctorId + "/appointment", HttpMethod.PUT, new HttpEntity<>(appointmentDto), Doctor.class);
 
         // THEN
+        assertEquals(HttpStatus.OK, postResponse.getStatusCode());
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
         Doctor actual = response.getBody();
         assertNotNull(actual);
         assertNotNull(actual.getId());
         String actualDoctorId = actual.getId();
-        String actualAppointmentId = actual.getAppointments().get(0).getId();
+        List<Appointment> actualAppointments = actual.getAppointments();
+        String actualAppointmentId = actualAppointments.get(actualAppointments.size() - 1).getId();
         appointment.setId(actualAppointmentId);
-        expectedDoctor.setAppointments(List.of(appointment));
+
+        expectedDoctor.setAppointments(List.of(oldAppointment, appointment));
         expectedDoctor.setId(actualDoctorId);
 
         assertEquals(expectedDoctor, actual);
@@ -116,6 +133,7 @@ class DoctorControllerTest {
         assertEquals(expectedDoctor, persistedDoctor);
 
     }
+
 
 
 }

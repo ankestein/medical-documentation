@@ -11,6 +11,7 @@ import org.mockito.MockedStatic;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -63,7 +64,7 @@ class DoctorServiceTest {
                 .city("Bonn")
                 .build();
 
-         when(doctorRepo.existsDoctorByFirstNameAndLastNameAndSpecialtyAndCity(
+        when(doctorRepo.existsDoctorByFirstNameAndLastNameAndSpecialtyAndCity(
                 "Linda", "Holder", "Dentist", "Bonn")
         ).thenReturn(true);
 
@@ -84,18 +85,13 @@ class DoctorServiceTest {
         // GIVEN
         MockedStatic<IdService> idService = mockStatic(IdService.class);
 
-        DoctorDto expectedDoctorDto = DoctorDto.builder()
-                .firstName("Linda")
-                .lastName("Holder")
-                .specialty("Dentist")
-                .city("Bonn")
-                .appointmentDto(AppointmentDto.builder()
-                        .date("2021-11-08")
-                        .reasonForVisit("checkup")
-                        .build())
+        AppointmentDto expectedAppointmentDto = AppointmentDto.builder()
+                .date(LocalDate.of(2021, 11, 8))
+                .reasonForVisit("checkup")
                 .build();
 
         Doctor expectedDoctor = Doctor.builder()
+                .id("1234")
                 .firstName("Linda")
                 .lastName("Holder")
                 .specialty("Dentist")
@@ -103,13 +99,14 @@ class DoctorServiceTest {
                 .appointments(List.of(
                         Appointment.builder()
                                 .id("111111")
-                                .date(LocalDate.of(2021,11,8))
+                                .date(LocalDate.of(2021, 11, 8))
                                 .reasonForVisit("checkup")
                                 .build()
                 ))
                 .build();
 
         Doctor doctorInDb = Doctor.builder()
+                .id("1234")
                 .firstName("Linda")
                 .lastName("Holder")
                 .specialty("Dentist")
@@ -117,53 +114,55 @@ class DoctorServiceTest {
                 .build();
 
         idService.when(IdService::generateId).thenReturn("111111");
-        when(doctorRepo.existsDoctorByIdAndAppointmentsDate("111111", LocalDate.of(2021,11,8))).thenReturn(false);
-        when(doctorRepo.findDoctorByFirstNameAndLastNameAndSpecialtyAndCity(
-                "Linda",
-                "Holder",
-                "Dentist",
-                "Bonn"
-        )).thenReturn(doctorInDb);
+        when(doctorRepo.findDoctorById("1234")).thenReturn(doctorInDb);
         when(doctorRepo.save(expectedDoctor)).thenReturn(expectedDoctor);
 
-
         // WHEN
-        Doctor actualDoctor = doctorService.addAppointment(expectedDoctorDto);
+        Doctor actualDoctor = doctorService.addAppointment(expectedAppointmentDto, "1234");
 
         // THEN
+        verify(doctorRepo).findDoctorById("1234");
         verify(doctorRepo).save(expectedDoctor);
         assertEquals(expectedDoctor, actualDoctor);
 
         idService.close();
-
     }
+
 
     @Test
     @DisplayName("Adding an appointment that is already in the database (same date) should throw an IllegalArgumentException")
     void addExistingAppointmentTest() {
         // GIVEN
-        DoctorDto expectedDoctorDto = DoctorDto.builder()
+        AppointmentDto expectedAppointmentDto = AppointmentDto.builder()
+                .date(LocalDate.of(2021, 11, 8))
+                .reasonForVisit("checkup")
+                .build();
+
+        Doctor doctorInDb = Doctor.builder()
+                .id("1234")
                 .firstName("Linda")
                 .lastName("Holder")
                 .specialty("Dentist")
                 .city("Bonn")
-                .appointmentDto(AppointmentDto.builder()
-                        .date("2021-11-08")
-                        .reasonForVisit("checkup")
-                        .build())
+                .appointments(List.of(
+                        Appointment.builder()
+                                .id("111111")
+                                .date(LocalDate.of(2021, 11, 8))
+                                .reasonForVisit("checkup")
+                                .build()
+                ))
                 .build();
 
-        when(doctorRepo.existsDoctorByIdAndAppointmentsDate(null, LocalDate.of(2021,11,8))).thenReturn(true);
+        when(doctorRepo.findDoctorById("1234")).thenReturn(doctorInDb);
 
         // WHEN
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            doctorService.addAppointment(expectedDoctorDto);
+            doctorService.addAppointment(expectedAppointmentDto, "1234");
         }, "I expected an IllegalArgumentException");
 
         // THEN
         assertEquals("Appointment with Doctor Holder on 2021-11-08 already exists in the database", thrown.getMessage());
-        verify(doctorRepo).existsDoctorByIdAndAppointmentsDate(null, LocalDate.of(2021,11,8));
-
+        verify(doctorRepo).findDoctorById("1234");
     }
 
 
@@ -173,18 +172,14 @@ class DoctorServiceTest {
         // GIVEN
         MockedStatic<IdService> idService = mockStatic(IdService.class);
 
-        DoctorDto doctorDto = DoctorDto.builder()
-                .firstName("Linda")
-                .lastName("Holder")
-                .specialty("Dentist")
-                .city("Bonn")
-                .appointmentDto(AppointmentDto.builder()
-                        .date("2021-11-08")
-                        .reasonForVisit("checkup")
-                        .build())
+        AppointmentDto expectedAppointmentDto = AppointmentDto.builder()
+                .date(LocalDate.of(2021, 11, 8))
+                .reasonForVisit("checkup")
                 .build();
 
+
         Doctor doctorInDb = Doctor.builder()
+                .id("1234")
                 .firstName("Linda")
                 .lastName("Holder")
                 .specialty("Dentist")
@@ -199,6 +194,7 @@ class DoctorServiceTest {
                 .build();
 
         Doctor updatedDoctor = Doctor.builder()
+                .id("1234")
                 .firstName("Linda")
                 .lastName("Holder")
                 .specialty("Dentist")
@@ -218,17 +214,17 @@ class DoctorServiceTest {
                 .build();
 
         idService.when(IdService::generateId).thenReturn("123456");
-        when(doctorRepo.findDoctorByFirstNameAndLastNameAndSpecialtyAndCity("Linda", "Holder", "Dentist", "Bonn")).thenReturn(doctorInDb);
+        when(doctorRepo.findDoctorById("1234")).thenReturn(doctorInDb);
         when(doctorRepo.save(doctorInDb)).thenReturn(updatedDoctor);
 
         // WHEN
-        Doctor actualDoctor = doctorService.addAppointment(doctorDto);
+        Doctor actualDoctor = doctorService.addAppointment(expectedAppointmentDto, "1234");
 
         // THEN
         assertEquals(updatedDoctor, actualDoctor);
+        verify(doctorRepo).findDoctorById("1234");
         verify(doctorRepo).save(doctorInDb);
         idService.verify(IdService::generateId);
-        verify(doctorRepo).findDoctorByFirstNameAndLastNameAndSpecialtyAndCity("Linda", "Holder", "Dentist", "Bonn");
 
         idService.close();
     }
@@ -241,19 +237,13 @@ class DoctorServiceTest {
         // GIVEN
         MockedStatic<IdService> idService = mockStatic(IdService.class);
 
-
-        DoctorDto doctorDto = DoctorDto.builder()
-                .firstName("Linda")
-                .lastName("Holder")
-                .specialty("Dentist")
-                .city("Bonn")
-                .appointmentDto(AppointmentDto.builder()
-                        .date("2021-11-08")
-                        .reasonForVisit("checkup")
-                        .build())
+        AppointmentDto expectedAppointmentDto = AppointmentDto.builder()
+                .date(LocalDate.of(2021, 11, 8))
+                .reasonForVisit("checkup")
                 .build();
 
         Doctor doctorInDb = Doctor.builder()
+                .id("1234")
                 .firstName("Linda")
                 .lastName("Holder")
                 .specialty("Dentist")
@@ -275,19 +265,42 @@ class DoctorServiceTest {
                 .build();
 
         idService.when(IdService::generateId).thenReturn("123456");
-        when(doctorRepo.findDoctorByFirstNameAndLastNameAndSpecialtyAndCity("Linda", "Holder", "Dentist", "Bonn")).thenReturn(doctorInDb);
+        when(doctorRepo.findDoctorById("1234")).thenReturn(doctorInDb);
         when(doctorRepo.save(doctorInDb)).thenReturn(updatedDoctor);
 
         // WHEN
-        Doctor actualDoctor = doctorService.addAppointment(doctorDto);
+        Doctor actualDoctor = doctorService.addAppointment(expectedAppointmentDto, "1234");
 
         // THEN
-        assertEquals(updatedDoctor, actualDoctor);
+        verify(doctorRepo).findDoctorById("1234");
         verify(doctorRepo).save(doctorInDb);
+        assertEquals(updatedDoctor, actualDoctor);
         idService.verify(IdService::generateId);
-        verify(doctorRepo).findDoctorByFirstNameAndLastNameAndSpecialtyAndCity("Linda", "Holder", "Dentist", "Bonn");
 
         idService.close();
+    }
+
+
+    @Test
+    @DisplayName("Adding an appointment to a doctor that doesn't exist in the database should throw a NoSuchElementException")
+    void addAppointmentToNonExistingDoctorTest() {
+        // GIVEN
+        AppointmentDto expectedAppointmentDto = AppointmentDto.builder()
+                .date(LocalDate.of(2021, 11, 8))
+                .reasonForVisit("checkup")
+                .build();
+
+        when(doctorRepo.findDoctorById("1234")).thenReturn(null);
+
+        // WHEN
+        NoSuchElementException thrown = assertThrows(NoSuchElementException.class, () -> {
+            doctorService.addAppointment(expectedAppointmentDto, "1234");
+        }, "I expected a NoSuchElementException");
+
+        // THEN
+        assertEquals("Could not add appointment - doctor with id 1234 not found in the database", thrown.getMessage());
+        verify(doctorRepo).findDoctorById("1234");
+
     }
 
 }

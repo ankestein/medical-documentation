@@ -4,7 +4,6 @@ import de.neuefische.backend.model.Doctor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -21,9 +20,5 @@ public interface DoctorRepo extends PagingAndSortingRepository<Doctor, String> {
             String lastName,
             String specialty,
             String city);
-
-    Boolean existsDoctorByIdAndAppointmentsDate(
-            String id,
-            LocalDate date);
 
 }
