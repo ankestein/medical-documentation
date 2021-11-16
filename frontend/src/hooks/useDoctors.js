@@ -4,6 +4,8 @@ import {deleteDoctor, getDoctors} from '../service/DoctorApiService';
 export default function useDoctors() {
 	const [allDoctors, setAllDoctors] = useState([]);
 
+	const [open, setOpen] = useState(false);
+
 	useEffect(() => {
 		getDoctors()
 			.then((doctors) => setAllDoctors(doctors))
@@ -16,5 +18,5 @@ export default function useDoctors() {
 		);
 	};
 
-	return {allDoctors, setAllDoctors, removeDoctor};
+	return {allDoctors, setAllDoctors, removeDoctor, open, setOpen};
 }

@@ -9,7 +9,7 @@ import Appointments from './pages/Appointments';
 import useDoctors from './hooks/useDoctors';
 
 export default function App() {
-	const {allDoctors, setAllDoctors, removeDoctor} = useDoctors();
+	const {allDoctors, setAllDoctors, removeDoctor, open, setOpen} = useDoctors();
 
 	return (
 		<div>
@@ -19,10 +19,15 @@ export default function App() {
 					<Homepage />
 				</Route>
 				<Route path='/doctors'>
-					<Doctors removeDoctor={removeDoctor} />
+					<Doctors
+						allDoctors={allDoctors}
+						removeDoctor={removeDoctor}
+						open={open}
+						setOpen={setOpen}
+					/>
 				</Route>
 				<Route path='/new-doctor'>
-					<NewDoctor />
+					<NewDoctor setAllDoctors={setAllDoctors} />
 				</Route>
 				<Route path='/appointments'>
 					<Appointments />

@@ -1,22 +1,28 @@
 import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 import {Button, Fab} from '@mui/material';
 import {DataGrid} from '@mui/x-data-grid';
 import {Link} from 'react-router-dom';
 import styled from 'styled-components/macro';
 import useDoctors from '../hooks/useDoctors';
 import PropTypes from 'prop-types';
+import ConfirmDialog from '../components/ConfirmDialog';
 
 Doctors.propTypes = {
 	removeDoctor: PropTypes.func.isRequired,
 };
 
-export default function Doctors({removeDoctor}) {
+export default function Doctors({removeDoctor, open, setOpen}) {
 	const {allDoctors} = useDoctors();
 
 	const fabStyle = {
 		position: 'absolute',
 		top: 60,
 		right: 16,
+	};
+
+	const handleClickOpen = () => {
+		setOpen(true);
 	};
 
 	const columns = [
@@ -28,14 +34,22 @@ export default function Doctors({removeDoctor}) {
 			headerName: '',
 			renderCell: (cellValues) => {
 				return (
-					<Button
-						color='primary'
-						onClick={() => {
-							removeDoctor(cellValues.row.id);
-						}}
-					>
-						Delete
-					</Button>
+					<div>
+						<Button
+							startIcon={<DeleteIcon />}
+							color='primary'
+							onClick={() => handleClickOpen()}
+						>
+							Delete
+						</Button>
+
+						<ConfirmDialog
+							cellValues={cellValues}
+							removeDoctor={removeDoctor}
+							open={open}
+							setOpen={setOpen}
+						/>
+					</div>
 				);
 			},
 		},
