@@ -23,6 +23,27 @@ class DoctorServiceTest {
     private final DoctorService doctorService = new DoctorService(doctorRepo);
 
     @Test
+    void getDoctorsTest() {
+        // GIVEN
+        List<Doctor> expectedDoctors = List.of(Doctor.builder()
+                .firstName("Adam")
+                .lastName("Riese")
+                .specialty("General practitioner")
+                .city("Bonn")
+                .build());
+        when(doctorRepo.findAll()).thenReturn(expectedDoctors);
+
+        // WHEN
+        List<Doctor> actualDoctors = doctorService.getDoctors();
+
+        // THEN
+        assertEquals(expectedDoctors, actualDoctors);
+        verify(doctorRepo).findAll();
+    }
+
+
+
+    @Test
     @DisplayName("addDoctor should add a new doctor to the database")
     void addDoctorTest() {
         // GIVEN
