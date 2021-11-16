@@ -45,8 +45,8 @@ export default function Doctors() {
 				<AddIcon />
 			</Fab>
 
-			<div style={{width: '100%'}}>
-				<DataGrid rows={rows} columns={columns} hideFooterPagination={true} />
+			<div style={{height: '650px', width: '100%'}}>
+				<DataGrid hideFooterPagination={false} rows={rows} columns={columns} />
 			</div>
 		</PageLayout>
 	);

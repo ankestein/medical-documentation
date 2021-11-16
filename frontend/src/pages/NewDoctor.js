@@ -32,7 +32,6 @@ export default function NewDoctor() {
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		if (!newDoctor.lastName || !newDoctor.specialty || !newDoctor.city) {
-			//alert('Please enter last name, specialty and city!');
 			return;
 		}
 		submitDoctor(newDoctor).catch(console.error);
