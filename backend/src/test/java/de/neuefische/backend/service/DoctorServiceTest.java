@@ -12,9 +12,9 @@ import org.mockito.MockedStatic;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class DoctorServiceTest {
@@ -114,14 +114,14 @@ class DoctorServiceTest {
                 .build();
 
         idService.when(IdService::generateId).thenReturn("111111");
-        when(doctorRepo.findDoctorById("1234")).thenReturn(doctorInDb);
+        when(doctorRepo.findById("1234")).thenReturn(Optional.ofNullable(doctorInDb));
         when(doctorRepo.save(expectedDoctor)).thenReturn(expectedDoctor);
 
         // WHEN
         Doctor actualDoctor = doctorService.addAppointment(expectedAppointmentDto, "1234");
 
         // THEN
-        verify(doctorRepo).findDoctorById("1234");
+        verify(doctorRepo).findById("1234");
         verify(doctorRepo).save(expectedDoctor);
         assertEquals(expectedDoctor, actualDoctor);
 
@@ -153,7 +153,7 @@ class DoctorServiceTest {
                 ))
                 .build();
 
-        when(doctorRepo.findDoctorById("1234")).thenReturn(doctorInDb);
+        when(doctorRepo.findById("1234")).thenReturn(Optional.ofNullable(doctorInDb));
 
         // WHEN
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
@@ -162,7 +162,7 @@ class DoctorServiceTest {
 
         // THEN
         assertEquals("Appointment with Doctor Holder on 2021-11-08 already exists in the database", thrown.getMessage());
-        verify(doctorRepo).findDoctorById("1234");
+        verify(doctorRepo).findById("1234");
     }
 
 
@@ -214,7 +214,8 @@ class DoctorServiceTest {
                 .build();
 
         idService.when(IdService::generateId).thenReturn("123456");
-        when(doctorRepo.findDoctorById("1234")).thenReturn(doctorInDb);
+        when(doctorRepo.findById("1234")).thenReturn(Optional.ofNullable(doctorInDb));
+        assertNotNull(doctorInDb);
         when(doctorRepo.save(doctorInDb)).thenReturn(updatedDoctor);
 
         // WHEN
@@ -222,7 +223,7 @@ class DoctorServiceTest {
 
         // THEN
         assertEquals(updatedDoctor, actualDoctor);
-        verify(doctorRepo).findDoctorById("1234");
+        verify(doctorRepo).findById("1234");
         verify(doctorRepo).save(doctorInDb);
         idService.verify(IdService::generateId);
 
@@ -265,14 +266,15 @@ class DoctorServiceTest {
                 .build();
 
         idService.when(IdService::generateId).thenReturn("123456");
-        when(doctorRepo.findDoctorById("1234")).thenReturn(doctorInDb);
+        when(doctorRepo.findById("1234")).thenReturn(Optional.ofNullable(doctorInDb));
+        assertNotNull(doctorInDb);
         when(doctorRepo.save(doctorInDb)).thenReturn(updatedDoctor);
 
         // WHEN
         Doctor actualDoctor = doctorService.addAppointment(expectedAppointmentDto, "1234");
 
         // THEN
-        verify(doctorRepo).findDoctorById("1234");
+        verify(doctorRepo).findById("1234");
         verify(doctorRepo).save(doctorInDb);
         assertEquals(updatedDoctor, actualDoctor);
         idService.verify(IdService::generateId);
@@ -290,7 +292,7 @@ class DoctorServiceTest {
                 .reasonForVisit("checkup")
                 .build();
 
-        when(doctorRepo.findDoctorById("1234")).thenReturn(null);
+        when(doctorRepo.findById("1234")).thenReturn(Optional.empty());
 
         // WHEN
         NoSuchElementException thrown = assertThrows(NoSuchElementException.class, () -> {
@@ -298,8 +300,8 @@ class DoctorServiceTest {
         }, "I expected a NoSuchElementException");
 
         // THEN
-        assertEquals("Could not add appointment - doctor with id 1234 not found in the database", thrown.getMessage());
-        verify(doctorRepo).findDoctorById("1234");
+        assertEquals("Doctor with id 1234 not found!", thrown.getMessage());
+        verify(doctorRepo).findById("1234");
 
     }
 

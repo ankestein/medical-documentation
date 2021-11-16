@@ -59,7 +59,7 @@ public class DoctorService {
         Appointment appointment = AppointmentMapper.mapAppointmentDtoToAppointment(appointmentDto);
         appointment.setId(IdService.generateId());
 
-        Doctor doctorToUpdate = getDoctorIfExists(doctorId);
+        Doctor doctorToUpdate = getDoctorById(doctorId);
         checkIfAppointmentExists(doctorToUpdate, appointmentDto);
 
         List<Appointment> appointments = new ArrayList<>();
@@ -69,17 +69,6 @@ public class DoctorService {
         appointments.add(appointment);
         doctorToUpdate.setAppointments(appointments);
         return doctorRepo.save(doctorToUpdate);
-    }
-
-
-    public Doctor getDoctorIfExists(String doctorId) {
-
-        Doctor doctorToUpdate = doctorRepo.findDoctorById(doctorId);
-
-        if (doctorToUpdate == null) {
-            throw new NoSuchElementException("Could not add appointment - doctor with id " + doctorId + " not found in the database");
-        }
-        return doctorToUpdate;
     }
 
 
