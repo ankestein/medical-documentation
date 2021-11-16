@@ -6,8 +6,18 @@ import Header from './components/Header';
 import NewDoctor from './pages/NewDoctor';
 import NewAppointment from './pages/NewAppointment';
 import Appointments from './pages/Appointments';
+import {useEffect, useState} from 'react';
+import {getDoctors} from './service/DoctorApiService';
 
 export default function App() {
+	const [allDoctors, setAllDoctors] = useState([]);
+
+	useEffect(() => {
+		getDoctors()
+			.then((doctors) => setAllDoctors(doctors))
+			.catch((error) => console.error(error.message));
+	}, []);
+
 	return (
 		<div>
 			<Header />
@@ -25,7 +35,7 @@ export default function App() {
 					<Appointments />
 				</Route>
 				<Route path='/new-appointment'>
-					<NewAppointment />
+					<NewAppointment allDoctors={allDoctors} />
 				</Route>
 			</Switch>
 			<Navigation />

@@ -2,6 +2,8 @@ package de.neuefische.backend.service;
 
 import de.neuefische.backend.dto.AppointmentDto;
 import de.neuefische.backend.dto.DoctorDto;
+import de.neuefische.backend.mapper.AppointmentMapper;
+import de.neuefische.backend.mapper.DoctorMapper;
 import de.neuefische.backend.model.Appointment;
 import de.neuefische.backend.model.Doctor;
 import de.neuefische.backend.repo.DoctorRepo;
@@ -17,14 +19,10 @@ import java.util.NoSuchElementException;
 public class DoctorService {
 
     private final DoctorRepo doctorRepo;
-    private final UtilService utilService;
-    private final IdService idService;
 
     @Autowired
-    public DoctorService(DoctorRepo doctorRepo, UtilService utilService, IdService idService) {
+    public DoctorService(DoctorRepo doctorRepo) {
         this.doctorRepo = doctorRepo;
-        this.utilService = utilService;
-        this.idService = idService;
     }
 
     public List<Doctor> getDoctors() {
@@ -39,9 +37,9 @@ public class DoctorService {
 
     public Doctor addDoctor(DoctorDto doctorDto) {
 
-        Doctor doctor = utilService.mapDoctorDtoToDoctor(doctorDto);
+        Doctor doctor = DoctorMapper.mapDoctorDtoToDoctor(doctorDto);
 
-        Boolean doctorExists = doctorRepo.existsDoctorByFirstNameAndLastNameAndSpecialtyAndCity(
+        boolean doctorExists = doctorRepo.existsDoctorByFirstNameAndLastNameAndSpecialtyAndCity(
                 doctor.getFirstName(),
                 doctor.getLastName(),
                 doctor.getSpecialty(),
@@ -56,46 +54,37 @@ public class DoctorService {
     }
 
 
-    public Doctor addAppointment(DoctorDto doctorDto) {
+    public Doctor addAppointment(AppointmentDto appointmentDto, String doctorId) {
 
-        AppointmentDto appointmentDto = doctorDto.getAppointmentDto();
-        Appointment appointment = utilService.mapAppointmentDtoToAppointment(appointmentDto);
-        appointment.setId(idService.generateId());
-        Doctor doctor = utilService.mapDoctorDtoToDoctor(doctorDto);
-        doctor.setAppointments(List.of(appointment));
+        Appointment appointment = AppointmentMapper.mapAppointmentDtoToAppointment(appointmentDto);
+        appointment.setId(IdService.generateId());
 
-        Doctor doctorToUpdate = doctorRepo.findDoctorByFirstNameAndLastNameAndSpecialtyAndCity(
-                doctor.getFirstName(),
-                doctor.getLastName(),
-                doctor.getSpecialty(),
-                doctor.getCity()
-        );
-        if (doctorToUpdate != null) {
-            doctor.setId(doctorToUpdate.getId());
+        Doctor doctorToUpdate = getDoctorById(doctorId);
+        checkIfAppointmentExists(doctorToUpdate, appointmentDto);
+
+        List<Appointment> appointments = new ArrayList<>();
+        if (doctorToUpdate.getAppointments() != null) {
+            appointments.addAll(doctorToUpdate.getAppointments());
         }
-
-        Boolean appointmentExists = doctorRepo.existsDoctorByIdAndAppointmentsDate(
-                doctor.getId(),
-                appointment.getDate()
-        );
-
-        if (appointmentExists) {
-            throw new IllegalArgumentException("Appointment with Doctor " + doctorDto.getLastName() + " on " + appointmentDto.getDate() + " already exists in the database");
-        } else {
-            if (doctorToUpdate != null) {
-                if (doctorToUpdate.getAppointments() != null) {
-                    List<Appointment> appointments = new ArrayList<>(doctorToUpdate.getAppointments());
-                    appointments.add(appointment);
-                    doctorToUpdate.setAppointments(appointments);
-                } else {
-                    List<Appointment> appointments = new ArrayList<>(List.of(appointment));
-                    doctorToUpdate.setAppointments(appointments);
-                }
-                return doctorRepo.save(doctorToUpdate);
-            } else {
-                return doctorRepo.save(doctor);
-            }
-        }
+        appointments.add(appointment);
+        doctorToUpdate.setAppointments(appointments);
+        return doctorRepo.save(doctorToUpdate);
     }
 
+
+    public void checkIfAppointmentExists(Doctor doctorToUpdate, AppointmentDto appointmentDto) {
+        if (doctorToUpdate.getAppointments() != null) {
+            boolean appointmentExists = doctorToUpdate
+                    .getAppointments()
+                    .stream()
+                    .anyMatch(
+                            element -> element.getDate().equals(appointmentDto.getDate())
+                    );
+
+            if (appointmentExists) {
+                throw new IllegalArgumentException("Appointment with Doctor " + doctorToUpdate.getLastName() + " on " + appointmentDto.getDate() + " already exists in the database");
+            }
+        }
+
+    }
 }

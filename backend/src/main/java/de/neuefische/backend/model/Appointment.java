@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,7 +17,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Appointment {
 
     private String id;
-    private String date;
+    //@JsonFormat(pattern="yyyy-MM-dd")
+    private LocalDate date;
     private String reasonForVisit;
     private String notes;
 

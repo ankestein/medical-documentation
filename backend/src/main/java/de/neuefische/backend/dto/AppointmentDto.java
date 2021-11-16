@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AppointmentDto {
 
-    private String date;
+    private LocalDate date;
     private String reasonForVisit;
     private String notes;
 
