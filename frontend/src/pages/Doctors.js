@@ -1,11 +1,16 @@
 import AddIcon from '@mui/icons-material/Add';
-import {Fab} from '@mui/material';
+import {Button, Fab} from '@mui/material';
 import {DataGrid} from '@mui/x-data-grid';
 import {Link} from 'react-router-dom';
 import styled from 'styled-components/macro';
 import useDoctors from '../hooks/useDoctors';
+import PropTypes from 'prop-types';
 
-export default function Doctors() {
+Doctors.propTypes = {
+	removeDoctor: PropTypes.func.isRequired,
+};
+
+export default function Doctors({removeDoctor}) {
 	const {allDoctors} = useDoctors();
 
 	const fabStyle = {
@@ -18,6 +23,22 @@ export default function Doctors() {
 		{field: 'col1', headerName: 'Name', width: 150},
 		{field: 'col2', headerName: 'Specialty', width: 150},
 		{field: 'col3', headerName: 'City', width: 150},
+		{
+			field: 'delete',
+			headerName: '',
+			renderCell: (cellValues) => {
+				return (
+					<Button
+						color='primary'
+						onClick={() => {
+							removeDoctor(cellValues.row.id);
+						}}
+					>
+						Delete
+					</Button>
+				);
+			},
+		},
 	];
 
 	const rows = allDoctors.map((doctor) => {
