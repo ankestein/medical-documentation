@@ -11,10 +11,6 @@ public interface DoctorRepo extends PagingAndSortingRepository<Doctor, String> {
 
     List<Doctor> findAll();
 
-    Doctor findDoctorById(
-            String id
-    );
-
     Boolean existsDoctorByFirstNameAndLastNameAndSpecialtyAndCity(
             String firstName,
             String lastName,
