@@ -101,7 +101,7 @@ class DoctorServiceTest {
 
 
     @Test
-    void testDeleteTodo() {
+    void testDeleteDoctor() {
         // given
         when(doctorRepo.findById("1234")).thenReturn(Optional.of(Doctor.builder()
                 .firstName("Linda")

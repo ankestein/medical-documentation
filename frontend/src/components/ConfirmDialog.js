@@ -36,7 +36,7 @@ export default function ConfirmDialog({
 				<Button onClick={handleClickClose} color='primary'>
 					Cancel
 				</Button>
-				<Button onClick={() => handleClickRemove()} color='secondary' autoFocus>
+				<Button onClick={handleClickRemove} color='secondary' autoFocus>
 					Confirm
 				</Button>
 			</DialogActions>

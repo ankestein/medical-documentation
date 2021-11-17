@@ -7,12 +7,13 @@ import styled from 'styled-components/macro';
 import useDoctors from '../hooks/useDoctors';
 import PropTypes from 'prop-types';
 import ConfirmDialog from '../components/ConfirmDialog';
+import {useState} from 'react';
 
 Doctors.propTypes = {
 	removeDoctor: PropTypes.func.isRequired,
 };
 
-export default function Doctors({removeDoctor, open, setOpen}) {
+export default function Doctors({removeDoctor}) {
 	const {allDoctors, selectedRowParams, setSelectedRowParams} = useDoctors();
 
 	const fabStyle = {
@@ -20,6 +21,8 @@ export default function Doctors({removeDoctor, open, setOpen}) {
 		top: 60,
 		right: 16,
 	};
+
+	const [open, setOpen] = useState(false);
 
 	const handleClickOpen = (cellValues) => {
 		setOpen(true);

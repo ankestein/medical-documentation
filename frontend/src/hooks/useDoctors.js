@@ -4,8 +4,6 @@ import {deleteDoctor, getDoctors} from '../service/DoctorApiService';
 export default function useDoctors() {
 	const [allDoctors, setAllDoctors] = useState([]);
 
-	const [open, setOpen] = useState(false);
-
 	const [selectedRowParams, setSelectedRowParams] = useState({
 		id: '',
 		name: '',
@@ -29,8 +27,6 @@ export default function useDoctors() {
 		allDoctors,
 		setAllDoctors,
 		removeDoctor,
-		open,
-		setOpen,
 		selectedRowParams,
 		setSelectedRowParams,
 	};
