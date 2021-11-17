@@ -1,8 +1,15 @@
 import {useEffect, useState} from 'react';
-import {getDoctors} from '../service/DoctorApiService';
+import {deleteDoctor, getDoctors} from '../service/DoctorApiService';
 
 export default function useDoctors() {
 	const [allDoctors, setAllDoctors] = useState([]);
+
+	const [selectedRowParams, setSelectedRowParams] = useState({
+		id: '',
+		name: '',
+		specialty: '',
+		city: '',
+	});
 
 	useEffect(() => {
 		getDoctors()
@@ -10,5 +17,17 @@ export default function useDoctors() {
 			.catch((error) => console.error(error.message));
 	}, []);
 
-	return {allDoctors, setAllDoctors};
+	const removeDoctor = (doctorId) => {
+		deleteDoctor(doctorId).then(() =>
+			setAllDoctors(allDoctors.filter((doctor) => doctor.id !== doctorId))
+		);
+	};
+
+	return {
+		allDoctors,
+		setAllDoctors,
+		removeDoctor,
+		selectedRowParams,
+		setSelectedRowParams,
+	};
 }
