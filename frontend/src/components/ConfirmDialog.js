@@ -12,14 +12,15 @@ export default function ConfirmDialog({
 	selectedRowParams,
 	open,
 	setOpen,
-	removeDoctor,
+	method,
+	message,
 }) {
 	const handleClickClose = () => {
 		setOpen(false);
 	};
 
 	const handleClickRemove = () => {
-		removeDoctor(selectedRowParams.id);
+		method(selectedRowParams.id);
 		handleClickClose();
 	};
 
@@ -28,7 +29,7 @@ export default function ConfirmDialog({
 			<DialogTitle id='alert-dialog-title'>{''}</DialogTitle>
 			<DialogContent>
 				<DialogContentText id='alert-dialog-description'>
-					{`Delete ${selectedRowParams.name}?`}
+					{message}
 				</DialogContentText>
 			</DialogContent>
 			<DialogActions>

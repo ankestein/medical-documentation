@@ -77,9 +77,10 @@ export default function Doctors({removeDoctor, open, setOpen}) {
 
 			<ConfirmDialog
 				selectedRowParams={selectedRowParams}
-				removeDoctor={removeDoctor}
+				method={removeDoctor}
 				open={open}
 				setOpen={setOpen}
+				message={`Delete ${selectedRowParams.name}?`}
 			/>
 		</PageLayout>
 	);
