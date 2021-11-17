@@ -101,25 +101,6 @@ class DoctorServiceTest {
 
 
     @Test
-    void testDeleteTodo() {
-        // given
-        when(doctorRepo.findById("1234")).thenReturn(Optional.of(Doctor.builder()
-                .firstName("Linda")
-                .lastName("Holder")
-                .specialty("Dentist")
-                .city("Bonn")
-                .build()));
-        DoctorService doctorService = new DoctorService(doctorRepo);
-
-        // when
-        doctorService.deleteDoctor("1234");
-
-        // then
-        verify(doctorRepo).deleteById("1234");
-    }
-
-
-    @Test
     @DisplayName("addAppointment should add a new appointment to the database")
     void addAppointmentTest() {
         // GIVEN
@@ -344,6 +325,5 @@ class DoctorServiceTest {
         verify(doctorRepo).findById("1234");
 
     }
-
 
 }

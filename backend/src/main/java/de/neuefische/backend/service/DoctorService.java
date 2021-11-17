@@ -87,8 +87,4 @@ public class DoctorService {
         }
 
     }
-
-    public void deleteDoctor(String id) {
-        doctorRepo.deleteById(id);
-    }
 }

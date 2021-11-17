@@ -13,7 +13,3 @@ export function submitAppointment(newAppointment, doctorId) {
 export function getDoctors() {
 	return axios.get('/api/doctor').then((response) => response.data);
 }
-
-export function deleteDoctor(doctorId) {
-	return axios.delete(`/api/doctor/${doctorId}`);
-}
