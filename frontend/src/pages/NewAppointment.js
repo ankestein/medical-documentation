@@ -5,6 +5,12 @@ import DateAdapter from '@mui/lab/AdapterMoment';
 import {DatePicker, LocalizationProvider} from '@mui/lab';
 import {submitAppointment} from '../service/DoctorApiService';
 import {useHistory} from 'react-router-dom';
+import PropTypes from 'prop-types';
+import Doctors from './Doctors';
+
+Doctors.propTypes = {
+	allDoctors: PropTypes.array,
+};
 
 export default function NewAppointment({allDoctors}) {
 	const initialAppointment = {

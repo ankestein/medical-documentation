@@ -3,11 +3,8 @@ import {useState} from 'react';
 import {getDoctors, submitDoctor} from '../service/DoctorApiService';
 import styled from 'styled-components/macro';
 import {useHistory} from 'react-router-dom';
-import useDoctors from '../hooks/useDoctors';
 
-export default function NewDoctor() {
-	const {setAllDoctors} = useDoctors();
-
+export default function NewDoctor({setAllDoctors}) {
 	const initialDoctor = {
 		firstName: '',
 		lastName: '',
