@@ -9,7 +9,7 @@ import {
 import {DialogContentText} from '@mui/material';
 
 export default function ConfirmDialog({
-	cellValues,
+	selectedRowParams,
 	open,
 	setOpen,
 	removeDoctor,
@@ -19,7 +19,7 @@ export default function ConfirmDialog({
 	};
 
 	const handleClickRemove = () => {
-		removeDoctor(cellValues.row.id);
+		removeDoctor(selectedRowParams.id);
 		handleClickClose();
 	};
 
@@ -28,7 +28,7 @@ export default function ConfirmDialog({
 			<DialogTitle id='alert-dialog-title'>{''}</DialogTitle>
 			<DialogContent>
 				<DialogContentText id='alert-dialog-description'>
-					{`Delete ${cellValues.row.col1}?`}
+					{`Delete ${selectedRowParams.name}?`}
 				</DialogContentText>
 			</DialogContent>
 			<DialogActions>

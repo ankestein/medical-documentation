@@ -6,6 +6,13 @@ export default function useDoctors() {
 
 	const [open, setOpen] = useState(false);
 
+	const [selectedRowParams, setSelectedRowParams] = useState({
+		id: '',
+		name: '',
+		specialty: '',
+		city: '',
+	});
+
 	useEffect(() => {
 		getDoctors()
 			.then((doctors) => setAllDoctors(doctors))
@@ -18,5 +25,13 @@ export default function useDoctors() {
 		);
 	};
 
-	return {allDoctors, setAllDoctors, removeDoctor, open, setOpen};
+	return {
+		allDoctors,
+		setAllDoctors,
+		removeDoctor,
+		open,
+		setOpen,
+		selectedRowParams,
+		setSelectedRowParams,
+	};
 }

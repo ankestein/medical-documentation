@@ -13,7 +13,7 @@ Doctors.propTypes = {
 };
 
 export default function Doctors({removeDoctor, open, setOpen}) {
-	const {allDoctors} = useDoctors();
+	const {allDoctors, selectedRowParams, setSelectedRowParams} = useDoctors();
 
 	const fabStyle = {
 		position: 'absolute',
@@ -21,35 +21,27 @@ export default function Doctors({removeDoctor, open, setOpen}) {
 		right: 16,
 	};
 
-	const handleClickOpen = () => {
+	const handleClickOpen = (cellValues) => {
 		setOpen(true);
+		setSelectedRowParams(cellValues.row);
 	};
 
 	const columns = [
-		{field: 'col1', headerName: 'Name', width: 150},
-		{field: 'col2', headerName: 'Specialty', width: 150},
-		{field: 'col3', headerName: 'City', width: 150},
+		{field: 'name', headerName: 'Name', width: 150},
+		{field: 'specialty', headerName: 'Specialty', width: 150},
+		{field: 'city', headerName: 'City', width: 150},
 		{
 			field: 'delete',
 			headerName: '',
 			renderCell: (cellValues) => {
 				return (
-					<div>
-						<Button
-							startIcon={<DeleteIcon />}
-							color='primary'
-							onClick={() => handleClickOpen()}
-						>
-							Delete
-						</Button>
-
-						<ConfirmDialog
-							cellValues={cellValues}
-							removeDoctor={removeDoctor}
-							open={open}
-							setOpen={setOpen}
-						/>
-					</div>
+					<Button
+						startIcon={<DeleteIcon />}
+						color='primary'
+						onClick={() => handleClickOpen(cellValues)}
+					>
+						Delete
+					</Button>
 				);
 			},
 		},
@@ -58,12 +50,11 @@ export default function Doctors({removeDoctor, open, setOpen}) {
 	const rows = allDoctors.map((doctor) => {
 		return {
 			id: doctor.id,
-			col1: `${doctor.lastName}, ${doctor.firstName}`,
-			col2: doctor.specialty,
-			col3: doctor.city,
+			name: `${doctor.lastName}, ${doctor.firstName}`,
+			specialty: doctor.specialty,
+			city: doctor.city,
 		};
 	});
-	console.log(rows);
 
 	return (
 		<PageLayout>
@@ -83,6 +74,13 @@ export default function Doctors({removeDoctor, open, setOpen}) {
 			<div style={{height: '650px', width: '100%'}}>
 				<DataGrid hideFooterPagination={false} rows={rows} columns={columns} />
 			</div>
+
+			<ConfirmDialog
+				selectedRowParams={selectedRowParams}
+				removeDoctor={removeDoctor}
+				open={open}
+				setOpen={setOpen}
+			/>
 		</PageLayout>
 	);
 }
