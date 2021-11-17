@@ -40,10 +40,6 @@ public class DoctorController {
         return doctorService.addAppointment(appointmentDto, id);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteDoctor(@PathVariable String id){
-        doctorService.deleteDoctor(id);
-    }
 
 
 }

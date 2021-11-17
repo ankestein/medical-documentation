@@ -1,19 +1,12 @@
 import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
-import {Button, Fab} from '@mui/material';
+import {Fab} from '@mui/material';
 import {DataGrid} from '@mui/x-data-grid';
 import {Link} from 'react-router-dom';
 import styled from 'styled-components/macro';
 import useDoctors from '../hooks/useDoctors';
-import PropTypes from 'prop-types';
-import ConfirmDialog from '../components/ConfirmDialog';
 
-Doctors.propTypes = {
-	removeDoctor: PropTypes.func.isRequired,
-};
-
-export default function Doctors({removeDoctor, open, setOpen}) {
-	const {allDoctors, selectedRowParams, setSelectedRowParams} = useDoctors();
+export default function Doctors() {
+	const {allDoctors} = useDoctors();
 
 	const fabStyle = {
 		position: 'absolute',
@@ -21,40 +14,21 @@ export default function Doctors({removeDoctor, open, setOpen}) {
 		right: 16,
 	};
 
-	const handleClickOpen = (cellValues) => {
-		setOpen(true);
-		setSelectedRowParams(cellValues.row);
-	};
-
 	const columns = [
-		{field: 'name', headerName: 'Name', width: 150},
-		{field: 'specialty', headerName: 'Specialty', width: 150},
-		{field: 'city', headerName: 'City', width: 150},
-		{
-			field: 'delete',
-			headerName: '',
-			renderCell: (cellValues) => {
-				return (
-					<Button
-						startIcon={<DeleteIcon />}
-						color='primary'
-						onClick={() => handleClickOpen(cellValues)}
-					>
-						Delete
-					</Button>
-				);
-			},
-		},
+		{field: 'col1', headerName: 'Name', width: 150},
+		{field: 'col2', headerName: 'Specialty', width: 150},
+		{field: 'col3', headerName: 'City', width: 150},
 	];
 
 	const rows = allDoctors.map((doctor) => {
 		return {
 			id: doctor.id,
-			name: `${doctor.lastName}, ${doctor.firstName}`,
-			specialty: doctor.specialty,
-			city: doctor.city,
+			col1: `${doctor.lastName}, ${doctor.firstName}`,
+			col2: doctor.specialty,
+			col3: doctor.city,
 		};
 	});
+	console.log(rows);
 
 	return (
 		<PageLayout>
@@ -74,14 +48,6 @@ export default function Doctors({removeDoctor, open, setOpen}) {
 			<div style={{height: '650px', width: '100%'}}>
 				<DataGrid hideFooterPagination={false} rows={rows} columns={columns} />
 			</div>
-
-			<ConfirmDialog
-				selectedRowParams={selectedRowParams}
-				method={removeDoctor}
-				open={open}
-				setOpen={setOpen}
-				message={`Delete ${selectedRowParams.name}?`}
-			/>
 		</PageLayout>
 	);
 }

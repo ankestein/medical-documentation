@@ -6,10 +6,17 @@ import Header from './components/Header';
 import NewDoctor from './pages/NewDoctor';
 import NewAppointment from './pages/NewAppointment';
 import Appointments from './pages/Appointments';
-import useDoctors from './hooks/useDoctors';
+import {useEffect, useState} from 'react';
+import {getDoctors} from './service/DoctorApiService';
 
 export default function App() {
-	const {allDoctors, setAllDoctors, removeDoctor, open, setOpen} = useDoctors();
+	const [allDoctors, setAllDoctors] = useState([]);
+
+	useEffect(() => {
+		getDoctors()
+			.then((doctors) => setAllDoctors(doctors))
+			.catch((error) => console.error(error.message));
+	}, []);
 
 	return (
 		<div>
@@ -19,15 +26,10 @@ export default function App() {
 					<Homepage />
 				</Route>
 				<Route path='/doctors'>
-					<Doctors
-						allDoctors={allDoctors}
-						removeDoctor={removeDoctor}
-						open={open}
-						setOpen={setOpen}
-					/>
+					<Doctors />
 				</Route>
 				<Route path='/new-doctor'>
-					<NewDoctor setAllDoctors={setAllDoctors} />
+					<NewDoctor />
 				</Route>
 				<Route path='/appointments'>
 					<Appointments />
