@@ -167,37 +167,4 @@ class DoctorControllerTest {
 
     }
 
-
-    @Test
-    void deleteDoctorTest() {
-        // GIVEN
-        Doctor doctor1 = Doctor.builder()
-                .id("1234")
-                .firstName("Linda")
-                .lastName("Holder")
-                .specialty("Dentist")
-                .city("Bonn")
-                .phoneNumber("022812345")
-                .build();
-
-        Doctor doctor2 = Doctor.builder()
-                .id("5678")
-                .firstName("Suse")
-                .lastName("Meier")
-                .specialty("Oculist")
-                .city("Cologne")
-                .build();
-        doctorRepo.save(doctor1);
-        doctorRepo.save(doctor2);
-
-        // WHEN
-        testRestTemplate.delete("/api/doctor/1234");
-
-        // THEN
-        List<Doctor> doctors = doctorRepo.findAll();
-        assertEquals(List.of(doctor2), doctors);
-
-    }
-
-
 }
