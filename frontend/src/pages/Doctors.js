@@ -4,7 +4,6 @@ import {Button, Fab} from '@mui/material';
 import {DataGrid} from '@mui/x-data-grid';
 import {Link} from 'react-router-dom';
 import styled from 'styled-components/macro';
-import useDoctors from '../hooks/useDoctors';
 import PropTypes from 'prop-types';
 import ConfirmDialog from '../components/ConfirmDialog';
 import {useState} from 'react';
@@ -13,9 +12,12 @@ Doctors.propTypes = {
 	removeDoctor: PropTypes.func.isRequired,
 };
 
-export default function Doctors({removeDoctor}) {
-	const {allDoctors, selectedRowParams, setSelectedRowParams} = useDoctors();
-
+export default function Doctors({
+	removeDoctor,
+	allDoctors,
+	selectedRowParams,
+	setSelectedRowParams,
+}) {
 	const fabStyle = {
 		position: 'absolute',
 		top: 60,
