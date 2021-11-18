@@ -60,35 +60,29 @@ public class DoctorService {
         appointment.setId(IdService.generateId());
 
         Doctor doctorToUpdate = getDoctorById(doctorId);
-        checkIfAppointmentExists(doctorToUpdate, appointmentDto);
+        validateAppointment(doctorToUpdate, appointmentDto);
 
-        List<Appointment> appointments = new ArrayList<>();
-        if (doctorToUpdate.getAppointments() != null) {
-            appointments.addAll(doctorToUpdate.getAppointments());
-        }
+        List<Appointment> appointments = new ArrayList<>(doctorToUpdate.getAppointments());
         appointments.add(appointment);
         doctorToUpdate.setAppointments(appointments);
         return doctorRepo.save(doctorToUpdate);
     }
 
 
-    public void checkIfAppointmentExists(Doctor doctorToUpdate, AppointmentDto appointmentDto) {
-        if (doctorToUpdate.getAppointments() != null) {
-            boolean appointmentExists = doctorToUpdate
-                    .getAppointments()
-                    .stream()
-                    .anyMatch(
-                            element -> element.getDate().equals(appointmentDto.getDate())
-                    );
+    public void validateAppointment(Doctor doctorToUpdate, AppointmentDto appointmentDto) {
 
-            if (appointmentExists) {
-                throw new IllegalArgumentException("Appointment with Doctor " + doctorToUpdate.getLastName() + " on " + appointmentDto.getDate() + " already exists in the database");
-            }
-        }
+        doctorToUpdate.getAppointments().stream()
+                .filter(element -> element.getDate().equals(appointmentDto.getDate()))
+                .findAny()
+                .ifPresent(element -> {
+                    throw new IllegalArgumentException("Appointment with Doctor " + doctorToUpdate.getLastName() + " on " + appointmentDto.getDate() + " already exists in the database");
+                });
 
     }
+
 
     public void deleteDoctor(String id) {
         doctorRepo.deleteById(id);
     }
+
 }
