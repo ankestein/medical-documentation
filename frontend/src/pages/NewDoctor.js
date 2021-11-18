@@ -26,9 +26,13 @@ export default function NewDoctor({setAllDoctors}) {
 		setNewDoctor({...newDoctor, [event.target.name]: event.target.value});
 	};
 
+	const isValid = (newDoc) => {
+		return newDoc.lastName && newDoc.specialty && newDoc.city;
+	};
+
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		if (!newDoctor.lastName || !newDoctor.specialty || !newDoctor.city) {
+		if (!isValid(newDoctor)) {
 			return;
 		}
 		submitDoctor(newDoctor).catch(console.error);
