@@ -7,6 +7,7 @@ import NewDoctor from './pages/NewDoctor';
 import NewAppointment from './pages/NewAppointment';
 import Appointments from './pages/Appointments';
 import useDoctors from './hooks/useDoctors';
+import NewCovidTest from './pages/NewCovidTest';
 
 export default function App() {
 	const {allDoctors, setAllDoctors, removeDoctor} = useDoctors();
@@ -29,6 +30,9 @@ export default function App() {
 				</Route>
 				<Route path='/new-appointment'>
 					<NewAppointment allDoctors={allDoctors} />
+				</Route>
+				<Route path='/new-covid-test'>
+					<NewCovidTest />
 				</Route>
 			</Switch>
 			<Navigation />
