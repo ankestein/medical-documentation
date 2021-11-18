@@ -1,4 +1,4 @@
-import {Button, MenuItem, TextField} from '@mui/material';
+import {Button, TextField} from '@mui/material';
 import {useState} from 'react';
 import {getCovidTests, submitCovidTest} from '../service/CovidTestApiService';
 import styled from 'styled-components/macro';
@@ -11,7 +11,7 @@ import {
 	RadioGroup,
 } from '@material-ui/core';
 import DateAdapter from '@mui/lab/AdapterMoment';
-import {DateTimePicker, LocalizationProvider} from '@mui/lab';
+import {Autocomplete, DateTimePicker, LocalizationProvider} from '@mui/lab';
 
 export default function NewCovidTest({setAllCovidTests}) {
 	const initialCovidTest = {
@@ -45,31 +45,27 @@ export default function NewCovidTest({setAllCovidTests}) {
 	};
 
 	const testTypes = [
-		'ANTIGEN_LOLLIPOP',
-		'ANTIGEN_NASAL',
-		'ANTIGEN_NASOPHARYNGEAL',
-		'ANTIGEN_SALIVA',
-		'PCR_TEST',
+		'Antigen test - lollipop',
+		'Antigen test - nasal',
+		'Antigen test - nasopharyngeal',
+		'Antigen test - saliva',
+		'PCR test',
 	];
 
 	return (
 		<PageLayout>
 			<Form onSubmit={handleSubmit}>
-				<TextField
+				<Autocomplete
 					id='select-test-type'
-					select
+					options={testTypes}
 					value={newCovidTest.testType}
-					label='Type of COVID test'
 					required={true}
 					name='testType'
 					onChange={handleChange}
-				>
-					{testTypes.map((type) => (
-						<MenuItem key={type} value={type}>
-							{type}
-						</MenuItem>
-					))}
-				</TextField>
+					renderInput={(params) => (
+						<TextField {...params} label='Type of COVID test' />
+					)}
+				/>
 
 				<LocalizationProvider dateAdapter={DateAdapter}>
 					<DateTimePicker
@@ -84,12 +80,7 @@ export default function NewCovidTest({setAllCovidTests}) {
 
 				<FormControl component='fieldset'>
 					<FormLabel component='legend'>Result</FormLabel>
-					<RadioGroup
-						row
-						aria-label='result'
-						name='result-radio-buttons-group'
-						defaultValue='negative'
-					>
+					<RadioGroup row aria-label='result' name='result-radio-buttons-group'>
 						<FormControlLabel
 							value='negative'
 							control={<Radio />}

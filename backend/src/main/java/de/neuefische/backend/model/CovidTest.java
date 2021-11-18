@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Document(collection = "covid-test")
+@Document(collection = "covid-tests")
 @Builder
 public class CovidTest {
 
