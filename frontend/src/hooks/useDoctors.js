@@ -15,7 +15,7 @@ export default function useDoctors() {
 		getDoctors()
 			.then((doctors) => setAllDoctors(doctors))
 			.catch((error) => console.error(error.message));
-	}, []);
+	}, [allDoctors]);
 
 	const removeDoctor = (doctorId) => {
 		deleteDoctor(doctorId).then(() =>
