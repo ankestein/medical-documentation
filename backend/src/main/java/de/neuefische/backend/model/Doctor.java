@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -28,5 +28,6 @@ public class Doctor {
     private String phoneNumber;
     private String mobileNumber;
     private String emailAddress;
-    private List<Appointment> appointments;
+    @Builder.Default
+    private List<Appointment> appointments = new ArrayList<>();
 }
