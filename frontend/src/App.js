@@ -8,6 +8,7 @@ import NewAppointment from './pages/NewAppointment';
 import Appointments from './pages/Appointments';
 import useDoctors from './hooks/useDoctors';
 import NewCovidTest from './pages/NewCovidTest';
+import CovidTests from './pages/CovidTests';
 
 export default function App() {
 	const {
@@ -16,6 +17,7 @@ export default function App() {
 		removeDoctor,
 		selectedRowParams,
 		setSelectedRowParams,
+		setAllCovidTests,
 	} = useDoctors();
 
 	return (
@@ -42,8 +44,11 @@ export default function App() {
 				<Route path='/new-appointment'>
 					<NewAppointment allDoctors={allDoctors} />
 				</Route>
+				<Route path='/covid-tests'>
+					<CovidTests />
+				</Route>
 				<Route path='/new-covid-test'>
-					<NewCovidTest />
+					<NewCovidTest setAllCovidTests={setAllCovidTests} />
 				</Route>
 			</Switch>
 			<Navigation />
