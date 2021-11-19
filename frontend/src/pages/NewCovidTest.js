@@ -1,5 +1,5 @@
 import {Button, TextField} from '@mui/material';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {getCovidTests, submitCovidTest} from '../service/CovidTestApiService';
 import styled from 'styled-components/macro';
 import {useHistory} from 'react-router-dom';
@@ -24,23 +24,12 @@ export default function NewCovidTest({setAllCovidTests}) {
 	};
 
 	const [newCovidTest, setNewCovidTest] = useState(initialCovidTest);
-	//const [valid, setValid] = useState(null);
 	const [showError, setShowError] = useState(false);
 	const history = useHistory();
-	{
-		/*}
-	useEffect(() => {
-		isValid(newCovidTest);
-	}, [newCovidTest]);
 
 	useEffect(() => {
-		setShowError(() => {
-			if (valid === true) return false;
-			if (valid === false) return true;
-		});
-	}, [valid]);
-	*/
-	}
+		if (showError && isValid(newCovidTest)) setShowError(false);
+	}, [newCovidTest]);
 
 	const handleChange = (event) => {
 		setNewCovidTest({...newCovidTest, [event.target.name]: event.target.value});
@@ -57,13 +46,7 @@ export default function NewCovidTest({setAllCovidTests}) {
 	};
 
 	const isValid = (newTest) => {
-		if (newTest.testType && newTest.dateTime) {
-			//	setValid(true);
-			return true;
-		} else {
-			//setValid(false);
-			return false;
-		}
+		return newTest.testType && newTest.dateTime;
 	};
 
 	const handleSubmit = (event) => {
@@ -76,7 +59,6 @@ export default function NewCovidTest({setAllCovidTests}) {
 		}
 		submitCovidTest(newCovidTest).catch(console.error);
 		setNewCovidTest(initialCovidTest);
-		//	setValid(null);
 		getCovidTests()
 			.then((covidTests) => setAllCovidTests(covidTests))
 			.catch(console.error)
@@ -91,8 +73,6 @@ export default function NewCovidTest({setAllCovidTests}) {
 						<FormControl component='fieldset'>
 							<FormLabel component='legend'>Type of COVID test</FormLabel>
 							<RadioGroup
-								required
-								aria-required={true}
 								aria-label='test-type'
 								name='testType'
 								value={newCovidTest.testType}
@@ -130,7 +110,6 @@ export default function NewCovidTest({setAllCovidTests}) {
 					<Grid item>
 						<LocalizationProvider dateAdapter={DateAdapter}>
 							<DateTimePicker
-								required
 								label='Date and time'
 								defaultValue={null}
 								value={newCovidTest.dateTime}
