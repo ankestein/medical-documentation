@@ -4,189 +4,182 @@ import {getCovidTests, submitCovidTest} from '../service/CovidTestApiService';
 import styled from 'styled-components/macro';
 import {useHistory} from 'react-router-dom';
 import {
+	Container,
 	FormControl,
 	FormControlLabel,
 	FormLabel,
+	Grid,
 	Radio,
 	RadioGroup,
+	Typography,
 } from '@material-ui/core';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import {DateTimePicker, LocalizationProvider} from '@mui/lab';
 
 export default function NewCovidTest({setAllCovidTests}) {
-	{
-		/*}
-	const initialCovidTest = {
-		testType: '',
-		dateTime: null,
-		result: '',
-	};
-	*/
-	}
-	{
-		/*}
 	const initialCovidTest = {
 		testType: null,
 		dateTime: null,
-		result: '',
+		result: null,
 	};
-*/
-	}
 
-	const [newCovidTest, setNewCovidTest] = useState({});
+	const [newCovidTest, setNewCovidTest] = useState(initialCovidTest);
+	//const [valid, setValid] = useState(null);
+	const [showError, setShowError] = useState(false);
 	const history = useHistory();
+	{
+		/*}
+	useEffect(() => {
+		isValid(newCovidTest);
+	}, [newCovidTest]);
+
+	useEffect(() => {
+		setShowError(() => {
+			if (valid === true) return false;
+			if (valid === false) return true;
+		});
+	}, [valid]);
+	*/
+	}
 
 	const handleChange = (event) => {
 		setNewCovidTest({...newCovidTest, [event.target.name]: event.target.value});
+		if (isValid(newCovidTest)) {
+			setShowError(false);
+		}
 	};
 
 	const handleDateTimeChange = (inputDateTime) => {
 		setNewCovidTest({...newCovidTest, dateTime: inputDateTime._d.toJSON()});
+		if (isValid(newCovidTest)) {
+			setShowError(false);
+		}
+	};
+
+	const isValid = (newTest) => {
+		if (newTest.testType && newTest.dateTime) {
+			//	setValid(true);
+			return true;
+		} else {
+			//setValid(false);
+			return false;
+		}
 	};
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		if (!newCovidTest.testType || !newCovidTest.dateTime) {
+		if (!isValid(newCovidTest)) {
+			setShowError(true);
 			return;
+		} else {
+			setShowError(false);
 		}
 		submitCovidTest(newCovidTest).catch(console.error);
-		//setNewCovidTest(initialCovidTest);
-		setNewCovidTest({});
+		setNewCovidTest(initialCovidTest);
+		//	setValid(null);
 		getCovidTests()
 			.then((covidTests) => setAllCovidTests(covidTests))
 			.catch(console.error)
 			.then(() => history.push('/covid-tests'));
 	};
 
-	{
-		/*}
-	const testTypes = [
-		{value: 'ANTIGEN_LOLLIPOP', label: 'Antigen test - lollipop'},
-		{value: 'ANTIGEN_NASAL', label: 'Antigen test - nasal'},
-		{value: 'ANTIGEN_NASOPHARYNGEAL', label: 'Antigen test - nasopharyngeal'},
-		{value: 'ANTIGEN_SALIVA', label: 'Antigen test - saliva'},
-		{value: 'PCR_TEST', label: 'PCR test'},
-	];
-  */
-	}
-	{
-		/*}
-const testTypes = [
-  'ANTIGEN_LOLLIPOP',
-  'ANTIGEN_NASAL',
-  'ANTIGEN_NASOPHARYNGEAL',
-  'ANTIGEN_SALIVA',
-  'PCR_TEST',
-];
-	*/
-	}
-
 	return (
 		<PageLayout>
 			<Form onSubmit={handleSubmit}>
-				{/*}
-      <Autocomplete
-        id='select-test-type'
-        options={testTypes}
-        isOptionEqualToValue={(option, value) => option.value === value.value}
-        value={newCovidTest.testType}
-        required={true}
-        name='testType'
-        onChange={handleChange}
-        renderInput={(params) => (
-          <TextField {...params} label='Type of COVID test' />
-        )}
-      />
-      */}
+				<Grid container direction={'column'} spacing={5}>
+					<Grid item>
+						<FormControl component='fieldset'>
+							<FormLabel component='legend'>Type of COVID test</FormLabel>
+							<RadioGroup
+								required
+								aria-required={true}
+								aria-label='test-type'
+								name='testType'
+								value={newCovidTest.testType}
+								onChange={handleChange}
+							>
+								<FormControlLabel
+									value='ANTIGEN_LOLLIPOP'
+									control={<Radio />}
+									label='Antigen test - lollipop'
+								/>
+								<FormControlLabel
+									value='ANTIGEN_NASAL'
+									control={<Radio />}
+									label='Antigen test - nasal'
+								/>
+								<FormControlLabel
+									value='ANTIGEN_NASOPHARYNGEAL'
+									control={<Radio />}
+									label='Antigen test - nasopharyngeal'
+								/>
+								<FormControlLabel
+									value='ANTIGEN_SALIVA'
+									control={<Radio />}
+									label='Antigen test - saliva'
+								/>
+								<FormControlLabel
+									value='PCR_TEST'
+									control={<Radio />}
+									label='PCR test'
+								/>
+							</RadioGroup>
+						</FormControl>
+					</Grid>
 
-				{/*}
-				<Autocomplete
-					options={testTypes}
-					isOptionEqualToValue={(option, value) => option.value === value.value}
-					value={newCovidTest.testType}
-					name='testType'
-					getOptionLabel={(option) => option.value}
-					renderOption={(option) => <>{option.label}</>}
-					onChange={handleChange}
-					renderInput={(params) => (
-						<TextField {...params} label='Type of COVID test' />
+					<Grid item>
+						<LocalizationProvider dateAdapter={DateAdapter}>
+							<DateTimePicker
+								required
+								label='Date and time'
+								defaultValue={null}
+								value={newCovidTest.dateTime}
+								onChange={handleDateTimeChange}
+								name='dateTime'
+								renderInput={(params) => <TextField {...params} />}
+								showTodayButton={true}
+							/>
+						</LocalizationProvider>
+					</Grid>
+
+					<Grid item>
+						<FormControl component='fieldset'>
+							<FormLabel component='legend'>Result</FormLabel>
+							<RadioGroup
+								row
+								aria-label='result'
+								name='result'
+								value={newCovidTest.result}
+								onChange={handleChange}
+							>
+								<FormControlLabel
+									value='NEGATIVE'
+									control={<Radio />}
+									label='negative'
+								/>
+								<FormControlLabel
+									value='POSITIVE'
+									control={<Radio />}
+									label='positive'
+								/>
+							</RadioGroup>
+						</FormControl>
+					</Grid>
+
+					{showError === true && (
+						<Container>
+							<Typography variant='body2' color='secondary'>
+								Please select test type & date and time!
+							</Typography>
+						</Container>
 					)}
-				/>
-     */}
 
-				<FormControl component='fieldset'>
-					<FormLabel component='legend'>Type of COVID test</FormLabel>
-					<RadioGroup
-						row
-						aria-label='test-type'
-						name='testType'
-						value={newCovidTest.testType}
-						onChange={handleChange}
-					>
-						<FormControlLabel
-							value='ANTIGEN_LOLLIPOP'
-							control={<Radio />}
-							label='Antigen test - lollipop'
-						/>
-						<FormControlLabel
-							value='ANTIGEN_NASAL'
-							control={<Radio />}
-							label='Antigen test - nasal'
-						/>
-						<FormControlLabel
-							value='ANTIGEN_NASOPHARYNGEAL'
-							control={<Radio />}
-							label='Antigen test - nasopharyngeal'
-						/>
-						<FormControlLabel
-							value='ANTIGEN_SALIVA'
-							control={<Radio />}
-							label='Antigen test - saliva'
-						/>
-						<FormControlLabel
-							value='PCR_TEST'
-							control={<Radio />}
-							label='PCR test'
-						/>
-					</RadioGroup>
-				</FormControl>
-
-				<LocalizationProvider dateAdapter={DateAdapter}>
-					<DateTimePicker
-						label='Date and time'
-						value={newCovidTest.dateTime}
-						onChange={handleDateTimeChange}
-						name='dateTime'
-						renderInput={(params) => <TextField {...params} />}
-						showTodayButton={true}
-					/>
-				</LocalizationProvider>
-
-				<FormControl component='fieldset'>
-					<FormLabel component='legend'>Result</FormLabel>
-					<RadioGroup
-						row
-						aria-label='result'
-						name='result'
-						value={newCovidTest.result}
-						onChange={handleChange}
-					>
-						<FormControlLabel
-							value='NEGATIVE'
-							control={<Radio />}
-							label='negative'
-						/>
-						<FormControlLabel
-							value='POSITIVE'
-							control={<Radio />}
-							label='positive'
-						/>
-					</RadioGroup>
-				</FormControl>
-
-				<Button variant='contained' type='submit'>
-					Submit
-				</Button>
+					<Grid item>
+						<Button variant='contained' type='submit'>
+							Submit
+						</Button>
+					</Grid>
+				</Grid>
 			</Form>
 		</PageLayout>
 	);
