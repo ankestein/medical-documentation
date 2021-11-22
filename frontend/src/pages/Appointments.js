@@ -1,11 +1,11 @@
 import AddIcon from '@mui/icons-material/Add';
-import {Fab} from '@mui/material';
+import {Fab, Typography} from '@mui/material';
 import {Link} from 'react-router-dom';
 
 export default function Appointments() {
 	return (
 		<div>
-			<h1>This is the Appointments Page</h1>
+			<Typography variant='h1'>This is the Appointments Page</Typography>
 
 			<Fab
 				size='medium'

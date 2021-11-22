@@ -1,6 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {Button, Fab} from '@mui/material';
+import {Button, Fab, Typography} from '@mui/material';
 import {DataGrid} from '@mui/x-data-grid';
 import {Link} from 'react-router-dom';
 import styled from 'styled-components/macro';
@@ -63,7 +63,7 @@ export default function Doctors({
 
 	return (
 		<PageLayout>
-			<StyledH1>Doctors</StyledH1>
+			<Typography variant='h1'>Doctors</Typography>
 
 			<Fab
 				color='primary'
@@ -93,8 +93,4 @@ export default function Doctors({
 
 const PageLayout = styled.div`
 	margin-bottom: 60px;
-`;
-
-const StyledH1 = styled.h1`
-	margin-left: 12px;
 `;
