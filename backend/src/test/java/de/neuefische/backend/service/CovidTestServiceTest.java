@@ -10,8 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class CovidTestServiceTest {
@@ -52,13 +51,18 @@ class CovidTestServiceTest {
                 .dateTime(LocalDateTime.of(2021, 11, 15, 7, 5))
                 .build();
 
-        when(covidTestRepo.save(expectedCovidTest)).thenReturn(expectedCovidTest);
+        CovidTest covidTestToSave = CovidTest.builder()
+                .testType(TestType.ANTIGEN_NASAL)
+                .dateTime(LocalDateTime.of(2021, 11, 15, 7, 5))
+                .build();
+
+        when(covidTestRepo.save(covidTestToSave)).thenReturn(expectedCovidTest);
 
         // WHEN
         CovidTest actualCovidTest = covidTestService.addCovidTest(expectedCovidTestDto);
 
         // THEN
-        assertEquals(expectedCovidTest, actualCovidTest);
+        assertSame(expectedCovidTest, actualCovidTest);
         verify(covidTestRepo).save(expectedCovidTest);
     }
 
