@@ -67,7 +67,7 @@ export default function NewDoctor({setAllDoctors}) {
 				<TextField
 					variant='outlined'
 					value={newDoctor.firstName}
-					placeholder='First name'
+					label='First name'
 					required={true}
 					name='firstName'
 					onChange={handleChange}
@@ -76,8 +76,8 @@ export default function NewDoctor({setAllDoctors}) {
 				<TextField
 					variant='outlined'
 					value={newDoctor.lastName}
-					placeholder='Last name'
 					required={true}
+					label='Last name'
 					name='lastName'
 					onChange={handleChange}
 				/>
@@ -101,7 +101,7 @@ export default function NewDoctor({setAllDoctors}) {
 				<TextField
 					variant='outlined'
 					value={newDoctor.street}
-					placeholder='Street'
+					label='Street'
 					required={false}
 					name='street'
 					onChange={handleChange}
@@ -110,7 +110,7 @@ export default function NewDoctor({setAllDoctors}) {
 				<TextField
 					variant='outlined'
 					value={newDoctor.streetNumber}
-					placeholder='Number'
+					label='Number'
 					required={false}
 					name='streetNumber'
 					onChange={handleChange}
@@ -119,7 +119,7 @@ export default function NewDoctor({setAllDoctors}) {
 				<TextField
 					variant='outlined'
 					value={newDoctor.postalCode}
-					placeholder='Postal code'
+					label='Postal code'
 					required={false}
 					name='postalCode'
 					onChange={handleChange}
@@ -128,7 +128,7 @@ export default function NewDoctor({setAllDoctors}) {
 				<TextField
 					variant='outlined'
 					value={newDoctor.city}
-					placeholder='City'
+					label='City'
 					required={true}
 					name='city'
 					onChange={handleChange}
@@ -137,7 +137,7 @@ export default function NewDoctor({setAllDoctors}) {
 				<TextField
 					variant='outlined'
 					value={newDoctor.country}
-					placeholder='Country'
+					label='Country'
 					required={false}
 					name='country'
 					onChange={handleChange}
@@ -146,7 +146,7 @@ export default function NewDoctor({setAllDoctors}) {
 				<TextField
 					variant='outlined'
 					value={newDoctor.phoneNumber}
-					placeholder='Phone'
+					label='Phone'
 					required={false}
 					name='phoneNumber'
 					onChange={handleChange}
@@ -155,7 +155,7 @@ export default function NewDoctor({setAllDoctors}) {
 				<TextField
 					variant='outlined'
 					value={newDoctor.mobileNumber}
-					placeholder='Mobile'
+					label='Mobile'
 					required={false}
 					name='mobileNumber'
 					onChange={handleChange}
@@ -164,7 +164,7 @@ export default function NewDoctor({setAllDoctors}) {
 				<TextField
 					variant='outlined'
 					value={newDoctor.emailAddress}
-					placeholder='Email'
+					label='Email'
 					required={false}
 					name='emailAddress'
 					onChange={handleChange}

@@ -6,19 +6,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
-
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Document(collection = "appointments")
+@Document(collection = "covid-tests")
 @Builder
-public class Appointment {
+public class CovidTest {
 
     private String id;
-    private LocalDate date;
-    private String reasonForVisit;
-    private String notes;
+    private TestType testType;
+    private LocalDateTime dateTime;
+    private Result result;
+
 
 }
