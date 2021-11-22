@@ -8,9 +8,10 @@ export default function Appointments() {
 			<Typography variant='h1'>This is the Appointments Page</Typography>
 
 			<Fab
-				size='medium'
-				color='steelblue'
-				aria-label='add'
+				//color='primary'
+				//size='small'
+				//sx={fabStyle}
+				aria-label='add-appointment'
 				component={Link}
 				to='/new-appointment'
 			>
