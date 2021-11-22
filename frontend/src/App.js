@@ -9,6 +9,8 @@ import Appointments from './pages/Appointments';
 import useDoctors from './hooks/useDoctors';
 import NewCovidTest from './pages/NewCovidTest';
 import CovidTests from './pages/CovidTests';
+import {ThemeProvider} from '@emotion/react';
+import theme from './styling/theme';
 
 export default function App() {
 	const {
@@ -21,7 +23,7 @@ export default function App() {
 	} = useDoctors();
 
 	return (
-		<div>
+		<ThemeProvider theme={theme}>
 			<Header />
 			<Switch>
 				<Route exact path='/'>
@@ -52,6 +54,6 @@ export default function App() {
 				</Route>
 			</Switch>
 			<Navigation />
-		</div>
+		</ThemeProvider>
 	);
 }
