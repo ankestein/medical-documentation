@@ -1,6 +1,6 @@
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {Button, Fab} from '@mui/material';
+import {Button, Fab, Typography} from '@mui/material';
 import {DataGrid} from '@mui/x-data-grid';
 import {Link} from 'react-router-dom';
 import styled from 'styled-components/macro';
@@ -19,9 +19,9 @@ export default function Doctors({
 	setSelectedRowParams,
 }) {
 	const fabStyle = {
-		position: 'absolute',
-		top: 60,
-		right: 16,
+		position: 'relative',
+		top: -62,
+		right: -310,
 	};
 
 	const [open, setOpen] = useState(false);
@@ -63,18 +63,43 @@ export default function Doctors({
 
 	return (
 		<PageLayout>
-			<StyledH1>Doctors</StyledH1>
+			<Typography variant='h1'>Doctors</Typography>
 
 			<Fab
-				color='primary'
-				size='small'
-				sx={fabStyle}
-				aria-label='add'
+				//color='primary'
+				//size='small'
+				//sx={fabStyle}
+				aria-label='add-doctor'
 				component={Link}
 				to='/new-doctor'
 			>
 				<AddIcon />
 			</Fab>
+
+			{/*
+			// style AddIcon myself because styling of FAB breaks when Dialog opens
+			<AddIcon
+				style={{
+					cursor: 'pointer',
+					//fontSize: '1.2857142857142856rem',
+					//fontWeight: 500,
+					//lineHeight: 1.75,
+					//letterSpacing: '0.02857em',
+					//textTransform: 'uppercase',
+					//color: 'rgba(0, 0, 0, 0.87)',
+					borderRadius: '50%',
+					width: 40,
+					height: 40,
+					background: '#a1c181ff',
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'center',
+					boxShadow:
+						'0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12)',
+					...fabStyle,
+				}}
+			></AddIcon>
+			*/}
 
 			<div style={{height: '650px', width: '100%'}}>
 				<DataGrid hideFooterPagination={false} rows={rows} columns={columns} />
@@ -93,8 +118,4 @@ export default function Doctors({
 
 const PageLayout = styled.div`
 	margin-bottom: 60px;
-`;
-
-const StyledH1 = styled.h1`
-	margin-left: 12px;
 `;

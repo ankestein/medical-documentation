@@ -1,9 +1,8 @@
 import AddIcon from '@mui/icons-material/Add';
-import {Fab} from '@mui/material';
+import {Fab, Typography} from '@mui/material';
 import {Link} from 'react-router-dom';
 import Doctors from './Doctors';
 import PropTypes from 'prop-types';
-import {Typography} from '@material-ui/core';
 import AppointmentCard from '../components/AppointmentCard';
 import styled from 'styled-components/macro';
 
@@ -14,11 +13,13 @@ Doctors.propTypes = {
 export default function Appointments({allDoctors}) {
 	return (
 		<PageLayout>
-			<Typography variant='h3'>Appointments</Typography>
+			<Typography variant='h1'>Appointments</Typography>
+
 			<Fab
-				size='small'
-				color='primary'
-				aria-label='add'
+				//color='primary'
+				//size='small'
+				//sx={fabStyle}
+				aria-label='add-appointment'
 				component={Link}
 				to='/new-appointment'
 			>

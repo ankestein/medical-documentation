@@ -5,7 +5,7 @@ export default function Header() {
 	return (
 		/*<header>This is the header</header>*/
 
-		<AppBar position='static'>
+		<AppBar position='sticky'>
 			<Toolbar variant='dense'>
 				<IconButton edge='start' color='inherit' aria-label='menu' sx={{mr: 2}}>
 					<MenuIcon />
