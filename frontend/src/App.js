@@ -39,7 +39,7 @@ export default function App() {
 					<NewDoctor setAllDoctors={setAllDoctors} />
 				</Route>
 				<Route path='/appointments'>
-					<Appointments />
+					<Appointments allDoctors={allDoctors} />
 				</Route>
 				<Route path='/new-appointment'>
 					<NewAppointment allDoctors={allDoctors} />
