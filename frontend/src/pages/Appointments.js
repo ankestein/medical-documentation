@@ -3,8 +3,9 @@ import {Fab} from '@mui/material';
 import {Link} from 'react-router-dom';
 import Doctors from './Doctors';
 import PropTypes from 'prop-types';
-import {List, Typography} from '@material-ui/core';
+import {Typography} from '@material-ui/core';
 import AppointmentCard from '../components/AppointmentCard';
+import styled from 'styled-components/macro';
 
 Doctors.propTypes = {
 	allDoctors: PropTypes.array,
@@ -12,7 +13,7 @@ Doctors.propTypes = {
 
 export default function Appointments({allDoctors}) {
 	return (
-		<div>
+		<PageLayout>
 			<Typography variant='h3'>Appointments</Typography>
 			<Fab
 				size='small'
@@ -24,26 +25,28 @@ export default function Appointments({allDoctors}) {
 				<AddIcon />
 			</Fab>
 
-			<List>
+			<CardContainer>
 				{allDoctors.map((doctor) => {
-					return (
-						<li key={doctor.id}>
-							{doctor.appointments.map((appointment) => {
-								return (
-									<List>
-										<li key={appointment.id}>
-											<AppointmentCard
-												doctor={doctor}
-												appointment={appointment}
-											/>
-										</li>
-									</List>
-								);
-							})}
-						</li>
-					);
+					{
+						return doctor.appointments.map((appointment) => {
+							return (
+								<AppointmentCard doctor={doctor} appointment={appointment} />
+							);
+						});
+					}
 				})}
-			</List>
-		</div>
+			</CardContainer>
+		</PageLayout>
 	);
 }
+
+const PageLayout = styled.div`
+	margin-bottom: 60px;
+`;
+
+const CardContainer = styled.div`
+	max-width: 100%;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-auto-rows: 190px;
+`;
