@@ -19,7 +19,8 @@ const theme = createTheme({
 		},
 	},
 	typography: {
-		fontSize: 12,
+		fontFamily: `"Montserrat", "Roboto", "Helvetica", "Arial", sans-serif`,
+		fontSize: 14,
 		h1: {
 			fontWeight: 500,
 			fontSize: '1.2rem',

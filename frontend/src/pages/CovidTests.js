@@ -25,7 +25,3 @@ export default function CovidTests() {
 const PageLayout = styled.div`
 	margin-bottom: 60px;
 `;
-
-const StyledH1 = styled.h1`
-	margin-left: 12px;
-`;
