@@ -3,7 +3,6 @@ import {deleteDoctor, getDoctors} from '../service/DoctorApiService';
 
 export default function useDoctors() {
 	const [allDoctors, setAllDoctors] = useState([]);
-	const [allCovidTests, setAllCovidTests] = useState([]);
 
 	const [selectedRowParams, setSelectedRowParams] = useState({
 		id: '',
@@ -30,7 +29,5 @@ export default function useDoctors() {
 		removeDoctor,
 		selectedRowParams,
 		setSelectedRowParams,
-		allCovidTests,
-		setAllCovidTests,
 	};
 }

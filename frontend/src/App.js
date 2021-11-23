@@ -11,6 +11,7 @@ import NewCovidTest from './pages/NewCovidTest';
 import CovidTests from './pages/CovidTests';
 import {ThemeProvider} from '@emotion/react';
 import theme from './styling/theme';
+import useCovidTests from './hooks/useCovidTests';
 
 export default function App() {
 	const {
@@ -19,8 +20,9 @@ export default function App() {
 		removeDoctor,
 		selectedRowParams,
 		setSelectedRowParams,
-		setAllCovidTests,
 	} = useDoctors();
+
+	const {allCovidTests, setAllCovidTests} = useCovidTests();
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -47,7 +49,7 @@ export default function App() {
 					<NewAppointment allDoctors={allDoctors} />
 				</Route>
 				<Route path='/covid-tests'>
-					<CovidTests />
+					<CovidTests allCovidTests={allCovidTests} />
 				</Route>
 				<Route path='/new-covid-test'>
 					<NewCovidTest setAllCovidTests={setAllCovidTests} />
