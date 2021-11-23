@@ -66,9 +66,9 @@ export default function Doctors({
 			<Typography variant='h1'>Doctors</Typography>
 
 			<Fab
-				//color='primary'
-				//size='small'
-				//sx={fabStyle}
+				color='primary'
+				size='small'
+				sx={fabStyle}
 				aria-label='add-doctor'
 				component={Link}
 				to='/new-doctor'

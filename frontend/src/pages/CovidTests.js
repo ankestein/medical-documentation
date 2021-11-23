@@ -5,6 +5,12 @@ import {Link} from 'react-router-dom';
 import {Typography} from '@mui/material';
 
 export default function CovidTests() {
+	const fabStyle = {
+		position: 'relative',
+		top: -62,
+		right: -310,
+	};
+
 	return (
 		<PageLayout>
 			<Typography variant='h1'>COVID19 Tests</Typography>
@@ -12,6 +18,7 @@ export default function CovidTests() {
 			<Fab
 				color='primary'
 				size='small'
+				sx={fabStyle}
 				aria-label='add-covid-test'
 				component={Link}
 				to='/new-covid-test'

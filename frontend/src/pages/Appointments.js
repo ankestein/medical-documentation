@@ -11,14 +11,22 @@ Doctors.propTypes = {
 };
 
 export default function Appointments({allDoctors}) {
+	const fabStyle = {
+		position: 'relative',
+		top: -62,
+		right: -310,
+	};
+
 	return (
 		<PageLayout>
-			<Typography variant='h1'>Appointments</Typography>
+			<Typography variant='h1' component='h1'>
+				Appointments
+			</Typography>
 
 			<Fab
-				//color='primary'
-				//size='small'
-				//sx={fabStyle}
+				color='primary'
+				size='small'
+				sx={fabStyle}
 				aria-label='add-appointment'
 				component={Link}
 				to='/new-appointment'
