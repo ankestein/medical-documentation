@@ -1,13 +1,14 @@
 import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {Button, Fab, Typography} from '@mui/material';
+import {Fab, Stack, Typography} from '@mui/material';
 import {DataGrid} from '@mui/x-data-grid';
 import {Link} from 'react-router-dom';
 import styled from 'styled-components/macro';
 import PropTypes from 'prop-types';
 import ConfirmDialog from '../components/ConfirmDialog';
 import {useState} from 'react';
-import {makeStyles} from '@material-ui/core';
+import {IconButton, makeStyles} from '@material-ui/core';
 
 Doctors.propTypes = {
 	removeDoctor: PropTypes.func.isRequired,
@@ -69,16 +70,26 @@ export default function Doctors({
 			field: 'delete',
 			headerName: '-',
 			color: '#a1c181ff',
-			width: 3,
 			headerClassName: 'datagrid-theme-button-header',
-			align: 'center',
 			renderCell: (cellValues) => {
 				return (
-					<Button
-						startIcon={<DeleteIcon />}
-						color='primary'
-						onClick={() => handleClickOpen(cellValues)}
-					/>
+					<Stack direction='row' spacing={0.1} margin={0} padding={0}>
+						<IconButton
+							color='#a1c181ff'
+							size='small'
+							style={{margin: 0, padding: 0}}
+							onClick={() => handleClickOpen(cellValues)}
+						>
+							<DeleteIcon fontSize='small' />
+						</IconButton>
+						<IconButton
+							color='#a1c181ff'
+							size='small'
+							style={{margin: 0, padding: 0}}
+						>
+							<EditIcon fontSize='small' />
+						</IconButton>
+					</Stack>
 				);
 			},
 		},
