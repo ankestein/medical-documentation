@@ -7,10 +7,23 @@ import styled from 'styled-components/macro';
 import PropTypes from 'prop-types';
 import ConfirmDialog from '../components/ConfirmDialog';
 import {useState} from 'react';
+import {makeStyles} from '@material-ui/core';
 
 Doctors.propTypes = {
 	removeDoctor: PropTypes.func.isRequired,
 };
+
+const useStyles = makeStyles({
+	root: {
+		'& .datagrid-theme--header': {
+			backgroundColor: '#a1c181ff',
+		},
+		'& .datagrid-theme-button-header': {
+			backgroundColor: '#a1c181ff',
+			color: '#a1c181ff',
+		},
+	},
+});
 
 export default function Doctors({
 	removeDoctor,
@@ -20,9 +33,11 @@ export default function Doctors({
 }) {
 	const fabStyle = {
 		position: 'relative',
-		top: -62,
+		top: -15,
 		right: -310,
 	};
+
+	const classes = useStyles();
 
 	const [open, setOpen] = useState(false);
 
@@ -32,21 +47,38 @@ export default function Doctors({
 	};
 
 	const columns = [
-		{field: 'name', headerName: 'Name', width: 150},
-		{field: 'specialty', headerName: 'Specialty', width: 150},
-		{field: 'city', headerName: 'City', width: 150},
+		{
+			field: 'name',
+			headerName: 'Name',
+			width: 110,
+			headerClassName: 'datagrid-theme--header',
+		},
+		{
+			field: 'specialty',
+			headerName: 'Specialty',
+			width: 110,
+			headerClassName: 'datagrid-theme--header',
+		},
+		{
+			field: 'city',
+			headerName: 'City',
+			width: 100,
+			headerClassName: 'datagrid-theme--header',
+		},
 		{
 			field: 'delete',
-			headerName: '',
+			headerName: '-',
+			color: '#a1c181ff',
+			width: 3,
+			headerClassName: 'datagrid-theme-button-header',
+			align: 'center',
 			renderCell: (cellValues) => {
 				return (
 					<Button
 						startIcon={<DeleteIcon />}
 						color='primary'
 						onClick={() => handleClickOpen(cellValues)}
-					>
-						Delete
-					</Button>
+					/>
 				);
 			},
 		},
@@ -55,7 +87,7 @@ export default function Doctors({
 	const rows = allDoctors.map((doctor) => {
 		return {
 			id: doctor.id,
-			name: `${doctor.lastName}, ${doctor.firstName}`,
+			name: `${doctor.lastName}, ${doctor.firstName.charAt(0)}.`,
 			specialty: doctor.specialty,
 			city: doctor.city,
 		};
@@ -66,9 +98,9 @@ export default function Doctors({
 			<Typography variant='h1'>Doctors</Typography>
 
 			<Fab
-				//color='primary'
-				//size='small'
-				//sx={fabStyle}
+				color='primary'
+				size='small'
+				sx={fabStyle}
 				aria-label='add-doctor'
 				component={Link}
 				to='/new-doctor'
@@ -102,7 +134,13 @@ export default function Doctors({
 			*/}
 
 			<div style={{height: '650px', width: '100%'}}>
-				<DataGrid hideFooterPagination={false} rows={rows} columns={columns} />
+				<DataGrid
+					hideFooterPagination={false}
+					rows={rows}
+					columns={columns}
+					className={classes.root}
+					style={{fontSize: 11}}
+				/>
 			</div>
 
 			<ConfirmDialog
