@@ -13,9 +13,7 @@ Doctors.propTypes = {
 export default function Appointments({allDoctors, fabPosition}) {
 	return (
 		<PageLayout>
-			<Typography variant='h1' component='h1'>
-				Appointments
-			</Typography>
+			<Typography variant='h1'>Appointments</Typography>
 
 			<Fab
 				color='#a1c181ff'
