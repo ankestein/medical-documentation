@@ -10,6 +10,7 @@ import useDoctors from './hooks/useDoctors';
 import NewCovidTest from './pages/NewCovidTest';
 import CovidTests from './pages/CovidTests';
 import LoginPage from './pages/LoginPage';
+import PrivateRoute from './routing/PrivateRoute';
 
 export default function App() {
 	const {
@@ -25,35 +26,35 @@ export default function App() {
 		<div>
 			<Header />
 			<Switch>
-				<Route exact path='/'>
+				<PrivateRoute exact path='/'>
 					<Homepage />
-				</Route>
+				</PrivateRoute>
 				<Route path='/login'>
 					<LoginPage />
 				</Route>
-				<Route path='/doctors'>
+				<PrivateRoute path='/doctors'>
 					<Doctors
 						allDoctors={allDoctors}
 						removeDoctor={removeDoctor}
 						selectedRowParams={selectedRowParams}
 						setSelectedRowParams={setSelectedRowParams}
 					/>
-				</Route>
-				<Route path='/new-doctor'>
+				</PrivateRoute>
+				<PrivateRoute path='/new-doctor'>
 					<NewDoctor setAllDoctors={setAllDoctors} />
-				</Route>
-				<Route path='/appointments'>
+				</PrivateRoute>
+				<PrivateRoute path='/appointments'>
 					<Appointments />
-				</Route>
-				<Route path='/new-appointment'>
+				</PrivateRoute>
+				<PrivateRoute path='/new-appointment'>
 					<NewAppointment allDoctors={allDoctors} />
-				</Route>
-				<Route path='/covid-tests'>
+				</PrivateRoute>
+				<PrivateRoute path='/covid-tests'>
 					<CovidTests />
-				</Route>
-				<Route path='/new-covid-test'>
+				</PrivateRoute>
+				<PrivateRoute path='/new-covid-test'>
 					<NewCovidTest setAllCovidTests={setAllCovidTests} />
-				</Route>
+				</PrivateRoute>
 			</Switch>
 			<Navigation />
 		</div>
