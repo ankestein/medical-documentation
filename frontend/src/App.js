@@ -11,6 +11,8 @@ import NewCovidTest from './pages/NewCovidTest';
 import CovidTests from './pages/CovidTests';
 import LoginPage from './pages/LoginPage';
 import PrivateRoute from './routing/PrivateRoute';
+import {ThemeProvider} from '@emotion/react';
+import theme from './styling/theme';
 
 export default function App() {
 	const {
@@ -23,7 +25,7 @@ export default function App() {
 	} = useDoctors();
 
 	return (
-		<div>
+		<ThemeProvider theme={theme}>
 			<Header />
 			<Switch>
 				<PrivateRoute exact path='/'>
@@ -44,7 +46,7 @@ export default function App() {
 					<NewDoctor setAllDoctors={setAllDoctors} />
 				</PrivateRoute>
 				<PrivateRoute path='/appointments'>
-					<Appointments />
+					<Appointments allDoctors={allDoctors} />
 				</PrivateRoute>
 				<PrivateRoute path='/new-appointment'>
 					<NewAppointment allDoctors={allDoctors} />
@@ -57,6 +59,6 @@ export default function App() {
 				</PrivateRoute>
 			</Switch>
 			<Navigation />
-		</div>
+		</ThemeProvider>
 	);
 }

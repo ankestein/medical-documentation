@@ -1,16 +1,31 @@
 import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {Button, Fab} from '@mui/material';
+import {Stack} from '@mui/material';
 import {DataGrid} from '@mui/x-data-grid';
-import {Link} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import styled from 'styled-components/macro';
 import PropTypes from 'prop-types';
 import ConfirmDialog from '../components/ConfirmDialog';
 import {useState} from 'react';
+import {IconButton, makeStyles} from '@material-ui/core';
+import {customStyle} from '../styling/styles';
 
 Doctors.propTypes = {
 	removeDoctor: PropTypes.func.isRequired,
 };
+
+const useStyles = makeStyles({
+	root: {
+		'& .datagrid-theme--header': {
+			backgroundColor: '#d0e0c0',
+		},
+		'& .datagrid-theme-button-header': {
+			backgroundColor: '#d0e0c0',
+			color: '#d0e0c0',
+		},
+	},
+});
 
 export default function Doctors({
 	removeDoctor,
@@ -18,35 +33,65 @@ export default function Doctors({
 	selectedRowParams,
 	setSelectedRowParams,
 }) {
-	const fabStyle = {
-		position: 'absolute',
-		top: 60,
-		right: 16,
-	};
+	const classes = useStyles();
 
 	const [open, setOpen] = useState(false);
+
+	const history = useHistory();
 
 	const handleClickOpen = (cellValues) => {
 		setOpen(true);
 		setSelectedRowParams(cellValues.row);
 	};
 
+	const handleClickAddDoctor = () => {
+		history.push('/new-doctor');
+	};
+
 	const columns = [
-		{field: 'name', headerName: 'Name', width: 150},
-		{field: 'specialty', headerName: 'Specialty', width: 150},
-		{field: 'city', headerName: 'City', width: 150},
+		{
+			field: 'name',
+			headerName: 'Name',
+			width: 110,
+			backgroundColor: 'red',
+			headerClassName: 'datagrid-theme--header',
+		},
+		{
+			field: 'specialty',
+			headerName: 'Specialty',
+			width: 110,
+			headerClassName: 'datagrid-theme--header',
+		},
+		{
+			field: 'city',
+			headerName: 'City',
+			width: 100,
+			headerClassName: 'datagrid-theme--header',
+		},
 		{
 			field: 'delete',
-			headerName: '',
+			headerName: '-',
+			color: '#a1c181ff',
+			headerClassName: 'datagrid-theme-button-header',
 			renderCell: (cellValues) => {
 				return (
-					<Button
-						startIcon={<DeleteIcon />}
-						color='primary'
-						onClick={() => handleClickOpen(cellValues)}
-					>
-						Delete
-					</Button>
+					<Stack direction='row' spacing={0.1} margin={0} padding={0}>
+						<IconButton
+							color='#a1c181ff'
+							size='small'
+							style={{margin: 0, padding: 0}}
+							onClick={() => handleClickOpen(cellValues)}
+						>
+							<DeleteIcon fontSize='small' />
+						</IconButton>
+						<IconButton
+							color='#a1c181ff'
+							size='small'
+							style={{margin: 0, padding: 0}}
+						>
+							<EditIcon fontSize='small' />
+						</IconButton>
+					</Stack>
 				);
 			},
 		},
@@ -55,7 +100,7 @@ export default function Doctors({
 	const rows = allDoctors.map((doctor) => {
 		return {
 			id: doctor.id,
-			name: `${doctor.lastName}, ${doctor.firstName}`,
+			name: `${doctor.lastName}, ${doctor.firstName.charAt(0)}.`,
 			specialty: doctor.specialty,
 			city: doctor.city,
 		};
@@ -65,21 +110,21 @@ export default function Doctors({
 		<PageLayout>
 			<StyledH1>Doctors</StyledH1>
 
-			<Fab
-				color='primary'
-				size='small'
-				sx={fabStyle}
-				aria-label='add'
-				component={Link}
-				to='/new-doctor'
-			>
-				<AddIcon />
-			</Fab>
+			<AddIcon
+				style={customStyle.addIconStyle}
+				sx={customStyle.fabPosition}
+				onClick={handleClickAddDoctor}
+			/>
 
 			<div style={{height: '650px', width: '100%'}}>
-				<DataGrid hideFooterPagination={false} rows={rows} columns={columns} />
+				<DataGrid
+					hideFooterPagination={false}
+					rows={rows}
+					columns={columns}
+					className={classes.root}
+					style={{fontSize: 11}}
+				/>
 			</div>
-
 			<ConfirmDialog
 				selectedRowParams={selectedRowParams}
 				method={removeDoctor}
@@ -96,5 +141,8 @@ const PageLayout = styled.div`
 `;
 
 const StyledH1 = styled.h1`
-	margin-left: 12px;
+	font-family: Montserrat, Roboto, Helvetica, Arial, sans-serif;
+	font-weight: 500;
+	font-size: 18px;
+	margin: 12px;
 `;
