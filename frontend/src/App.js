@@ -46,25 +46,15 @@ export default function App() {
 					<NewDoctor setAllDoctors={setAllDoctors} />
 				</PrivateRoute>
 				<PrivateRoute path='/appointments'>
-					<Appointments />
+					<Appointments allDoctors={allDoctors} />
 				</PrivateRoute>
 				<PrivateRoute path='/new-appointment'>
-				</Route>
-				<Route path='/appointments'>
-					<Appointments allDoctors={allDoctors} addIconStyle={addIconStyle} />
-				</Route>
-				<Route path='/new-appointment'>
 					<NewAppointment allDoctors={allDoctors} />
 				</PrivateRoute>
 				<PrivateRoute path='/covid-tests'>
 					<CovidTests />
 				</PrivateRoute>
 				<PrivateRoute path='/new-covid-test'>
-				</Route>
-				<Route path='/covid-tests'>
-					<CovidTests addIconStyle={addIconStyle} />
-				</Route>
-				<Route path='/new-covid-test'>
 					<NewCovidTest setAllCovidTests={setAllCovidTests} />
 				</PrivateRoute>
 			</Switch>
