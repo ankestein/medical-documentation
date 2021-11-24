@@ -1,9 +1,12 @@
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {deleteDoctor, getDoctors} from '../service/DoctorApiService';
+import {AuthContext} from '../context/AuthProvider';
 
-export default function useDoctors(token) {
+export default function useDoctors() {
 	const [allDoctors, setAllDoctors] = useState([]);
 	const [allCovidTests, setAllCovidTests] = useState([]);
+
+	const {token} = useContext(AuthContext);
 
 	const [selectedRowParams, setSelectedRowParams] = useState({
 		id: '',

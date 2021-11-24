@@ -1,5 +1,5 @@
 import Navigation from './components/Navigation';
-import {Route, Switch, useHistory} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import Homepage from './pages/Homepage';
 import Doctors from './pages/Doctors';
 import Header from './components/Header';
@@ -10,8 +10,6 @@ import useDoctors from './hooks/useDoctors';
 import NewCovidTest from './pages/NewCovidTest';
 import CovidTests from './pages/CovidTests';
 import LoginPage from './pages/LoginPage';
-import axios from 'axios';
-import {useState} from 'react';
 
 export default function App() {
 	const {
@@ -23,18 +21,6 @@ export default function App() {
 		setAllCovidTests,
 	} = useDoctors();
 
-	const history = useHistory();
-	const [token, setToken] = useState();
-
-	const login = (credentials) => {
-		axios
-			.post('/auth/login', credentials)
-			.then((res) => res.data)
-			.then((data) => setToken(data))
-			.then(() => history.push('/'))
-			.catch((error) => console.error(error.message));
-	};
-
 	return (
 		<div>
 			<Header />
@@ -43,7 +29,7 @@ export default function App() {
 					<Homepage />
 				</Route>
 				<Route path='/login'>
-					<LoginPage login={login} />
+					<LoginPage />
 				</Route>
 				<Route path='/doctors'>
 					<Doctors

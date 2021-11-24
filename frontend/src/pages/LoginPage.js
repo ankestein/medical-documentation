@@ -1,15 +1,17 @@
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import {Button} from '@material-ui/core';
 import {TextField} from '@mui/material';
 import styled from 'styled-components/macro';
+import {AuthContext} from '../context/AuthProvider';
 
 const initialState = {
 	username: '',
 	password: '',
 };
 
-export default function LoginPage({login}) {
+export default function LoginPage() {
 	const [credentials, setCredentials] = useState(initialState);
+	const {login} = useContext(AuthContext);
 
 	const handleChange = (event) => {
 		setCredentials({...credentials, [event.target.name]: event.target.value});
@@ -17,7 +19,6 @@ export default function LoginPage({login}) {
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		console.log('logging in');
 		login(credentials);
 	};
 
