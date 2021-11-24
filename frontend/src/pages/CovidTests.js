@@ -1,43 +1,45 @@
-import {Fab} from '@material-ui/core';
 import AddIcon from '@mui/icons-material/Add';
 import styled from 'styled-components/macro';
-import {Link} from 'react-router-dom';
-import {Typography} from '@mui/material';
+import {useHistory} from 'react-router-dom';
+import {customStyle} from '../styling/styles';
 import CovidTestCard from '../components/CovidTestCard';
 
 export default function CovidTests({allCovidTests}) {
-	const fabStyle = {
-		position: 'relative',
-		top: -62,
-		right: -310,
+	const history = useHistory();
+
+	const handleClickAddCovidTest = () => {
+		history.push('/new-covid-test');
 	};
 
 	return (
 		<PageLayout>
-			<Typography variant='h1'>COVID19 Tests</Typography>
+			<StyledH1>COVID19 Tests</StyledH1>
 
-			<Fab
-				color='primary'
-				size='small'
-				sx={fabStyle}
-				aria-label='add-covid-test'
-				component={Link}
-				to='/new-covid-test'
-			>
-				<AddIcon />
-			</Fab>
+			<AddIcon
+				style={customStyle.addIconStyle}
+				sx={customStyle.fabPosition}
+				onClick={handleClickAddCovidTest}
+			/>
 
 			<CardContainer>
 				{allCovidTests.map((covidTest) => {
 					return <CovidTestCard covidTest={covidTest} />;
 				})}
 			</CardContainer>
+
 		</PageLayout>
 	);
 }
 
 const PageLayout = styled.div`
 	margin-bottom: 60px;
+`;
+
+const StyledH1 = styled.h1`
+	font-family: Montserrat, Roboto, Helvetica, Arial, sans-serif;
+	font-weight: 500;
+	font-size: 18px;
+	margin: 12px;
 `;
 
 const CardContainer = styled.div`

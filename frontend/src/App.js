@@ -9,6 +9,8 @@ import Appointments from './pages/Appointments';
 import useDoctors from './hooks/useDoctors';
 import NewCovidTest from './pages/NewCovidTest';
 import CovidTests from './pages/CovidTests';
+import LoginPage from './pages/LoginPage';
+import PrivateRoute from './routing/PrivateRoute';
 import {ThemeProvider} from '@emotion/react';
 import theme from './styling/theme';
 import useCovidTests from './hooks/useCovidTests';
@@ -28,32 +30,35 @@ export default function App() {
 		<ThemeProvider theme={theme}>
 			<Header />
 			<Switch>
-				<Route exact path='/'>
+				<PrivateRoute exact path='/'>
 					<Homepage />
+				</PrivateRoute>
+				<Route path='/login'>
+					<LoginPage />
 				</Route>
-				<Route path='/doctors'>
+				<PrivateRoute path='/doctors'>
 					<Doctors
 						allDoctors={allDoctors}
 						removeDoctor={removeDoctor}
 						selectedRowParams={selectedRowParams}
 						setSelectedRowParams={setSelectedRowParams}
 					/>
-				</Route>
-				<Route path='/new-doctor'>
+				</PrivateRoute>
+				<PrivateRoute path='/new-doctor'>
 					<NewDoctor setAllDoctors={setAllDoctors} />
-				</Route>
-				<Route path='/appointments'>
+				</PrivateRoute>
+				<PrivateRoute path='/appointments'>
 					<Appointments allDoctors={allDoctors} />
-				</Route>
-				<Route path='/new-appointment'>
+				</PrivateRoute>
+				<PrivateRoute path='/new-appointment'>
 					<NewAppointment allDoctors={allDoctors} />
-				</Route>
-				<Route path='/covid-tests'>
-					<CovidTests allCovidTests={allCovidTests} />
-				</Route>
-				<Route path='/new-covid-test'>
+				</PrivateRoute>
+				<PrivateRoute path='/covid-tests'>
+					<CovidTests  allCovidTests={allCovidTests} />
+				</PrivateRoute>
+				<PrivateRoute path='/new-covid-test'>
 					<NewCovidTest setAllCovidTests={setAllCovidTests} />
-				</Route>
+				</PrivateRoute>
 			</Switch>
 			<Navigation />
 		</ThemeProvider>

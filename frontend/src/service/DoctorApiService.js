@@ -1,19 +1,35 @@
 import axios from 'axios';
 
-export function submitDoctor(newDoctor) {
-	return axios.post('/api/doctor', newDoctor).then((response) => response.data);
-}
+const getHeader = (token) => {
+	return {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+};
 
-export function submitAppointment(newAppointment, doctorId) {
+export function submitDoctor(newDoctor, token) {
 	return axios
-		.put(`/api/doctor/${doctorId}/appointment`, newAppointment)
+		.post('/api/doctor', newDoctor, getHeader(token))
 		.then((response) => response.data);
 }
 
-export function getDoctors() {
-	return axios.get('/api/doctor').then((response) => response.data);
+export function submitAppointment(newAppointment, doctorId, token) {
+	return axios
+		.put(
+			`/api/doctor/${doctorId}/appointment`,
+			newAppointment,
+			getHeader(token)
+		)
+		.then((response) => response.data);
 }
 
-export function deleteDoctor(doctorId) {
-	return axios.delete(`/api/doctor/${doctorId}`);
+export function getDoctors(token) {
+	return axios
+		.get('/api/doctor', getHeader(token))
+		.then((response) => response.data);
+}
+
+export function deleteDoctor(doctorId, token) {
+	return axios.delete(`/api/doctor/${doctorId}`, getHeader(token));
 }

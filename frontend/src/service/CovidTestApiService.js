@@ -1,11 +1,21 @@
 import axios from 'axios';
 
-export function submitCovidTest(newCovidTest) {
+const getHeader = (token) => {
+	return {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+};
+
+export function submitCovidTest(newCovidTest, token) {
 	return axios
-		.post('/api/covid-test', newCovidTest)
+		.post('/api/covid-test', newCovidTest, getHeader(token))
 		.then((response) => response.data);
 }
 
-export function getCovidTests() {
-	return axios.get('/api/covid-test').then((response) => response.data);
+export function getCovidTests(token) {
+	return axios
+		.get('/api/covid-test', getHeader(token))
+		.then((response) => response.data);
 }
