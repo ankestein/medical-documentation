@@ -1,5 +1,5 @@
 import AddIcon from '@mui/icons-material/Add';
-import {Fab, Typography} from '@mui/material';
+import {Fab} from '@mui/material';
 import {Link} from 'react-router-dom';
 import Doctors from './Doctors';
 import PropTypes from 'prop-types';
@@ -13,7 +13,7 @@ Doctors.propTypes = {
 export default function Appointments({allDoctors, fabPosition}) {
 	return (
 		<PageLayout>
-			<Typography variant='h1'>Appointments</Typography>
+			<StyledH1>Appointments</StyledH1>
 
 			<Fab
 				color='#a1c181ff'
@@ -50,4 +50,11 @@ const CardContainer = styled.div`
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	grid-auto-rows: 190px;
+`;
+
+const StyledH1 = styled.h1`
+	font-family: Montserrat, Roboto, Helvetica, Arial, sans-serif;
+	font-weight: 500;
+	font-size: 18px;
+	margin: 12px;
 `;

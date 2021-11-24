@@ -1,7 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {Fab, Stack, Typography} from '@mui/material';
+import {Fab, Stack} from '@mui/material';
 import {DataGrid} from '@mui/x-data-grid';
 import {Link} from 'react-router-dom';
 import styled from 'styled-components/macro';
@@ -101,7 +101,7 @@ export default function Doctors({
 
 	return (
 		<PageLayout>
-			<Typography variant='h1'>Doctors</Typography>
+			<StyledH1>Doctors</StyledH1>
 
 			<Fab
 				color='#a1c181ff'
@@ -162,4 +162,11 @@ export default function Doctors({
 
 const PageLayout = styled.div`
 	margin-bottom: 60px;
+`;
+
+const StyledH1 = styled.h1`
+	font-family: Montserrat, Roboto, Helvetica, Arial, sans-serif;
+	font-weight: 500;
+	font-size: 18px;
+	margin: 12px;
 `;
