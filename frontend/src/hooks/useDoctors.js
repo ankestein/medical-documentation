@@ -1,9 +1,12 @@
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {deleteDoctor, getDoctors} from '../service/DoctorApiService';
+import {AuthContext} from '../context/AuthProvider';
 
 export default function useDoctors() {
 	const [allDoctors, setAllDoctors] = useState([]);
 	const [allCovidTests, setAllCovidTests] = useState([]);
+
+	const {token} = useContext(AuthContext);
 
 	const [selectedRowParams, setSelectedRowParams] = useState({
 		id: '',
@@ -13,13 +16,13 @@ export default function useDoctors() {
 	});
 
 	useEffect(() => {
-		getDoctors()
+		getDoctors(token)
 			.then((doctors) => setAllDoctors(doctors))
 			.catch((error) => console.error(error.message));
-	}, [allDoctors]);
+	}, [allDoctors, token]);
 
 	const removeDoctor = (doctorId) => {
-		deleteDoctor(doctorId).then(() =>
+		deleteDoctor(doctorId, token).then(() =>
 			setAllDoctors(allDoctors.filter((doctor) => doctor.id !== doctorId))
 		);
 	};
