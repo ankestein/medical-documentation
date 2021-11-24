@@ -22,18 +22,24 @@ const theme = createTheme({
 		fontFamily: `"Montserrat", "Roboto", "Helvetica", "Arial", sans-serif`,
 		fontSize: 14,
 		h1: {
-			//fontWeight: 500,
-			fontSize: 12,
+			fontWeight: 500,
+			fontSize: '1.2rem',
 			margin: '12px',
 		},
 	},
-	/*fabStyle: {
-		position: 'relative',
-		top: -62,
-		right: -310,
-		color: '#a1c181ff',
-		size: 'small',
-	},*/
+	components: {
+		MuiFab: {
+			styleOverrides: {
+				root: {
+					position: 'relative',
+					top: -62,
+					right: -310,
+					color: '#a1c181ff',
+					size: 'small',
+				},
+			},
+		},
+	},
 });
 
 export default theme;

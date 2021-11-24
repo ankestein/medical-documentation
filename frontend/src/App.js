@@ -22,6 +22,12 @@ export default function App() {
 		setAllCovidTests,
 	} = useDoctors();
 
+	const fabPosition = {
+		position: 'relative',
+		top: -35,
+		left: '85%',
+	};
+
 	return (
 		<ThemeProvider theme={theme}>
 			<Header />
@@ -35,6 +41,7 @@ export default function App() {
 						removeDoctor={removeDoctor}
 						selectedRowParams={selectedRowParams}
 						setSelectedRowParams={setSelectedRowParams}
+						fabPosition={fabPosition}
 					/>
 				</Route>
 				<Route path='/new-doctor'>
