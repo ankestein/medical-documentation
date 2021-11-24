@@ -17,6 +17,8 @@ public class JWTUtilService {
     @Value("${neuefische.meddoc.jwt.secret}")
     private String JWT_SECRET;
 
+    private final long duration = 4 * 60 * 60 * 1000;
+
     public String createToken(Map<String, Object> claims, String subject) {
 
         // Generate JWT
@@ -24,7 +26,7 @@ public class JWTUtilService {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(Date.from(Instant.now()))
-                .setExpiration(Date.from(Instant.now().plus(Duration.ofHours(4))))
+                .setExpiration(Date.from(Instant.now().plus(Duration.ofMillis(duration))))
                 .signWith(SignatureAlgorithm.HS256, JWT_SECRET)
                 .compact();
     }
