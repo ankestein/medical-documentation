@@ -1,23 +1,34 @@
-import {Fab} from '@material-ui/core';
 import AddIcon from '@mui/icons-material/Add';
 import styled from 'styled-components/macro';
-import {Link} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 
 export default function CovidTests({fabPosition}) {
+	const history = useHistory();
+
+	const handleClickAddCovidTest = () => {
+		history.push('/new-covid-test');
+	};
+
 	return (
 		<PageLayout>
 			<StyledH1>COVID19 Tests</StyledH1>
 
-			<Fab
-				color='#a1c181ff'
-				size='small'
+			<AddIcon
+				style={{
+					cursor: 'pointer',
+					borderRadius: '50%',
+					width: 40,
+					height: 40,
+					background: '#a1c181ff',
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'center',
+					boxShadow:
+						'0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12)',
+				}}
 				sx={fabPosition}
-				aria-label='add-covid-test'
-				component={Link}
-				to='/new-covid-test'
-			>
-				<AddIcon />
-			</Fab>
+				onClick={handleClickAddCovidTest}
+			/>
 		</PageLayout>
 	);
 }

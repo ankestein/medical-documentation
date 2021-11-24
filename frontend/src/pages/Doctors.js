@@ -1,9 +1,9 @@
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import {Fab, Stack} from '@mui/material';
+import {Stack} from '@mui/material';
 import {DataGrid} from '@mui/x-data-grid';
-import {Link} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import styled from 'styled-components/macro';
 import PropTypes from 'prop-types';
 import ConfirmDialog from '../components/ConfirmDialog';
@@ -37,9 +37,15 @@ export default function Doctors({
 
 	const [open, setOpen] = useState(false);
 
+	const history = useHistory();
+
 	const handleClickOpen = (cellValues) => {
 		setOpen(true);
 		setSelectedRowParams(cellValues.row);
+	};
+
+	const handleClickAddDoctor = () => {
+		history.push('/new-doctor');
 	};
 
 	const columns = [
@@ -104,19 +110,6 @@ export default function Doctors({
 		<PageLayout>
 			<StyledH1>Doctors</StyledH1>
 
-			<Fab
-				color='#a1c181ff'
-				size='small'
-				sx={fabPosition}
-				aria-label='add-doctor'
-				component={Link}
-				to='/new-doctor'
-			>
-				<AddIcon />
-			</Fab>
-
-			{/*
-			// style AddIcon myself because styling of FAB breaks when Dialog opens
 			<AddIcon
 				style={{
 					cursor: 'pointer',
@@ -125,7 +118,6 @@ export default function Doctors({
 					//lineHeight: 1.75,
 					//letterSpacing: '0.02857em',
 					//textTransform: 'uppercase',
-					//color: 'rgba(0, 0, 0, 0.87)',
 					borderRadius: '50%',
 					width: 40,
 					height: 40,
@@ -135,10 +127,10 @@ export default function Doctors({
 					justifyContent: 'center',
 					boxShadow:
 						'0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12)',
-					...fabStyle,
 				}}
-			></AddIcon>
-			*/}
+				sx={fabPosition}
+				onClick={handleClickAddDoctor}
+			/>
 
 			<div style={{height: '650px', width: '100%'}}>
 				<DataGrid
@@ -149,7 +141,6 @@ export default function Doctors({
 					style={{fontSize: 11}}
 				/>
 			</div>
-
 			<ConfirmDialog
 				selectedRowParams={selectedRowParams}
 				method={removeDoctor}

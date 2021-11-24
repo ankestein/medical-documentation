@@ -1,6 +1,5 @@
 import AddIcon from '@mui/icons-material/Add';
-import {Fab} from '@mui/material';
-import {Link} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import Doctors from './Doctors';
 import PropTypes from 'prop-types';
 import AppointmentCard from '../components/AppointmentCard';
@@ -11,20 +10,32 @@ Doctors.propTypes = {
 };
 
 export default function Appointments({allDoctors, fabPosition}) {
+	const history = useHistory();
+
+	const handleClickAddAppointment = () => {
+		history.push('/new-appointment');
+	};
+
 	return (
 		<PageLayout>
 			<StyledH1>Appointments</StyledH1>
 
-			<Fab
-				color='#a1c181ff'
-				size='small'
+			<AddIcon
+				style={{
+					cursor: 'pointer',
+					borderRadius: '50%',
+					width: 40,
+					height: 40,
+					background: '#a1c181ff',
+					display: 'flex',
+					alignItems: 'center',
+					justifyContent: 'center',
+					boxShadow:
+						'0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12)',
+				}}
 				sx={fabPosition}
-				aria-label='add-appointment'
-				component={Link}
-				to='/new-appointment'
-			>
-				<AddIcon />
-			</Fab>
+				onClick={handleClickAddAppointment}
+			/>
 
 			<CardContainer>
 				{allDoctors.map((doctor) => {
