@@ -7,15 +7,15 @@ import de.neuefische.backend.mapper.DoctorMapper;
 import de.neuefische.backend.model.Appointment;
 import de.neuefische.backend.model.Doctor;
 import de.neuefische.backend.repo.DoctorRepo;
+import de.neuefische.backend.security.model.AppUser;
+import de.neuefische.backend.security.repo.AppUserRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,6 +27,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class DoctorControllerTest {
+
+    @Autowired
+    private AppUserRepo appUserRepo;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private TestRestTemplate testRestTemplate;
@@ -42,6 +48,8 @@ class DoctorControllerTest {
 
     @Test
     void addDoctorTest() {
+        HttpHeaders headers = getHttpHeadersWithJWT();
+
         // GIVEN
         DoctorDto doctorDto = DoctorDto.builder()
                 .firstName("Linda")
@@ -54,7 +62,7 @@ class DoctorControllerTest {
         Doctor expectedDoctor = DoctorMapper.mapDoctorDtoToDoctor(doctorDto);
 
         // WHEN
-        ResponseEntity<Doctor> response = testRestTemplate.postForEntity("/api/doctor", doctorDto, Doctor.class);
+        ResponseEntity<Doctor> response = testRestTemplate.exchange("/api/doctor", HttpMethod.POST, new HttpEntity<>(doctorDto, headers), Doctor.class);
 
         // THEN
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -68,7 +76,7 @@ class DoctorControllerTest {
         assertEquals(expectedDoctor, actual);
 
         // THEN - check via GET if element was actually added
-        ResponseEntity<Doctor> getResponse = testRestTemplate.getForEntity("/api/doctor/" + actualId, Doctor.class);
+        ResponseEntity<Doctor> getResponse = testRestTemplate.exchange("/api/doctor/" + actualId, HttpMethod.GET, new HttpEntity<>(headers), Doctor.class);
         Doctor persistedDoctor = getResponse.getBody();
 
         assertNotNull(persistedDoctor);
@@ -79,6 +87,8 @@ class DoctorControllerTest {
 
     @Test
     void addAppointmentTest() {
+        HttpHeaders headers = getHttpHeadersWithJWT();
+
         // GIVEN
         AppointmentDto appointmentDto = AppointmentDto.builder()
                 .date(LocalDate.of(2021, 11, 8))
@@ -102,13 +112,13 @@ class DoctorControllerTest {
         Appointment appointment = AppointmentMapper.mapAppointmentDtoToAppointment(appointmentDto);
         Appointment oldAppointment = AppointmentMapper.mapAppointmentDtoToAppointment(oldAppointmentDto);
 
-        ResponseEntity<Doctor> postResponse = testRestTemplate.postForEntity("/api/doctor", doctorDto, Doctor.class);
+        ResponseEntity<Doctor> postResponse = testRestTemplate.exchange("/api/doctor", HttpMethod.POST, new HttpEntity<>(doctorDto, headers), Doctor.class);
         assertNotNull(postResponse.getBody());
         assertNotNull(postResponse.getBody().getId());
         String doctorId = postResponse.getBody().getId();
 
         // WHEN
-        ResponseEntity<Doctor> response = testRestTemplate.exchange("/api/doctor/" + doctorId + "/appointment", HttpMethod.PUT, new HttpEntity<>(appointmentDto), Doctor.class);
+        ResponseEntity<Doctor> response = testRestTemplate.exchange("/api/doctor/" + doctorId + "/appointment", HttpMethod.PUT, new HttpEntity<>(appointmentDto, getHttpHeadersWithJWT()), Doctor.class);
 
         // THEN
         assertEquals(HttpStatus.OK, postResponse.getStatusCode());
@@ -128,7 +138,7 @@ class DoctorControllerTest {
         assertEquals(expectedDoctor, actual);
 
         // THEN - check via GET if element was actually added
-        ResponseEntity<Doctor> getResponse = testRestTemplate.getForEntity("/api/doctor/" + actualDoctorId, Doctor.class);
+        ResponseEntity<Doctor> getResponse = testRestTemplate.exchange("/api/doctor/" + actualDoctorId, HttpMethod.GET, new HttpEntity<>(headers), Doctor.class);
         Doctor persistedDoctor = getResponse.getBody();
 
         assertNotNull(persistedDoctor);
@@ -139,6 +149,8 @@ class DoctorControllerTest {
 
     @Test
     void getDoctorsTest() {
+        HttpHeaders headers = getHttpHeadersWithJWT();
+
         // GIVEN
         Doctor doctor1 = Doctor.builder()
                 .firstName("Linda")
@@ -159,7 +171,7 @@ class DoctorControllerTest {
         doctorRepo.save(doctor2);
 
         // WHEN
-        ResponseEntity<Doctor[]> response = testRestTemplate.getForEntity("/api/doctor", Doctor[].class);
+        ResponseEntity<Doctor[]> response = testRestTemplate.exchange("/api/doctor", HttpMethod.GET, new HttpEntity<>(getHttpHeadersWithJWT()), Doctor[].class);
 
         // THEN
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -191,7 +203,7 @@ class DoctorControllerTest {
         doctorRepo.save(doctor2);
 
         // WHEN
-        testRestTemplate.delete("/api/doctor/1234");
+        testRestTemplate.exchange("/api/doctor/1234", HttpMethod.DELETE, new HttpEntity<>(getHttpHeadersWithJWT()), Void.class);
 
         // THEN
         List<Doctor> doctors = doctorRepo.findAll();
@@ -199,5 +211,16 @@ class DoctorControllerTest {
 
     }
 
+    private HttpHeaders getHttpHeadersWithJWT() {
+        appUserRepo.save(AppUser.builder()
+                .username("test_username")
+                .password(passwordEncoder.encode("some-password"))
+                .build());
+        AppUser loginData = new AppUser("test_username", "some-password");
+        ResponseEntity<String> response = testRestTemplate.postForEntity("/auth/login", loginData, String.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(response.getBody());
+        return headers;
+    }
 
 }
