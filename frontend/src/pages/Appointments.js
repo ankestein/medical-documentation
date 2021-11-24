@@ -4,12 +4,13 @@ import Doctors from './Doctors';
 import PropTypes from 'prop-types';
 import AppointmentCard from '../components/AppointmentCard';
 import styled from 'styled-components/macro';
+import {customStyle} from '../styling/styles';
 
 Doctors.propTypes = {
 	allDoctors: PropTypes.array,
 };
 
-export default function Appointments({allDoctors, fabPosition, addIconStyle}) {
+export default function Appointments({allDoctors}) {
 	const history = useHistory();
 
 	const handleClickAddAppointment = () => {
@@ -21,8 +22,8 @@ export default function Appointments({allDoctors, fabPosition, addIconStyle}) {
 			<StyledH1>Appointments</StyledH1>
 
 			<AddIcon
-				style={addIconStyle}
-				sx={fabPosition}
+				style={customStyle.addIconStyle}
+				sx={customStyle.fabPosition}
 				onClick={handleClickAddAppointment}
 			/>
 

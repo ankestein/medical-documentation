@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import ConfirmDialog from '../components/ConfirmDialog';
 import {useState} from 'react';
 import {IconButton, makeStyles} from '@material-ui/core';
+import {customStyle} from '../styling/styles';
 
 Doctors.propTypes = {
 	removeDoctor: PropTypes.func.isRequired,
@@ -31,8 +32,6 @@ export default function Doctors({
 	allDoctors,
 	selectedRowParams,
 	setSelectedRowParams,
-	fabPosition,
-	addIconStyle,
 }) {
 	const classes = useStyles();
 
@@ -112,8 +111,8 @@ export default function Doctors({
 			<StyledH1>Doctors</StyledH1>
 
 			<AddIcon
-				style={addIconStyle}
-				sx={fabPosition}
+				style={customStyle.addIconStyle}
+				sx={customStyle.fabPosition}
 				onClick={handleClickAddDoctor}
 			/>
 

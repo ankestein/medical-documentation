@@ -1,8 +1,9 @@
 import AddIcon from '@mui/icons-material/Add';
 import styled from 'styled-components/macro';
 import {useHistory} from 'react-router-dom';
+import {customStyle} from '../styling/styles';
 
-export default function CovidTests({fabPosition, addIconStyle}) {
+export default function CovidTests() {
 	const history = useHistory();
 
 	const handleClickAddCovidTest = () => {
@@ -14,8 +15,8 @@ export default function CovidTests({fabPosition, addIconStyle}) {
 			<StyledH1>COVID19 Tests</StyledH1>
 
 			<AddIcon
-				style={addIconStyle}
-				sx={fabPosition}
+				style={customStyle.addIconStyle}
+				sx={customStyle.fabPosition}
 				onClick={handleClickAddCovidTest}
 			/>
 		</PageLayout>
