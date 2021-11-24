@@ -55,7 +55,7 @@ export default function CovidTestCard({covidTest}) {
 }
 
 const StyledCard = styled.div`
-	background: #a1c181ff;
+	background: #d0e0c0;
 	position: relative;
 	margin: 6px;
 	border: 1px solid grey;
