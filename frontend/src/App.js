@@ -28,6 +28,24 @@ export default function App() {
 		left: '85%',
 	};
 
+	const addIconStyle = {
+		cursor: 'pointer',
+		//fontSize: '1.2857142857142856rem',
+		//fontWeight: 500,
+		//lineHeight: 1.75,
+		//letterSpacing: '0.02857em',
+		//textTransform: 'uppercase',
+		borderRadius: '50%',
+		width: 40,
+		height: 40,
+		background: '#a1c181ff',
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+		boxShadow:
+			'0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12)',
+	};
+
 	return (
 		<ThemeProvider theme={theme}>
 			<Header />
@@ -42,19 +60,20 @@ export default function App() {
 						selectedRowParams={selectedRowParams}
 						setSelectedRowParams={setSelectedRowParams}
 						fabPosition={fabPosition}
+						addIconStyle={addIconStyle}
 					/>
 				</Route>
 				<Route path='/new-doctor'>
 					<NewDoctor setAllDoctors={setAllDoctors} />
 				</Route>
 				<Route path='/appointments'>
-					<Appointments allDoctors={allDoctors} />
+					<Appointments allDoctors={allDoctors} addIconStyle={addIconStyle} />
 				</Route>
 				<Route path='/new-appointment'>
 					<NewAppointment allDoctors={allDoctors} />
 				</Route>
 				<Route path='/covid-tests'>
-					<CovidTests />
+					<CovidTests addIconStyle={addIconStyle} />
 				</Route>
 				<Route path='/new-covid-test'>
 					<NewCovidTest setAllCovidTests={setAllCovidTests} />

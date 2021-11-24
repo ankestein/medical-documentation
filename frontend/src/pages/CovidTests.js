@@ -2,7 +2,7 @@ import AddIcon from '@mui/icons-material/Add';
 import styled from 'styled-components/macro';
 import {useHistory} from 'react-router-dom';
 
-export default function CovidTests({fabPosition}) {
+export default function CovidTests({fabPosition, addIconStyle}) {
 	const history = useHistory();
 
 	const handleClickAddCovidTest = () => {
@@ -14,18 +14,7 @@ export default function CovidTests({fabPosition}) {
 			<StyledH1>COVID19 Tests</StyledH1>
 
 			<AddIcon
-				style={{
-					cursor: 'pointer',
-					borderRadius: '50%',
-					width: 40,
-					height: 40,
-					background: '#a1c181ff',
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'center',
-					boxShadow:
-						'0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12)',
-				}}
+				style={addIconStyle}
 				sx={fabPosition}
 				onClick={handleClickAddCovidTest}
 			/>

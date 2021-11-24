@@ -9,7 +9,7 @@ Doctors.propTypes = {
 	allDoctors: PropTypes.array,
 };
 
-export default function Appointments({allDoctors, fabPosition}) {
+export default function Appointments({allDoctors, fabPosition, addIconStyle}) {
 	const history = useHistory();
 
 	const handleClickAddAppointment = () => {
@@ -21,18 +21,7 @@ export default function Appointments({allDoctors, fabPosition}) {
 			<StyledH1>Appointments</StyledH1>
 
 			<AddIcon
-				style={{
-					cursor: 'pointer',
-					borderRadius: '50%',
-					width: 40,
-					height: 40,
-					background: '#a1c181ff',
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'center',
-					boxShadow:
-						'0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12)',
-				}}
+				style={addIconStyle}
 				sx={fabPosition}
 				onClick={handleClickAddAppointment}
 			/>
