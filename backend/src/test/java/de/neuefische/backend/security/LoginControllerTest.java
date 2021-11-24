@@ -37,12 +37,12 @@ class LoginControllerTest {
 
         // GIVEN
         appUserRepo.save(AppUser.builder()
-                .username("user")
+                .username("test-user")
                 .password(passwordEncoder.encode("some-password"))
                 .build());
 
         // WHEN
-        AppUser appUser = new AppUser("user", "some-password");
+        AppUser appUser = new AppUser("test-user", "some-password");
         ResponseEntity<String> response = restTemplate.postForEntity("/auth/login", appUser, String.class);
 
         // THEN
@@ -53,7 +53,7 @@ class LoginControllerTest {
                 .setSigningKey(JWT_SECRET)
                 .parseClaimsJws(response.getBody())
                 .getBody();
-        assertThat(body.getSubject(), is("user"));
+        assertThat(body.getSubject(), is("test-user"));
     }
 
     @Test
@@ -61,12 +61,12 @@ class LoginControllerTest {
 
         // GIVEN
         appUserRepo.save(AppUser.builder()
-                .username("user")
+                .username("test-user")
                 .password(passwordEncoder.encode("some-password"))
                 .build());
 
         // WHEN
-        AppUser appUser = new AppUser("user", "WRONG_PASSWORD");
+        AppUser appUser = new AppUser("test-user", "WRONG_PASSWORD");
         ResponseEntity<String> response = restTemplate.postForEntity("/auth/login", appUser, String.class);
 
         // THEN
