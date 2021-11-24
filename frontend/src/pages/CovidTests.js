@@ -4,14 +4,15 @@ import styled from 'styled-components/macro';
 import {Link} from 'react-router-dom';
 import {Typography} from '@mui/material';
 
-export default function CovidTests() {
+export default function CovidTests({fabPosition}) {
 	return (
 		<PageLayout>
 			<Typography variant='h1'>COVID19 Tests</Typography>
 
 			<Fab
-				color='primary'
+				color='#a1c181ff'
 				size='small'
+				sx={fabPosition}
 				aria-label='add-covid-test'
 				component={Link}
 				to='/new-covid-test'

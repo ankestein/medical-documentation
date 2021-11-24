@@ -17,7 +17,7 @@ Doctors.propTypes = {
 const useStyles = makeStyles({
 	root: {
 		'& .datagrid-theme--header': {
-			backgroundColor: 'primary',
+			backgroundColor: '#a1c181ff',
 		},
 		'& .datagrid-theme-button-header': {
 			backgroundColor: '#a1c181ff',
@@ -31,13 +31,8 @@ export default function Doctors({
 	allDoctors,
 	selectedRowParams,
 	setSelectedRowParams,
+	fabPosition,
 }) {
-	const fabStyle = {
-		position: 'relative',
-		top: -15,
-		right: -310,
-	};
-
 	const classes = useStyles();
 
 	const [open, setOpen] = useState(false);
@@ -109,9 +104,9 @@ export default function Doctors({
 			<Typography variant='h1'>Doctors</Typography>
 
 			<Fab
-				color='primary'
+				color='#a1c181ff'
 				size='small'
-				sx={fabStyle}
+				sx={fabPosition}
 				aria-label='add-doctor'
 				component={Link}
 				to='/new-doctor'
