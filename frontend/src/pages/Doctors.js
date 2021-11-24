@@ -17,11 +17,11 @@ Doctors.propTypes = {
 const useStyles = makeStyles({
 	root: {
 		'& .datagrid-theme--header': {
-			backgroundColor: '#a1c181ff',
+			backgroundColor: '#d0e0c0',
 		},
 		'& .datagrid-theme-button-header': {
-			backgroundColor: '#a1c181ff',
-			color: '#a1c181ff',
+			backgroundColor: '#d0e0c0',
+			color: '#d0e0c0',
 		},
 	},
 });
@@ -47,6 +47,7 @@ export default function Doctors({
 			field: 'name',
 			headerName: 'Name',
 			width: 110,
+			backgroundColor: 'red',
 			headerClassName: 'datagrid-theme--header',
 		},
 		{
