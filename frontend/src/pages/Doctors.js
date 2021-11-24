@@ -17,7 +17,7 @@ Doctors.propTypes = {
 const useStyles = makeStyles({
 	root: {
 		'& .datagrid-theme--header': {
-			backgroundColor: '#a1c181ff',
+			backgroundColor: 'primary',
 		},
 		'& .datagrid-theme-button-header': {
 			backgroundColor: '#a1c181ff',

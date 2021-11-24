@@ -27,12 +27,18 @@ const theme = createTheme({
 			margin: '12px',
 		},
 	},
-	fabStyle: {
-		position: 'relative',
-		top: -62,
-		right: -310,
-		color: '#a1c181ff',
-		size: 'small',
+	components: {
+		MuiFab: {
+			styleOverrides: {
+				root: {
+					position: 'relative',
+					top: -62,
+					right: -310,
+					color: '#a1c181ff',
+					size: 'small',
+				},
+			},
+		},
 	},
 });
 
