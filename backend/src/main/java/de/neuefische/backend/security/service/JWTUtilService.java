@@ -19,6 +19,10 @@ public class JWTUtilService {
 
     private final long duration = 4 * 60 * 60 * 1000;
 
+    public long getDuration() {
+        return duration;
+    }
+
     public String createToken(Map<String, Object> claims, String subject) {
 
         // Generate JWT
@@ -26,7 +30,7 @@ public class JWTUtilService {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(Date.from(Instant.now()))
-                .setExpiration(Date.from(Instant.now().plus(Duration.ofMillis(duration))))
+                .setExpiration(Date.from(Instant.now().plus(Duration.ofMillis(getDuration()))))
                 .signWith(SignatureAlgorithm.HS256, JWT_SECRET)
                 .compact();
     }
@@ -35,4 +39,5 @@ public class JWTUtilService {
         Claims claims = Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token).getBody();
         return claims.getSubject();
     }
+
 }

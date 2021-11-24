@@ -7,17 +7,19 @@ import de.neuefische.backend.security.service.JWTUtilService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.HashMap;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = "neuefische.meddoc.jwt.secret=dev-secret-54321")
@@ -29,7 +31,7 @@ class UserControllerTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
+    @SpyBean
     private JWTUtilService jwtUtilService;
 
     @Autowired
@@ -64,7 +66,7 @@ class UserControllerTest {
         //GIVEN
         HttpHeaders headers = new HttpHeaders();
 
-        ReflectionTestUtils.setField(jwtUtilService, "duration", 1);
+        when(jwtUtilService.getDuration()).thenReturn(1L);
         headers.setBearerAuth(jwtUtilService.createToken(new HashMap<>(), "test_username"));
 
         //WHEN
@@ -72,6 +74,7 @@ class UserControllerTest {
         //THEN
 
         assertThat(response.getStatusCode(), is(HttpStatus.FORBIDDEN));
+        verify(jwtUtilService).getDuration();
     }
 
 
