@@ -1,4 +1,3 @@
-import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {Stack} from '@mui/material';
@@ -9,7 +8,7 @@ import PropTypes from 'prop-types';
 import ConfirmDialog from '../components/ConfirmDialog';
 import {useState} from 'react';
 import {IconButton, makeStyles} from '@material-ui/core';
-import {customStyle} from '../styling/styles';
+import AddButton from '../components/AddButton';
 
 Doctors.propTypes = {
 	removeDoctor: PropTypes.func.isRequired,
@@ -110,13 +109,9 @@ export default function Doctors({
 		<PageLayout>
 			<StyledH1>Doctors</StyledH1>
 
-			<AddIcon
-				style={customStyle.addIconStyle}
-				sx={customStyle.fabPosition}
-				onClick={handleClickAddDoctor}
-			/>
+			<AddButton onClick={handleClickAddDoctor} />
 
-			<div style={{height: '650px', width: '100%'}}>
+			<DataGridContainer>
 				<DataGrid
 					hideFooterPagination={false}
 					rows={rows}
@@ -124,7 +119,7 @@ export default function Doctors({
 					className={classes.root}
 					style={{fontSize: 11}}
 				/>
-			</div>
+			</DataGridContainer>
 			<ConfirmDialog
 				selectedRowParams={selectedRowParams}
 				method={removeDoctor}
@@ -145,4 +140,10 @@ const StyledH1 = styled.h1`
 	font-weight: 500;
 	font-size: 18px;
 	margin: 12px;
+`;
+
+const DataGridContainer = styled.div`
+	height: 650px;
+	width: 100%;
+	z-index: 1;
 `;
