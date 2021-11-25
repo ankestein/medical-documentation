@@ -7,9 +7,10 @@ export const customStyle = {
 	addIconStyle: {
 		cursor: 'pointer',
 		borderRadius: '50%',
-		width: 40,
-		height: 40,
-		background: '#a1c181ff',
+		fontSize: '30px',
+		//width: 40,
+		//height: 40,
+		background: 'var(--primary-background)',
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',

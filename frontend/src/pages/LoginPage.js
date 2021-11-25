@@ -57,6 +57,6 @@ const Form = styled.form`
 `;
 
 const PageLayout = styled.div`
-	margin-top: 56px;
+	margin-top: 80px;
 	margin-bottom: 60px;
 `;

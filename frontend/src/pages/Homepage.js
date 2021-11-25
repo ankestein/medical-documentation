@@ -3,33 +3,39 @@ import AppointmentStickyNote from '../components/AppointmentStickyNote';
 
 export default function Homepage({allDoctors}) {
 	return (
-		<PageLayout>
-			<StyledH1>My next appointments:</StyledH1>
+		<Background>
+			<PageLayout>
+				<StyledH1>My next appointments:</StyledH1>
 
-			<CardContainer>
-				{allDoctors.map((doctor) => {
-					return doctor.appointments
-						.filter(
-							(appointment) => new Date(appointment.date) - new Date() > 0
-						)
-						.map((appointment) => {
-							return (
-								<AppointmentStickyNote
-									doctor={doctor}
-									appointment={appointment}
-								/>
-							);
-						});
-				})}
-			</CardContainer>
-		</PageLayout>
+				<CardContainer>
+					{allDoctors.map((doctor) => {
+						return doctor.appointments
+							.filter(
+								(appointment) => new Date(appointment.date) - new Date() > 0
+							)
+							.map((appointment) => {
+								return (
+									<AppointmentStickyNote
+										doctor={doctor}
+										appointment={appointment}
+									/>
+								);
+							});
+					})}
+				</CardContainer>
+			</PageLayout>
+		</Background>
 	);
 }
+
+const Background = styled.div`
+	height: 100vh;
+	background: #d0e0c0;
+`;
 
 const PageLayout = styled.div`
 	margin-top: 56px;
 	margin-bottom: 60px;
-	background: #d0e0c0;
 `;
 
 const StyledH1 = styled.h1`
