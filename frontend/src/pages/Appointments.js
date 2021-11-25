@@ -29,13 +29,11 @@ export default function Appointments({allDoctors}) {
 
 			<CardContainer>
 				{allDoctors.map((doctor) => {
-					{
-						return doctor.appointments.map((appointment) => {
-							return (
-								<AppointmentCard doctor={doctor} appointment={appointment} />
-							);
-						});
-					}
+					return doctor.appointments.map((appointment) => {
+						return (
+							<AppointmentCard doctor={doctor} appointment={appointment} />
+						);
+					});
 				})}
 			</CardContainer>
 		</PageLayout>

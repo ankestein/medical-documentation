@@ -4,7 +4,6 @@ import {AuthContext} from '../context/AuthProvider';
 
 export default function useDoctors() {
 	const [allDoctors, setAllDoctors] = useState([]);
-	const [allCovidTests, setAllCovidTests] = useState([]);
 
 	const {token} = useContext(AuthContext);
 
@@ -33,7 +32,5 @@ export default function useDoctors() {
 		removeDoctor,
 		selectedRowParams,
 		setSelectedRowParams,
-		allCovidTests,
-		setAllCovidTests,
 	};
 }
