@@ -20,8 +20,21 @@ export default function NewAppointment({allDoctors}) {
 	const initialAppointment = {
 		date: null,
 		reasonForVisit: '',
+		reminder: '',
 		notes: '',
+		examination: '',
+		doctorsReply: '',
+		medication: '',
+		imagingType: null,
+		bloodSampling: '',
 	};
+
+	const imagingTypes = [
+		{id: 'XRAY', label: 'X-Ray'},
+		{id: 'CT', label: 'CT'},
+		{id: 'MRT', label: 'MRT'},
+		{id: 'ULTRASONIC', label: 'Ultrasonic'},
+	];
 
 	const [newAppointment, setNewAppointment] = useState(initialAppointment);
 	const [selectedDoctorId, setSelectedDoctorId] = useState('');
@@ -42,6 +55,10 @@ export default function NewAppointment({allDoctors}) {
 
 	const handleDoctorChange = (event) => {
 		setSelectedDoctorId(event.target.value);
+	};
+
+	const handleImagingChange = (event) => {
+		setNewAppointment({...newAppointment, imagingType: event.target.value});
 	};
 
 	const handleSubmit = (event) => {
@@ -99,10 +116,78 @@ export default function NewAppointment({allDoctors}) {
 
 				<TextField
 					variant='outlined'
+					value={newAppointment.reminder}
+					placeholder='Reminder'
+					required={false}
+					name='reminder'
+					onChange={handleChange}
+				/>
+
+				<TextField
+					variant='outlined'
 					value={newAppointment.notes}
 					placeholder='Notes'
 					required={false}
 					name='notes'
+					onChange={handleChange}
+				/>
+
+				<TextField
+					variant='outlined'
+					value={newAppointment.examination}
+					placeholder='Examination'
+					required={false}
+					name='examination'
+					onChange={handleChange}
+				/>
+
+				<Grid container spacing={1} alignItems='center'>
+					<Grid item xs={1}>
+						<FontAwesomeIcon icon={faUserMd} />
+					</Grid>
+					<Grid item xs={11}>
+						<TextField
+							variant='outlined'
+							value={newAppointment.doctorsReply}
+							placeholder="Doctor's reply"
+							required={false}
+							name='doctorsReply'
+							onChange={handleChange}
+						/>
+					</Grid>
+				</Grid>
+
+				<TextField
+					id='select-imaging'
+					select
+					value={newAppointment.imagingType}
+					label='Imaging'
+					required={false}
+					name='imagingId'
+					onChange={handleImagingChange}
+				>
+					{imagingTypes.map((imagingType) => (
+						<MenuItem key={imagingType.id} value={imagingType.id}>
+							{imagingType.label}
+						</MenuItem>
+					))}
+				</TextField>
+
+				<TextField
+					variant='outlined'
+					value={newAppointment.medication}
+					placeholder='Medication'
+					required={false}
+					name='medication'
+					onChange={handleChange}
+				/>
+
+				<TextField
+					variant='outlined'
+					value={newAppointment.bloodSampling}
+					placeholder='Blood sampling'
+					required={false}
+					name='bloodSampling'
 					onChange={handleChange}
 				/>
 
