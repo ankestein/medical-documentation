@@ -29,6 +29,7 @@ export default function NewCovidTest({setAllCovidTests}) {
 
 	useEffect(() => {
 		if (showError && isValid(newCovidTest)) setShowError(false);
+		//eslint-disable-next-line
 	}, [newCovidTest]);
 
 	const handleChange = (event) => {
