@@ -4,6 +4,17 @@ import {getDoctors, submitDoctor} from '../service/DoctorApiService';
 import styled from 'styled-components/macro';
 import {useHistory} from 'react-router-dom';
 import {AuthContext} from '../context/AuthProvider';
+import IconTextField from '../components/IconTextField';
+import {
+	faEnvelope,
+	faMapMarkerAlt,
+	faMobileAlt,
+	faPhone,
+	faTooth,
+	faUserMd,
+} from '@fortawesome/free-solid-svg-icons';
+import {Grid} from '@material-ui/core';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 export default function NewDoctor({setAllDoctors}) {
 	const initialDoctor = {
@@ -66,8 +77,8 @@ export default function NewDoctor({setAllDoctors}) {
 	return (
 		<PageLayout>
 			<Form onSubmit={handleSubmit}>
-				<TextField
-					variant='outlined'
+				<IconTextField
+					icon={faUserMd}
 					value={newDoctor.firstName}
 					label='First name'
 					required={true}
@@ -75,8 +86,8 @@ export default function NewDoctor({setAllDoctors}) {
 					onChange={handleChange}
 				/>
 
-				<TextField
-					variant='outlined'
+				<IconTextField
+					icon={faUserMd}
 					value={newDoctor.lastName}
 					required={true}
 					label='Last name'
@@ -84,88 +95,104 @@ export default function NewDoctor({setAllDoctors}) {
 					onChange={handleChange}
 				/>
 
-				<TextField
-					id='select-specialty'
-					select
-					value={newDoctor.specialty}
-					label='Specialty'
-					required={true}
-					name='specialty'
-					onChange={handleChange}
-				>
-					{specialties.map((specialty) => (
-						<MenuItem key={specialty} value={specialty}>
-							{specialty}
-						</MenuItem>
-					))}
-				</TextField>
+				<Grid container spacing={1} alignItems='center'>
+					<Grid item xs={1}>
+						<FontAwesomeIcon icon={faTooth} color='grey' />
+					</Grid>
+					<Grid item xs={11}>
+						<TextField
+							fullWidth
+							id='select-specialty'
+							select
+							value={newDoctor.specialty}
+							label='Specialty'
+							required={true}
+							name='specialty'
+							onChange={handleChange}
+						>
+							{specialties.map((specialty) => (
+								<MenuItem key={specialty} value={specialty}>
+									{specialty}
+								</MenuItem>
+							))}
+						</TextField>
+					</Grid>
+				</Grid>
 
-				<TextField
-					variant='outlined'
+				<IconTextField
+					icon={faMapMarkerAlt}
 					value={newDoctor.street}
+					placeholder='Street'
 					label='Street'
 					required={false}
 					name='street'
 					onChange={handleChange}
 				/>
 
-				<TextField
-					variant='outlined'
+				<IconTextField
+					icon={faMapMarkerAlt}
 					value={newDoctor.streetNumber}
+					placeholder='Number'
 					label='Number'
 					required={false}
 					name='streetNumber'
 					onChange={handleChange}
 				/>
 
-				<TextField
-					variant='outlined'
+				<IconTextField
+					icon={faMapMarkerAlt}
 					value={newDoctor.postalCode}
+					placeholder='Postal code'
 					label='Postal code'
 					required={false}
 					name='postalCode'
 					onChange={handleChange}
 				/>
 
-				<TextField
-					variant='outlined'
+				<IconTextField
+					icon={faMapMarkerAlt}
 					value={newDoctor.city}
+					placeholder='City'
 					label='City'
 					required={true}
 					name='city'
 					onChange={handleChange}
 				/>
 
-				<TextField
-					variant='outlined'
+				<IconTextField
+					icon={faMapMarkerAlt}
 					value={newDoctor.country}
+					placeholder='Country'
 					label='Country'
 					required={false}
 					name='country'
 					onChange={handleChange}
 				/>
 
-				<TextField
-					variant='outlined'
+				<IconTextField
+					icon={faPhone}
 					value={newDoctor.phoneNumber}
+					placeholder='Phone'
 					label='Phone'
 					required={false}
 					name='phoneNumber'
 					onChange={handleChange}
 				/>
 
-				<TextField
-					variant='outlined'
+				<IconTextField
+					icon={faMobileAlt}
 					value={newDoctor.mobileNumber}
+					placeholder='Mobile'
 					label='Mobile'
 					required={false}
 					name='mobileNumber'
 					onChange={handleChange}
 				/>
 
-				<TextField
-					variant='outlined'
+				<IconTextField
+					icon={faEnvelope}
 					value={newDoctor.emailAddress}
+					placeholder='Email'
 					label='Email'
 					required={false}
 					name='emailAddress'

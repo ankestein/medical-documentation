@@ -5,6 +5,7 @@ import {TextField} from '@mui/material';
 export default function IconTextField({
 	icon,
 	value,
+	label,
 	required,
 	onChange,
 	placeholder,
@@ -18,6 +19,7 @@ export default function IconTextField({
 			<Grid item xs={11}>
 				<TextField
 					variant='outlined'
+					label={label}
 					value={value}
 					placeholder={placeholder}
 					required={required}
