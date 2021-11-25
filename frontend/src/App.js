@@ -31,7 +31,7 @@ export default function App() {
 			<Header />
 			<Switch>
 				<PrivateRoute exact path='/'>
-					<Homepage />
+					<Homepage allDoctors={allDoctors} />
 				</PrivateRoute>
 				<Route path='/login'>
 					<LoginPage />
@@ -54,7 +54,7 @@ export default function App() {
 					<NewAppointment allDoctors={allDoctors} />
 				</PrivateRoute>
 				<PrivateRoute path='/covid-tests'>
-					<CovidTests  allCovidTests={allCovidTests} />
+					<CovidTests allCovidTests={allCovidTests} />
 				</PrivateRoute>
 				<PrivateRoute path='/new-covid-test'>
 					<NewCovidTest setAllCovidTests={setAllCovidTests} />
