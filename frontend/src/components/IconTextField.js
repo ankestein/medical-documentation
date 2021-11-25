@@ -13,7 +13,7 @@ export default function IconTextField({
 	return (
 		<Grid container spacing={1} alignItems='center'>
 			<Grid item xs={1}>
-				<FontAwesomeIcon icon={icon} />
+				<FontAwesomeIcon icon={icon} color='grey' />
 			</Grid>
 			<Grid item xs={11}>
 				<TextField

@@ -9,15 +9,20 @@ import PropTypes from 'prop-types';
 import Doctors from './Doctors';
 import {
 	faBell,
+	faCalendarAlt,
 	faCapsules,
 	faClipboard,
+	faCommentDots,
 	faQuestionCircle,
 	faStethoscope,
 	faSyringe,
 	faUserMd,
+	faXRay,
 } from '@fortawesome/free-solid-svg-icons';
 import {AuthContext} from '../context/AuthProvider';
 import IconTextField from '../components/IconTextField';
+import {Grid} from '@material-ui/core';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 Doctors.propTypes = {
 	allDoctors: PropTypes.array,
@@ -81,36 +86,51 @@ export default function NewAppointment({allDoctors}) {
 	return (
 		<PageLayout>
 			<Form onSubmit={handleSubmit}>
-				<TextField
-					id='select-doctor'
-					select
-					value={selectedDoctorId}
-					label='Doctor'
-					required={true}
-					name='doctorId'
-					onChange={handleDoctorChange}
-				>
-					{allDoctors
-						.sort((first, second) => {
-							return first.lastName > second.lastName ? 1 : -1;
-						})
-						.map((doctor) => (
-							<MenuItem key={doctor.id} value={doctor.id}>
-								{`${doctor.lastName}, ${doctor.firstName} - ${doctor.specialty} - ${doctor.city}`}
-							</MenuItem>
-						))}
-				</TextField>
+				<Grid container spacing={1} alignItems='center'>
+					<Grid item xs={1}>
+						<FontAwesomeIcon icon={faUserMd} color='grey' />
+					</Grid>
+					<Grid item xs={11}>
+						<TextField
+							fullWidth
+							id='select-doctor'
+							select
+							value={selectedDoctorId}
+							label='Doctor'
+							required={true}
+							name='doctorId'
+							onChange={handleDoctorChange}
+						>
+							{allDoctors
+								.sort((first, second) => {
+									return first.lastName > second.lastName ? 1 : -1;
+								})
+								.map((doctor) => (
+									<MenuItem key={doctor.id} value={doctor.id}>
+										{`${doctor.lastName}, ${doctor.firstName} - ${doctor.specialty} - ${doctor.city}`}
+									</MenuItem>
+								))}
+						</TextField>
+					</Grid>
+				</Grid>
 
-				<LocalizationProvider dateAdapter={DateAdapter}>
-					<DatePicker
-						label='Date'
-						value={newAppointment.date}
-						onChange={handleDateChange}
-						name='date'
-						renderInput={(params) => <TextField {...params} />}
-						showTodayButton={true}
-					/>
-				</LocalizationProvider>
+				<Grid container spacing={1} alignItems='center'>
+					<Grid item xs={1}>
+						<FontAwesomeIcon icon={faCalendarAlt} color='grey' />
+					</Grid>
+					<Grid item xs={11}>
+						<LocalizationProvider dateAdapter={DateAdapter}>
+							<DatePicker
+								label='Date'
+								value={newAppointment.date}
+								onChange={handleDateChange}
+								name='date'
+								renderInput={(params) => <TextField {...params} />}
+								showTodayButton={true}
+							/>
+						</LocalizationProvider>
+					</Grid>
+				</Grid>
 
 				<IconTextField
 					icon={faQuestionCircle}
@@ -149,7 +169,7 @@ export default function NewAppointment({allDoctors}) {
 				/>
 
 				<IconTextField
-					icon={faUserMd}
+					icon={faCommentDots}
 					value={newAppointment.doctorsReply}
 					placeholder="Doctor's reply"
 					required={false}
@@ -157,21 +177,29 @@ export default function NewAppointment({allDoctors}) {
 					onChange={handleChange}
 				/>
 
-				<TextField
-					id='select-imaging'
-					select
-					value={newAppointment.imagingType}
-					label='Imaging'
-					required={false}
-					name='imagingId'
-					onChange={handleImagingChange}
-				>
-					{imagingTypes.map((imagingType) => (
-						<MenuItem key={imagingType.id} value={imagingType.id}>
-							{imagingType.label}
-						</MenuItem>
-					))}
-				</TextField>
+				<Grid container spacing={1} alignItems='center'>
+					<Grid item xs={1}>
+						<FontAwesomeIcon icon={faXRay} color='grey' />
+					</Grid>
+					<Grid item xs={11}>
+						<TextField
+							fullWidth
+							id='select-imaging'
+							select
+							value={newAppointment.imagingType}
+							label='Imaging'
+							required={false}
+							name='imagingId'
+							onChange={handleImagingChange}
+						>
+							{imagingTypes.map((imagingType) => (
+								<MenuItem key={imagingType.id} value={imagingType.id}>
+									{imagingType.label}
+								</MenuItem>
+							))}
+						</TextField>
+					</Grid>
+				</Grid>
 
 				<IconTextField
 					icon={faCapsules}
