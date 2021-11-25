@@ -236,5 +236,6 @@ const Form = styled.form`
 `;
 
 const PageLayout = styled.div`
+	margin-top: 56px;
 	margin-bottom: 60px;
 `;

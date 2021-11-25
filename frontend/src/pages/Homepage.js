@@ -27,14 +27,18 @@ export default function Homepage({allDoctors}) {
 }
 
 const PageLayout = styled.div`
+	margin-top: 56px;
 	margin-bottom: 60px;
+	background: #d0e0c0;
 `;
 
 const StyledH1 = styled.h1`
+	color: #303030;
 	font-family: Montserrat, Roboto, Helvetica, Arial, sans-serif;
 	font-weight: 500;
 	font-size: 18px;
-	margin: 12px;
+	margin-left: 12px;
+	padding-top: 12px;
 `;
 
 const CardContainer = styled.div`

@@ -36,6 +36,7 @@ export default function Appointments({allDoctors}) {
 }
 
 const PageLayout = styled.div`
+	margin-top: 56px;
 	margin-bottom: 60px;
 `;
 
@@ -48,8 +49,10 @@ const CardContainer = styled.div`
 `;
 
 const StyledH1 = styled.h1`
+	color: #303030;
 	font-family: Montserrat, Roboto, Helvetica, Arial, sans-serif;
 	font-weight: 500;
 	font-size: 18px;
-	margin: 12px;
+	margin-left: 12px;
+	padding-top: 12px;
 `;
