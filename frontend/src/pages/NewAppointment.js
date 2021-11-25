@@ -7,7 +7,15 @@ import {submitAppointment} from '../service/DoctorApiService';
 import {useHistory} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Doctors from './Doctors';
-import {faUserMd} from '@fortawesome/free-solid-svg-icons';
+import {
+	faBell,
+	faCapsules,
+	faClipboard,
+	faQuestionCircle,
+	faStethoscope,
+	faSyringe,
+	faUserMd,
+} from '@fortawesome/free-solid-svg-icons';
 import {AuthContext} from '../context/AuthProvider';
 import IconTextField from '../components/IconTextField';
 
@@ -104,8 +112,8 @@ export default function NewAppointment({allDoctors}) {
 					/>
 				</LocalizationProvider>
 
-				<TextField
-					variant='outlined'
+				<IconTextField
+					icon={faQuestionCircle}
 					value={newAppointment.reasonForVisit}
 					placeholder='Reason for Visit'
 					required={false}
@@ -113,8 +121,8 @@ export default function NewAppointment({allDoctors}) {
 					onChange={handleChange}
 				/>
 
-				<TextField
-					variant='outlined'
+				<IconTextField
+					icon={faBell}
 					value={newAppointment.reminder}
 					placeholder='Reminder'
 					required={false}
@@ -122,8 +130,8 @@ export default function NewAppointment({allDoctors}) {
 					onChange={handleChange}
 				/>
 
-				<TextField
-					variant='outlined'
+				<IconTextField
+					icon={faClipboard}
 					value={newAppointment.notes}
 					placeholder='Notes'
 					required={false}
@@ -131,8 +139,8 @@ export default function NewAppointment({allDoctors}) {
 					onChange={handleChange}
 				/>
 
-				<TextField
-					variant='outlined'
+				<IconTextField
+					icon={faStethoscope}
 					value={newAppointment.examination}
 					placeholder='Examination'
 					required={false}
@@ -165,8 +173,8 @@ export default function NewAppointment({allDoctors}) {
 					))}
 				</TextField>
 
-				<TextField
-					variant='outlined'
+				<IconTextField
+					icon={faCapsules}
 					value={newAppointment.medication}
 					placeholder='Medication'
 					required={false}
@@ -174,8 +182,8 @@ export default function NewAppointment({allDoctors}) {
 					onChange={handleChange}
 				/>
 
-				<TextField
-					variant='outlined'
+				<IconTextField
+					icon={faSyringe}
 					value={newAppointment.bloodSampling}
 					placeholder='Blood sampling'
 					required={false}
