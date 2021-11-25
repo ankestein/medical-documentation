@@ -1,8 +1,9 @@
 import {Button, MenuItem, TextField} from '@mui/material';
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import {getDoctors, submitDoctor} from '../service/DoctorApiService';
 import styled from 'styled-components/macro';
 import {useHistory} from 'react-router-dom';
+import {AuthContext} from '../context/AuthProvider';
 
 export default function NewDoctor({setAllDoctors}) {
 	const initialDoctor = {
@@ -20,6 +21,7 @@ export default function NewDoctor({setAllDoctors}) {
 	};
 
 	const [newDoctor, setNewDoctor] = useState(initialDoctor);
+	const {token} = useContext(AuthContext);
 	const history = useHistory();
 
 	const handleChange = (event) => {
@@ -35,7 +37,7 @@ export default function NewDoctor({setAllDoctors}) {
 		if (!isValid(newDoctor)) {
 			return;
 		}
-		submitDoctor(newDoctor).catch(console.error);
+		submitDoctor(newDoctor, token).catch(console.error);
 		setNewDoctor(initialDoctor);
 		getDoctors()
 			.then((doctors) => setAllDoctors(doctors))

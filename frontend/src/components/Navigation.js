@@ -1,11 +1,13 @@
 import {BottomNavigation, BottomNavigationAction, Paper} from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
-import PersonIcon from '@mui/icons-material/Person';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import ThermostatIcon from '@mui/icons-material/Thermostat';
 import CoronavirusIcon from '@mui/icons-material/Coronavirus';
 import {useState} from 'react';
 import {useHistory} from 'react-router-dom';
+import {faUserMd} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import styled from 'styled-components/macro';
 
 export default function Navigation() {
 	const [value, setValue] = useState('');
@@ -22,7 +24,11 @@ export default function Navigation() {
 				<BottomNavigationAction
 					label='Doctors'
 					value='/doctors'
-					icon={<PersonIcon />}
+					icon={
+						<StyledBox>
+							<FontAwesomeIcon icon={faUserMd} size='lg' />
+						</StyledBox>
+					}
 				/>
 
 				<BottomNavigationAction
@@ -48,3 +54,8 @@ export default function Navigation() {
 		</Paper>
 	);
 }
+
+const StyledBox = styled.div`
+	margin-top: 3px;
+	margin-bottom: 3px;
+`;

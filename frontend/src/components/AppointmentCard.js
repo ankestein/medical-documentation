@@ -29,6 +29,11 @@ export default function AppointmentCard({appointment, doctor}) {
 				>
 					{appointment.reasonForVisit}
 				</Typography>
+
+				<Typography variant='body2' style={{fontSize: 10, color: '#c181c1'}}>
+					{appointment.reminder}
+				</Typography>
+
 				<Typography variant='body2' style={{fontSize: 8, color: '#233d4dff'}}>
 					{appointment.notes}
 				</Typography>
