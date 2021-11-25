@@ -13,6 +13,12 @@ public class AppointmentMapper {
                 .date(appointmentDto.getDate())
                 .reasonForVisit(appointmentDto.getReasonForVisit())
                 .notes(appointmentDto.getNotes())
+                .reminder(appointmentDto.getReminder())
+                .examination(appointmentDto.getExamination())
+                .doctorsReply(appointmentDto.getDoctorsReply())
+                .medication(appointmentDto.getMedication())
+                .bloodSampling(appointmentDto.getBloodSampling())
+                .imagingType(appointmentDto.getImagingType())
                 .build();
     }
 }

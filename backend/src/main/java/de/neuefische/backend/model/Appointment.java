@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 
@@ -12,13 +11,20 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Document(collection = "appointments")
 @Builder
 public class Appointment {
 
     private String id;
     private LocalDate date;
     private String reasonForVisit;
+    private String reminder;
     private String notes;
+    private String examination;
+    private String doctorsReply;
+    private String medication;
+    private ImagingType imagingType;
+    private String bloodSampling;
+
+
 
 }
