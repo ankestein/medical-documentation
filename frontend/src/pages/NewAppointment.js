@@ -1,5 +1,5 @@
 import {Button, MenuItem, TextField} from '@mui/material';
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import styled from 'styled-components/macro';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import {DatePicker, LocalizationProvider} from '@mui/lab';
@@ -7,6 +7,10 @@ import {submitAppointment} from '../service/DoctorApiService';
 import {useHistory} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Doctors from './Doctors';
+import {Grid} from '@material-ui/core';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faUserMd} from '@fortawesome/free-solid-svg-icons';
+import {AuthContext} from '../context/AuthProvider';
 
 Doctors.propTypes = {
 	allDoctors: PropTypes.array,
@@ -21,6 +25,7 @@ export default function NewAppointment({allDoctors}) {
 
 	const [newAppointment, setNewAppointment] = useState(initialAppointment);
 	const [selectedDoctorId, setSelectedDoctorId] = useState('');
+	const {token} = useContext(AuthContext);
 
 	const history = useHistory();
 
@@ -41,7 +46,9 @@ export default function NewAppointment({allDoctors}) {
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-		submitAppointment(newAppointment, selectedDoctorId).catch(console.error);
+		submitAppointment(newAppointment, selectedDoctorId, token).catch(
+			console.error
+		);
 		setNewAppointment(initialAppointment);
 		setSelectedDoctorId('');
 		history.push('/appointments');
