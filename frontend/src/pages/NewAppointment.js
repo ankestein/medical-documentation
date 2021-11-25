@@ -7,10 +7,9 @@ import {submitAppointment} from '../service/DoctorApiService';
 import {useHistory} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Doctors from './Doctors';
-import {Grid} from '@material-ui/core';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faUserMd} from '@fortawesome/free-solid-svg-icons';
 import {AuthContext} from '../context/AuthProvider';
+import IconTextField from '../components/IconTextField';
 
 Doctors.propTypes = {
 	allDoctors: PropTypes.array,
@@ -141,21 +140,14 @@ export default function NewAppointment({allDoctors}) {
 					onChange={handleChange}
 				/>
 
-				<Grid container spacing={1} alignItems='center'>
-					<Grid item xs={1}>
-						<FontAwesomeIcon icon={faUserMd} />
-					</Grid>
-					<Grid item xs={11}>
-						<TextField
-							variant='outlined'
-							value={newAppointment.doctorsReply}
-							placeholder="Doctor's reply"
-							required={false}
-							name='doctorsReply'
-							onChange={handleChange}
-						/>
-					</Grid>
-				</Grid>
+				<IconTextField
+					icon={faUserMd}
+					value={newAppointment.doctorsReply}
+					placeholder="Doctor's reply"
+					required={false}
+					name='doctorsReply'
+					onChange={handleChange}
+				/>
 
 				<TextField
 					id='select-imaging'
