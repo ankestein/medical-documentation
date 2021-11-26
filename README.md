@@ -1,5 +1,7 @@
 # MedDoc - Medical documentation app
 
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=ankestein_medical-documentation&metric=bugs)](https://sonarcloud.io/summary/new_code?id=ankestein_medical-documentation)
+
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ankestein_medical-documentation&metric=coverage)](https://sonarcloud.io/summary/new_code?id=ankestein_medical-documentation)
 
 
