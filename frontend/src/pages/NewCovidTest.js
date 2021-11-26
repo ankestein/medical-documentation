@@ -174,5 +174,6 @@ const Form = styled.form`
 `;
 
 const PageLayout = styled.div`
+	margin-top: 64px;
 	margin-bottom: 60px;
 `;

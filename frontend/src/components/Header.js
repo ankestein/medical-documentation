@@ -1,8 +1,9 @@
-import {AppBar, IconButton, Toolbar, Typography} from '@mui/material';
+import {AppBar, IconButton, Toolbar} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import {Login} from '@mui/icons-material';
-import {Box} from '@material-ui/core';
+import {Box, Paper} from '@material-ui/core';
 import {useHistory} from 'react-router-dom';
+import logo from '../styling/MedDoc-logo-transparent.png';
 
 export default function Header() {
 	const history = useHistory();
@@ -12,30 +13,26 @@ export default function Header() {
 	};
 
 	return (
-		<Box sx={{flexGrow: 1}}>
-			<AppBar position='sticky'>
-				<Toolbar>
-					<IconButton
-						edge='start'
-						color='inherit'
-						aria-label='menu'
-						sx={{mr: 2}}
-					>
-						<MenuIcon />
-					</IconButton>
-					<Typography
-						variant='h6'
-						color='inherit'
-						component='div'
-						sx={{flexGrow: 1}}
-					>
-						MedDoc
-					</Typography>
-					<IconButton color='inherit' onClick={handleClick}>
-						<Login />
-					</IconButton>
-				</Toolbar>
-			</AppBar>
-		</Box>
+		<Paper sx={{position: 'fixed', top: 0, width: 1.0}} elevation={3}>
+			<Box>
+				<AppBar>
+					<Toolbar>
+						<IconButton
+							edge='start'
+							aria-label='menu'
+							sx={{mr: 2, color: 'white'}}
+						>
+							<MenuIcon />
+						</IconButton>
+
+						<img src={logo} width='130' alt='MedDoc' />
+
+						<IconButton onClick={handleClick} sx={{ml: 17, color: 'white'}}>
+							<Login />
+						</IconButton>
+					</Toolbar>
+				</AppBar>
+			</Box>
+		</Paper>
 	);
 }

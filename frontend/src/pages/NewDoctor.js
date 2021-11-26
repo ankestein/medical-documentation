@@ -4,6 +4,17 @@ import {getDoctors, submitDoctor} from '../service/DoctorApiService';
 import styled from 'styled-components/macro';
 import {useHistory} from 'react-router-dom';
 import {AuthContext} from '../context/AuthProvider';
+import IconTextField from '../components/IconTextField';
+import {
+	faEnvelope,
+	faMapMarkerAlt,
+	faMobileAlt,
+	faPhone,
+	faTooth,
+	faUserMd,
+} from '@fortawesome/free-solid-svg-icons';
+import {Grid} from '@material-ui/core';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 export default function NewDoctor({setAllDoctors}) {
 	const initialDoctor = {
@@ -63,11 +74,52 @@ export default function NewDoctor({setAllDoctors}) {
 		'Urologist',
 	];
 
+	const fields = [
+		{
+			icon: faMapMarkerAlt,
+			label: 'Street',
+		},
+		{
+			icon: faMapMarkerAlt,
+			label: 'Number',
+			name: 'streetNumber',
+		},
+		{
+			icon: faMapMarkerAlt,
+			label: 'Postal code',
+			name: 'postalCode',
+		},
+		{
+			icon: faMapMarkerAlt,
+			label: 'City',
+			required: true,
+		},
+		{
+			icon: faMapMarkerAlt,
+			label: 'Country',
+		},
+		{
+			icon: faPhone,
+			label: 'Phone',
+			name: 'phoneNumber',
+		},
+		{
+			icon: faMobileAlt,
+			label: 'Mobile',
+			name: 'mobileNumber',
+		},
+		{
+			icon: faEnvelope,
+			label: 'Email',
+			name: 'emailAddress',
+		},
+	];
+
 	return (
 		<PageLayout>
 			<Form onSubmit={handleSubmit}>
-				<TextField
-					variant='outlined'
+				<IconTextField
+					icon={faUserMd}
 					value={newDoctor.firstName}
 					label='First name'
 					required={true}
@@ -75,8 +127,8 @@ export default function NewDoctor({setAllDoctors}) {
 					onChange={handleChange}
 				/>
 
-				<TextField
-					variant='outlined'
+				<IconTextField
+					icon={faUserMd}
 					value={newDoctor.lastName}
 					required={true}
 					label='Last name'
@@ -84,93 +136,45 @@ export default function NewDoctor({setAllDoctors}) {
 					onChange={handleChange}
 				/>
 
-				<TextField
-					id='select-specialty'
-					select
-					value={newDoctor.specialty}
-					label='Specialty'
-					required={true}
-					name='specialty'
-					onChange={handleChange}
-				>
-					{specialties.map((specialty) => (
-						<MenuItem key={specialty} value={specialty}>
-							{specialty}
-						</MenuItem>
-					))}
-				</TextField>
+				<Grid container spacing={1} alignItems='center'>
+					<Grid item xs={1}>
+						<FontAwesomeIcon icon={faTooth} color='grey' />
+					</Grid>
+					<Grid item xs={11}>
+						<TextField
+							fullWidth
+							id='select-specialty'
+							select
+							value={newDoctor.specialty}
+							label='Specialty'
+							required={true}
+							name='specialty'
+							onChange={handleChange}
+						>
+							{specialties.map((specialty) => (
+								<MenuItem key={specialty} value={specialty}>
+									{specialty}
+								</MenuItem>
+							))}
+						</TextField>
+					</Grid>
+				</Grid>
 
-				<TextField
-					variant='outlined'
-					value={newDoctor.street}
-					label='Street'
-					required={false}
-					name='street'
-					onChange={handleChange}
-				/>
-
-				<TextField
-					variant='outlined'
-					value={newDoctor.streetNumber}
-					label='Number'
-					required={false}
-					name='streetNumber'
-					onChange={handleChange}
-				/>
-
-				<TextField
-					variant='outlined'
-					value={newDoctor.postalCode}
-					label='Postal code'
-					required={false}
-					name='postalCode'
-					onChange={handleChange}
-				/>
-
-				<TextField
-					variant='outlined'
-					value={newDoctor.city}
-					label='City'
-					required={true}
-					name='city'
-					onChange={handleChange}
-				/>
-
-				<TextField
-					variant='outlined'
-					value={newDoctor.country}
-					label='Country'
-					required={false}
-					name='country'
-					onChange={handleChange}
-				/>
-
-				<TextField
-					variant='outlined'
-					value={newDoctor.phoneNumber}
-					label='Phone'
-					required={false}
-					name='phoneNumber'
-					onChange={handleChange}
-				/>
-
-				<TextField
-					variant='outlined'
-					value={newDoctor.mobileNumber}
-					label='Mobile'
-					required={false}
-					name='mobileNumber'
-					onChange={handleChange}
-				/>
-
-				<TextField
-					variant='outlined'
-					value={newDoctor.emailAddress}
-					label='Email'
-					required={false}
-					name='emailAddress'
-					onChange={handleChange}
-				/>
+				{fields.map((field) => {
+					return (
+						<IconTextField
+							icon={field.icon}
+							value={
+								field.name ? newDoctor[field.name] : newDoctor[field.label]
+							}
+							placeholder={field.label}
+							label={field.label}
+							required={field.required ? field.required : false}
+							name={field.name ? field.name : field.label.toLowerCase()}
+							onChange={handleChange}
+						/>
+					);
+				})}
 
 				<Button variant='contained' type='submit'>
 					Submit
@@ -189,5 +193,6 @@ const Form = styled.form`
 `;
 
 const PageLayout = styled.div`
+	margin-top: 64px;
 	margin-bottom: 60px;
 `;
