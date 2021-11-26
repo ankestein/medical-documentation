@@ -1,5 +1,8 @@
 # MedDoc - Medical documentation app
 
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ankestein_medical-documentation&metric=coverage)](https://sonarcloud.io/summary/new_code?id=ankestein_medical-documentation)
+
+
 ## About
 MedDoc is an app for recording and organizing information about medical appointments, examinations, symptoms and treatments as well as documenting COVID 19 tests.
 
