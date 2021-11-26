@@ -115,13 +115,6 @@ export default function NewDoctor({setAllDoctors}) {
 		},
 	];
 
-	const toLowerCamelCase = (input) => {
-		const regex = /\s+(\w)?/gi;
-		input.toLowerCase().replace(regex, function (match, letter) {
-			return letter.toUpperCase();
-		});
-	};
-
 	return (
 		<PageLayout>
 			<Form onSubmit={handleSubmit}>
