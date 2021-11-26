@@ -2,6 +2,10 @@ import styled from 'styled-components/macro';
 import AppointmentStickyNote from '../components/AppointmentStickyNote';
 
 export default function Homepage({allDoctors}) {
+	const futureAppointments = (appointment) => {
+		return new Date(appointment.date) - new Date() > 0;
+	};
+
 	return (
 		<Background>
 			<PageLayout>
@@ -10,9 +14,7 @@ export default function Homepage({allDoctors}) {
 				<CardContainer>
 					{allDoctors.map((doctor) => {
 						return doctor.appointments
-							.filter(
-								(appointment) => new Date(appointment.date) - new Date() > 0
-							)
+							.filter(futureAppointments)
 							.map((appointment) => {
 								return (
 									<AppointmentStickyNote

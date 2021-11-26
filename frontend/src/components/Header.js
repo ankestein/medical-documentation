@@ -20,17 +20,14 @@ export default function Header() {
 						<IconButton
 							edge='start'
 							aria-label='menu'
-							sx={{marginRight: 2, color: 'white'}}
+							sx={{mr: 2, color: 'white'}}
 						>
 							<MenuIcon />
 						</IconButton>
 
 						<img src={logo} width='130' alt='MedDoc' />
 
-						<IconButton
-							onClick={handleClick}
-							sx={{marginLeft: 17, color: 'white'}}
-						>
+						<IconButton onClick={handleClick} sx={{ml: 17, color: 'white'}}>
 							<Login />
 						</IconButton>
 					</Toolbar>
