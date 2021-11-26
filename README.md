@@ -7,6 +7,7 @@
 
  * [About](#about)
  * [Tech Stack](#technologies-and-tools)
+ * [Impressions](#impressions)
  * [Getting Started](#getting-started)
  * [Acknowledgements and Resources](#acknowledgements-and-resources)
 
@@ -14,24 +15,12 @@
 
 ## About
 
+<img src="/images/MedDoc-logo-black-crop.png" alt="Logo" width="200">
 
- 
-<!-- PROJECT LOGO -->
-<br />
-<div align="center">
-    <img src="/frontend/src/styling/MedDoc-logo-transparent.png" alt="Logo" width="40" height="40">
-</div>
 
 MedDoc is an app for recording and organizing information about doctors, medical appointments, examinations, symptoms and treatments as well as documenting COVID 19 tests.
 
 This is my capstone project within the _Full stack development with Java_ bootcamp with [neue fische School and Pool for Digital Talent](https://www.neuefische.de).
-
-
-<img src="/images/Homepage.png" alt="Homepage" width="40">
-<img src="/images/Appointments.png" alt="Appointments page" width="40">
-<img src="/images/NewAppointment_Bottom.png" alt="New appointment form" width="40">
-<img src="/images/Doctors.png" alt="Doctors page" width="40">
-<img src="/images/CovidTests.png" alt="Covid tests page" width="40">
 
 
 
@@ -56,6 +45,27 @@ This is my capstone project within the _Full stack development with Java_ bootca
 <img alt="git" src="https://img.shields.io/badge/-Git-F05032?style=flat-square&logo=git&logoColor=white" />
 ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=flat-square&logo=github&logoColor=white)
 <img alt="github actions" src="https://img.shields.io/badge/-Github_Actions-2088FF?style=flat-square&logo=github-actions&logoColor=white" />
+
+
+
+
+
+## Impressions
+
+![Homepage](/images/Homepage.png)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![NewAppointment_Bottom](/images/NewAppointment_Bottom.png)
+<br/>
+<br/>
+
+
+![Appointments](/images/Appointments.png)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+![Doctors](/images/Doctors.png)
+<br/>
+<br/>
+
+
+![CovidTests](/images/CovidTests.png)
+
 
 
 
