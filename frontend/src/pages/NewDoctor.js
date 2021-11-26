@@ -74,6 +74,54 @@ export default function NewDoctor({setAllDoctors}) {
 		'Urologist',
 	];
 
+	const fields = [
+		{
+			icon: faMapMarkerAlt,
+			label: 'Street',
+		},
+		{
+			icon: faMapMarkerAlt,
+			label: 'Number',
+			name: 'streetNumber',
+		},
+		{
+			icon: faMapMarkerAlt,
+			label: 'Postal code',
+			name: 'postalCode',
+		},
+		{
+			icon: faMapMarkerAlt,
+			label: 'City',
+			required: true,
+		},
+		{
+			icon: faMapMarkerAlt,
+			label: 'Country',
+		},
+		{
+			icon: faPhone,
+			label: 'Phone',
+			name: 'phoneNumber',
+		},
+		{
+			icon: faMobileAlt,
+			label: 'Mobile',
+			name: 'mobileNumber',
+		},
+		{
+			icon: faEnvelope,
+			label: 'Email',
+			name: 'emailAddress',
+		},
+	];
+
+	const toLowerCamelCase = (input) => {
+		const regex = /\s+(\w)?/gi;
+		input.toLowerCase().replace(regex, function (match, letter) {
+			return letter.toUpperCase();
+		});
+	};
+
 	return (
 		<PageLayout>
 			<Form onSubmit={handleSubmit}>
@@ -119,85 +167,21 @@ export default function NewDoctor({setAllDoctors}) {
 					</Grid>
 				</Grid>
 
-				<IconTextField
-					icon={faMapMarkerAlt}
-					value={newDoctor.street}
-					placeholder='Street'
-					label='Street'
-					required={false}
-					name='street'
-					onChange={handleChange}
-				/>
-
-				<IconTextField
-					icon={faMapMarkerAlt}
-					value={newDoctor.streetNumber}
-					placeholder='Number'
-					label='Number'
-					required={false}
-					name='streetNumber'
-					onChange={handleChange}
-				/>
-
-				<IconTextField
-					icon={faMapMarkerAlt}
-					value={newDoctor.postalCode}
-					placeholder='Postal code'
-					label='Postal code'
-					required={false}
-					name='postalCode'
-					onChange={handleChange}
-				/>
-
-				<IconTextField
-					icon={faMapMarkerAlt}
-					value={newDoctor.city}
-					placeholder='City'
-					label='City'
-					required={true}
-					name='city'
-					onChange={handleChange}
-				/>
-
-				<IconTextField
-					icon={faMapMarkerAlt}
-					value={newDoctor.country}
-					placeholder='Country'
-					label='Country'
-					required={false}
-					name='country'
-					onChange={handleChange}
-				/>
-
-				<IconTextField
-					icon={faPhone}
-					value={newDoctor.phoneNumber}
-					placeholder='Phone'
-					label='Phone'
-					required={false}
-					name='phoneNumber'
-					onChange={handleChange}
-				/>
-
-				<IconTextField
-					icon={faMobileAlt}
-					value={newDoctor.mobileNumber}
-					placeholder='Mobile'
-					label='Mobile'
-					required={false}
-					name='mobileNumber'
-					onChange={handleChange}
-				/>
-
-				<IconTextField
-					icon={faEnvelope}
-					value={newDoctor.emailAddress}
-					placeholder='Email'
-					label='Email'
-					required={false}
-					name='emailAddress'
-					onChange={handleChange}
-				/>
+				{fields.map((field) => {
+					return (
+						<IconTextField
+							icon={field.icon}
+							value={
+								field.name ? newDoctor[field.name] : newDoctor[field.label]
+							}
+							placeholder={field.label}
+							label={field.label}
+							required={field.required ? field.required : false}
+							name={field.name ? field.name : field.label.toLowerCase()}
+							onChange={handleChange}
+						/>
+					);
+				})}
 
 				<Button variant='contained' type='submit'>
 					Submit
