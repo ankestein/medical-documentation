@@ -19,3 +19,13 @@ export function getCovidTests(token) {
 		.get('/api/covid-test', getHeader(token))
 		.then((response) => response.data);
 }
+
+export function editCovidTest(covidTestToEdit, token) {
+	return axios
+		.put(
+			`/api/covid-test/${covidTestToEdit.id}`,
+			covidTestToEdit,
+			getHeader(token)
+		)
+		.then((response) => response.data);
+}
