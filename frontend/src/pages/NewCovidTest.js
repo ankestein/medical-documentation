@@ -1,5 +1,5 @@
 import {Button, TextField} from '@mui/material';
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {getCovidTests, submitCovidTest} from '../service/CovidTestApiService';
 import styled from 'styled-components/macro';
 import {useHistory} from 'react-router-dom';
@@ -15,16 +15,24 @@ import {
 } from '@material-ui/core';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import {DateTimePicker, LocalizationProvider} from '@mui/lab';
+import PropTypes from 'prop-types';
+import {AuthContext} from '../context/AuthProvider';
 
-export default function NewCovidTest({setAllCovidTests}) {
-	const initialCovidTest = {
-		testType: null,
-		dateTime: null,
-		result: null,
-	};
+NewCovidTest.propTypes = {
+	setAllCovidTests: PropTypes.func.isRequired,
+	newCovidTest: PropTypes.object.isRequired,
+	setNewCovidTest: PropTypes.func.isRequired,
+	initialCovidTest: PropTypes.object,
+};
 
-	const [newCovidTest, setNewCovidTest] = useState(initialCovidTest);
+export default function NewCovidTest({
+	setAllCovidTests,
+	newCovidTest,
+	setNewCovidTest,
+	initialCovidTest,
+}) {
 	const [showError, setShowError] = useState(false);
+	const {token} = useContext(AuthContext);
 	const history = useHistory();
 
 	useEffect(() => {
@@ -58,7 +66,7 @@ export default function NewCovidTest({setAllCovidTests}) {
 		} else {
 			setShowError(false);
 		}
-		submitCovidTest(newCovidTest).catch(console.error);
+		submitCovidTest(newCovidTest, token).catch(console.error);
 		setNewCovidTest(initialCovidTest);
 		getCovidTests()
 			.then((covidTests) => setAllCovidTests(covidTests))
@@ -153,12 +161,13 @@ export default function NewCovidTest({setAllCovidTests}) {
 							</Typography>
 						</Container>
 					)}
-
-					<Grid item>
-						<Button variant='contained' type='submit'>
-							Submit
-						</Button>
-					</Grid>
+					{!newCovidTest.id && (
+						<Grid item>
+							<Button variant='contained' type='submit'>
+								Submit
+							</Button>
+						</Grid>
+					)}
 				</Grid>
 			</Form>
 		</PageLayout>
