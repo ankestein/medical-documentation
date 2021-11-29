@@ -3,6 +3,7 @@ package de.neuefische.backend.controller;
 import de.neuefische.backend.dto.CovidTestDto;
 import de.neuefische.backend.mapper.CovidTestMapper;
 import de.neuefische.backend.model.CovidTest;
+import de.neuefische.backend.model.Result;
 import de.neuefische.backend.model.TestType;
 import de.neuefische.backend.repo.CovidTestRepo;
 import de.neuefische.backend.security.model.AppUser;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayContainingInAnyOrder;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -106,6 +108,79 @@ class CovidTestControllerTest {
         assertThat(response.getBody(), arrayContainingInAnyOrder(covidTest1, covidTest2));
 
     }
+
+    @Test
+    void editCovidTestTest() {
+        HttpHeaders headers = getHttpHeadersWithJWT();
+
+        // GIVEN
+        CovidTestDto covidTestDto = CovidTestDto.builder()
+                .id("123")
+                .testType(TestType.ANTIGEN_NASAL)
+                .dateTime(LocalDateTime.of(2021, 11, 15, 7, 5))
+                .result(Result.NEGATIVE)
+                .build();
+
+        CovidTest covidTestToUpdate = CovidTest.builder()
+                .id("123")
+                .testType(TestType.ANTIGEN_NASAL)
+                .dateTime(LocalDateTime.of(2021, 11, 15, 7, 5))
+                .build();
+
+        covidTestRepo.save(covidTestToUpdate);
+
+        CovidTest updatedCovidTest = CovidTestMapper.mapCovidTestDtoToCovidTest(covidTestDto);
+
+        // WHEN
+        ResponseEntity<CovidTest> response = testRestTemplate.exchange("/api/covid-test/123", HttpMethod.PUT, new HttpEntity<>(covidTestDto, headers), CovidTest.class);
+
+        // THEN
+        assertThat(response.getStatusCode(), is(HttpStatus.OK));
+        assertEquals(updatedCovidTest, response.getBody());
+
+    }
+
+    @Test
+    void editNonExistentCovidTestTest() {
+        HttpHeaders headers = getHttpHeadersWithJWT();
+
+        // GIVEN
+        CovidTestDto covidTestDto = CovidTestDto.builder()
+                .id("unknownID222")
+                .testType(TestType.ANTIGEN_NASAL)
+                .dateTime(LocalDateTime.of(2021, 11, 15, 7, 5))
+                .result(Result.NEGATIVE)
+                .build();
+
+        // WHEN
+        ResponseEntity<CovidTest> response = testRestTemplate.exchange("/api/covid-test/unknownID222", HttpMethod.PUT, new HttpEntity<>(covidTestDto, headers), CovidTest.class);
+
+        // THEN
+        assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
+    }
+
+    @Test
+    void editCovidTestWithNonMatchingPathId() {
+        HttpHeaders headers = getHttpHeadersWithJWT();
+
+        // GIVEN
+        CovidTestDto covidTestDto = CovidTestDto.builder()
+                .id("123")
+                .testType(TestType.ANTIGEN_NASAL)
+                .dateTime(LocalDateTime.of(2021, 11, 15, 7, 5))
+                .result(Result.NEGATIVE)
+                .build();
+
+        // WHEN
+        ResponseEntity<CovidTest> response = testRestTemplate.exchange("/api/covid-test/456", HttpMethod.PUT, new HttpEntity<>(covidTestDto, headers), CovidTest.class);
+
+        // THEN
+        assertThat(response.getStatusCode(), is(HttpStatus.UNPROCESSABLE_ENTITY));
+
+
+    }
+
+
 
     private HttpHeaders getHttpHeadersWithJWT() {
         appUserRepo.save(AppUser.builder()

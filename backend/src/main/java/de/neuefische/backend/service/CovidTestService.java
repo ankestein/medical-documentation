@@ -44,5 +44,14 @@ public class CovidTestService {
             return covidTestRepo.save(covidTest);
         }
     }
-    
+
+    public CovidTest editCovidTest(CovidTestDto covidTestDto) {
+        if (covidTestRepo.existsById(covidTestDto.getId())) {
+            CovidTest covidTest = CovidTestMapper.mapCovidTestDtoToCovidTest(covidTestDto);
+            return covidTestRepo.save(covidTest);
+        } else {
+            throw new NoSuchElementException("Could not update Covid Test - element with id " + covidTestDto.getId() + " not found!");
+        }
+    }
+
 }
