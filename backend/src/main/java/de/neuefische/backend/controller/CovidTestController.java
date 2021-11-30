@@ -34,4 +34,12 @@ public class CovidTestController {
         return covidTestService.addCovidTest(covidTestDto);
     }
 
+    @PutMapping("/{id}")
+    public CovidTest editCovidTest(@RequestBody CovidTestDto covidTestDto, @PathVariable String id) {
+        if(!id.equals(covidTestDto.getId())){
+            throw new IllegalArgumentException("Could not update element - path id does not match element id in request body!");
+        }
+        return covidTestService.editCovidTest(covidTestDto);
+    }
+
 }

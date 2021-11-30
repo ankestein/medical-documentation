@@ -1,5 +1,5 @@
 import {Button, TextField} from '@mui/material';
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {getCovidTests, submitCovidTest} from '../service/CovidTestApiService';
 import styled from 'styled-components/macro';
 import {useHistory} from 'react-router-dom';
@@ -15,16 +15,24 @@ import {
 } from '@material-ui/core';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import {DateTimePicker, LocalizationProvider} from '@mui/lab';
+import PropTypes from 'prop-types';
+import {AuthContext} from '../context/AuthProvider';
 
-export default function NewCovidTest({setAllCovidTests}) {
-	const initialCovidTest = {
-		testType: null,
-		dateTime: null,
-		result: null,
-	};
+NewCovidTest.propTypes = {
+	setAllCovidTests: PropTypes.func.isRequired,
+	newCovidTest: PropTypes.object.isRequired,
+	setNewCovidTest: PropTypes.func.isRequired,
+	initialCovidTest: PropTypes.object,
+};
 
-	const [newCovidTest, setNewCovidTest] = useState(initialCovidTest);
+export default function NewCovidTest({
+	setAllCovidTests,
+	newCovidTest,
+	setNewCovidTest,
+	initialCovidTest,
+}) {
 	const [showError, setShowError] = useState(false);
+	const {token} = useContext(AuthContext);
 	const history = useHistory();
 
 	useEffect(() => {
@@ -58,13 +66,28 @@ export default function NewCovidTest({setAllCovidTests}) {
 		} else {
 			setShowError(false);
 		}
-		submitCovidTest(newCovidTest).catch(console.error);
+		submitCovidTest(newCovidTest, token).catch(console.error);
 		setNewCovidTest(initialCovidTest);
 		getCovidTests()
 			.then((covidTests) => setAllCovidTests(covidTests))
 			.catch(console.error)
 			.then(() => history.push('/covid-tests'));
 	};
+
+	const values = [
+		'ANTIGEN_LOLLIPOP',
+		'ANTIGEN_NASAL',
+		'ANTIGEN_NASOPHARYNGEAL',
+		'ANTIGEN_SALIVA',
+		'PCR_TEST',
+	];
+	const labels = [
+		'Antigen test - lollipop',
+		'Antigen test - nasal',
+		'Antigen test - nasopharyngeal',
+		'Antigen test - saliva',
+		'PCR test',
+	];
 
 	return (
 		<PageLayout>
@@ -79,31 +102,13 @@ export default function NewCovidTest({setAllCovidTests}) {
 								value={newCovidTest.testType}
 								onChange={handleChange}
 							>
-								<FormControlLabel
-									value='ANTIGEN_LOLLIPOP'
-									control={<Radio />}
-									label='Antigen test - lollipop'
-								/>
-								<FormControlLabel
-									value='ANTIGEN_NASAL'
-									control={<Radio />}
-									label='Antigen test - nasal'
-								/>
-								<FormControlLabel
-									value='ANTIGEN_NASOPHARYNGEAL'
-									control={<Radio />}
-									label='Antigen test - nasopharyngeal'
-								/>
-								<FormControlLabel
-									value='ANTIGEN_SALIVA'
-									control={<Radio />}
-									label='Antigen test - saliva'
-								/>
-								<FormControlLabel
-									value='PCR_TEST'
-									control={<Radio />}
-									label='PCR test'
-								/>
+								{values.map((value, i) => (
+									<FormControlLabel
+										control={<Radio />}
+										label={labels[i]}
+										value={value}
+									/>
+								))}
 							</RadioGroup>
 						</FormControl>
 					</Grid>
@@ -153,12 +158,13 @@ export default function NewCovidTest({setAllCovidTests}) {
 							</Typography>
 						</Container>
 					)}
-
-					<Grid item>
-						<Button variant='contained' type='submit'>
-							Submit
-						</Button>
-					</Grid>
+					{!newCovidTest.id && (
+						<Grid item>
+							<Button variant='contained' type='submit'>
+								Submit
+							</Button>
+						</Grid>
+					)}
 				</Grid>
 			</Form>
 		</PageLayout>

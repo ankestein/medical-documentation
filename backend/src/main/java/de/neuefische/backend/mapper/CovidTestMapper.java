@@ -10,6 +10,7 @@ public class CovidTestMapper {
 
     public static CovidTest mapCovidTestDtoToCovidTest(CovidTestDto covidTestDto) {
         return CovidTest.builder()
+                .id(covidTestDto.getId())
                 .testType(covidTestDto.getTestType())
                 .dateTime(covidTestDto.getDateTime())
                 .result(covidTestDto.getResult())

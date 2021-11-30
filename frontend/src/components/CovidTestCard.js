@@ -1,9 +1,36 @@
-import {Button, CardActions, CardContent, Typography} from '@material-ui/core';
+import {
+	Button,
+	CardActions,
+	CardContent,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
+	Typography,
+} from '@material-ui/core';
 import EditIcon from '@mui/icons-material/Edit';
 import styled from 'styled-components/macro';
 import moment from 'moment';
+import {useContext, useEffect, useState} from 'react';
+import {AuthContext} from '../context/AuthProvider';
+import {editCovidTest, getCovidTests} from '../service/CovidTestApiService';
+import NewCovidTest from '../pages/NewCovidTest';
 
-export default function CovidTestCard({covidTest}) {
+export default function CovidTestCard({
+	covidTest,
+	setAllCovidTests,
+	newCovidTest,
+	setNewCovidTest,
+	initialCovidTest,
+}) {
+	const {token} = useContext(AuthContext);
+	const [open, setOpen] = useState(false);
+	const [covidTestToEdit, setCovidTestToEdit] = useState(covidTest);
+
+	useEffect(() => {
+		setCovidTestToEdit(newCovidTest);
+	}, [newCovidTest]);
+
 	const testTypes = {
 		ANTIGEN_LOLLIPOP: 'Lollipop',
 		ANTIGEN_NASAL: 'Nasal',
@@ -12,45 +39,83 @@ export default function CovidTestCard({covidTest}) {
 		PCR_TEST: 'PCR',
 	};
 
-	return (
-		<StyledCard>
-			<CardContent style={{padding: '10px', fontSize: 'small'}}>
-				<Typography variant='overline' style={{color: '#303030', fontSize: 10}}>
-					{testTypes[covidTest.testType]}
-				</Typography>
-				<Typography
-					variant='subtitle2'
-					style={{color: '#233d4dff', marginBottom: 8, fontSize: 10}}
-				>
-					{moment(covidTest.dateTime).format('llll')}
-				</Typography>
-				<Typography
-					variant='body2'
-					style={{
-						fontWeight: 500,
-						fontSize: 10,
-						lineHeight: 1,
-						color: '#303030',
-						marginBottom: 4,
-					}}
-				>
-					{covidTest.result}
-				</Typography>
-			</CardContent>
+	const handleClickOpen = () => {
+		setOpen(true);
+		setNewCovidTest(covidTest);
+	};
 
-			<CardActions>
-				{!covidTest.result && (
+	const handleClickClose = () => {
+		setOpen(false);
+	};
+
+	const handleSave = () => {
+		editCovidTest(covidTestToEdit, token).catch(console.error);
+		setNewCovidTest(initialCovidTest);
+		getCovidTests(token)
+			.then((covidTests) => setAllCovidTests(covidTests))
+			.catch(console.error);
+		handleClickClose();
+	};
+
+	return (
+		<>
+			<StyledCard>
+				<CardContent style={{padding: '10px', fontSize: 'small'}}>
+					<Typography
+						variant='overline'
+						style={{color: '#303030', fontSize: 10}}
+					>
+						{testTypes[covidTest.testType]}
+					</Typography>
+					<Typography
+						variant='subtitle2'
+						style={{color: '#233d4dff', marginBottom: 8, fontSize: 10}}
+					>
+						{moment(covidTest.dateTime).format('llll')}
+					</Typography>
+					<Typography
+						variant='body2'
+						style={{
+							fontWeight: 500,
+							fontSize: 10,
+							lineHeight: 1,
+							color: '#303030',
+							marginBottom: 4,
+						}}
+					>
+						{covidTest.result}
+					</Typography>
+				</CardContent>
+
+				<CardActions>
 					<Button
 						startIcon={<EditIcon />}
 						size='small'
 						color='primary'
 						style={{position: 'absolute', bottom: 6, right: 6, fontSize: 10}}
+						onClick={handleClickOpen}
 					>
-						Add result
+						Edit
 					</Button>
-				)}
-			</CardActions>
-		</StyledCard>
+				</CardActions>
+			</StyledCard>
+
+			<Dialog open={open} onClose={handleClickClose}>
+				<DialogTitle>Edit Covid Test</DialogTitle>
+				<DialogContent>
+					<NewCovidTest
+						newCovidTest={newCovidTest}
+						setAllCovidTests={setAllCovidTests}
+						setNewCovidTest={setNewCovidTest}
+						setCovidTestToEdit={setCovidTestToEdit}
+					/>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={handleClickClose}>Cancel</Button>
+					<Button onClick={handleSave}>Save</Button>
+				</DialogActions>
+			</Dialog>
+		</>
 	);
 }
 

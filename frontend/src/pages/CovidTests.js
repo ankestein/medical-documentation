@@ -3,7 +3,13 @@ import {useHistory} from 'react-router-dom';
 import CovidTestCard from '../components/CovidTestCard';
 import AddButton from '../components/AddButton';
 
-export default function CovidTests({allCovidTests}) {
+export default function CovidTests({
+	allCovidTests,
+	setAllCovidTests,
+	newCovidTest,
+	setNewCovidTest,
+	initialCovidTest,
+}) {
 	const history = useHistory();
 
 	const handleClickAddCovidTest = () => {
@@ -18,7 +24,15 @@ export default function CovidTests({allCovidTests}) {
 
 			<CardContainer>
 				{allCovidTests.map((covidTest) => {
-					return <CovidTestCard covidTest={covidTest} />;
+					return (
+						<CovidTestCard
+							covidTest={covidTest}
+							setAllCovidTests={setAllCovidTests}
+							newCovidTest={newCovidTest}
+							setNewCovidTest={setNewCovidTest}
+							initialCovidTest={initialCovidTest}
+						/>
+					);
 				})}
 			</CardContainer>
 		</PageLayout>
