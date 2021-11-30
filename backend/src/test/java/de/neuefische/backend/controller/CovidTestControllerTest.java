@@ -1,5 +1,6 @@
 package de.neuefische.backend.controller;
 
+import de.neuefische.backend.controller.exception.ApiError;
 import de.neuefische.backend.dto.CovidTestDto;
 import de.neuefische.backend.mapper.CovidTestMapper;
 import de.neuefische.backend.model.CovidTest;
@@ -153,11 +154,14 @@ class CovidTestControllerTest {
                 .build();
 
         // WHEN
-        ResponseEntity<CovidTest> response = testRestTemplate.exchange("/api/covid-test/unknownID222", HttpMethod.PUT, new HttpEntity<>(covidTestDto, headers), CovidTest.class);
+        ResponseEntity<ApiError> response = testRestTemplate.exchange("/api/covid-test/unknownID222", HttpMethod.PUT, new HttpEntity<>(covidTestDto, headers), ApiError.class);
 
         // THEN
         assertThat(response.getStatusCode(), is(HttpStatus.NOT_FOUND));
+        assertNotNull(response.getBody());
+        assertThat(response.getBody().getExceptionMessage(), is("Could not update Covid Test - element with id unknownID222 not found!"));
     }
+
 
     @Test
     void editCovidTestWithNonMatchingPathId() {
@@ -172,12 +176,12 @@ class CovidTestControllerTest {
                 .build();
 
         // WHEN
-        ResponseEntity<CovidTest> response = testRestTemplate.exchange("/api/covid-test/456", HttpMethod.PUT, new HttpEntity<>(covidTestDto, headers), CovidTest.class);
+        ResponseEntity<ApiError> response = testRestTemplate.exchange("/api/covid-test/unknownID222", HttpMethod.PUT, new HttpEntity<>(covidTestDto, headers), ApiError.class);
 
         // THEN
         assertThat(response.getStatusCode(), is(HttpStatus.UNPROCESSABLE_ENTITY));
-
-
+        assertNotNull(response.getBody());
+        assertThat(response.getBody().getExceptionMessage(), is("Could not update element - path id does not match element id in request body!"));
     }
 
 
@@ -190,6 +194,7 @@ class CovidTestControllerTest {
         AppUser loginData = new AppUser("test_username", "some-password");
         ResponseEntity<String> response = testRestTemplate.postForEntity("/auth/login", loginData, String.class);
         HttpHeaders headers = new HttpHeaders();
+        assertNotNull(response.getBody());
         headers.setBearerAuth(response.getBody());
         return headers;
     }

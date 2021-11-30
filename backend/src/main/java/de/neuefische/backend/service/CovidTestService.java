@@ -1,7 +1,6 @@
 package de.neuefische.backend.service;
 
 import de.neuefische.backend.dto.CovidTestDto;
-import de.neuefische.backend.mapper.CovidTestMapper;
 import de.neuefische.backend.model.CovidTest;
 import de.neuefische.backend.repo.CovidTestRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import static de.neuefische.backend.mapper.CovidTestMapper.mapCovidTestDtoToCovidTest;
+
 
 @Service
 public class CovidTestService {
@@ -32,7 +34,7 @@ public class CovidTestService {
 
     public CovidTest addCovidTest(CovidTestDto covidTestDto) {
 
-        CovidTest covidTest = CovidTestMapper.mapCovidTestDtoToCovidTest(covidTestDto);
+        CovidTest covidTest = mapCovidTestDtoToCovidTest(covidTestDto);
 
         boolean covidTestExists = covidTestRepo.existsCovidTestByDateTime(
                 covidTest.getDateTime()
@@ -47,7 +49,7 @@ public class CovidTestService {
 
     public CovidTest editCovidTest(CovidTestDto covidTestDto) {
         if (covidTestRepo.existsById(covidTestDto.getId())) {
-            CovidTest covidTest = CovidTestMapper.mapCovidTestDtoToCovidTest(covidTestDto);
+            CovidTest covidTest = mapCovidTestDtoToCovidTest(covidTestDto);
             return covidTestRepo.save(covidTest);
         } else {
             throw new NoSuchElementException("Could not update Covid Test - element with id " + covidTestDto.getId() + " not found!");
