@@ -74,6 +74,21 @@ export default function NewCovidTest({
 			.then(() => history.push('/covid-tests'));
 	};
 
+	const values = [
+		'ANTIGEN_LOLLIPOP',
+		'ANTIGEN_NASAL',
+		'ANTIGEN_NASOPHARYNGEAL',
+		'ANTIGEN_SALIVA',
+		'PCR_TEST',
+	];
+	const labels = [
+		'Antigen test - lollipop',
+		'Antigen test - nasal',
+		'Antigen test - nasopharyngeal',
+		'Antigen test - saliva',
+		'PCR test',
+	];
+
 	return (
 		<PageLayout>
 			<Form onSubmit={handleSubmit}>
@@ -87,31 +102,13 @@ export default function NewCovidTest({
 								value={newCovidTest.testType}
 								onChange={handleChange}
 							>
-								<FormControlLabel
-									value='ANTIGEN_LOLLIPOP'
-									control={<Radio />}
-									label='Antigen test - lollipop'
-								/>
-								<FormControlLabel
-									value='ANTIGEN_NASAL'
-									control={<Radio />}
-									label='Antigen test - nasal'
-								/>
-								<FormControlLabel
-									value='ANTIGEN_NASOPHARYNGEAL'
-									control={<Radio />}
-									label='Antigen test - nasopharyngeal'
-								/>
-								<FormControlLabel
-									value='ANTIGEN_SALIVA'
-									control={<Radio />}
-									label='Antigen test - saliva'
-								/>
-								<FormControlLabel
-									value='PCR_TEST'
-									control={<Radio />}
-									label='PCR test'
-								/>
+								{values.map((value, i) => (
+									<FormControlLabel
+										control={<Radio />}
+										label={labels[i]}
+										value={value}
+									/>
+								))}
 							</RadioGroup>
 						</FormControl>
 					</Grid>
